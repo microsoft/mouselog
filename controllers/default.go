@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/astaxie/beego"
+
 	"github.com/mouselog/mouselog-server/trace"
 )
 
@@ -50,10 +51,13 @@ func (c *ApiController) UploadTrace() {
 	}
 
 	ss := getOrCreateSs(sessionId)
-	ss.AddEvents(&events)
 
-	fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, events.Url, events.Data[0].Timestamp, events.Data[0].X, events.Data[0].Y)
+	if len(events.Data) > 0 {
+		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, events.Url, events.Data[0].Timestamp, events.Data[0].X, events.Data[0].Y)
+	} else {
+		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, events.Url)
+	}
 
-	c.Data["json"] = ss.ToString()
+	c.Data["json"] = ss.AddEventsAndDetect(&events)
 	c.ServeJSON()
 }
