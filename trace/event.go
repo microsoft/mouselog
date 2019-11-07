@@ -5,6 +5,8 @@ type Events struct {
 	Width  int     `json:"width"`
 	Height int     `json:"height"`
 	Data   []Event `json:"events"`
+
+	Degrees []float64 `json:"-"`
 }
 
 type Event struct {
