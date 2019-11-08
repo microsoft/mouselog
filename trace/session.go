@@ -7,7 +7,7 @@ type Session struct {
 }
 
 type Result struct {
-	IsBot bool   `json:"isBot"`
+	IsBot int    `json:"isBot"`
 	Rule  string `json:"rule"`
 
 	UrlRows []UrlRow `json:"urlRows"`
@@ -25,21 +25,19 @@ func NewSession(id string) *Session {
 	return &ss
 }
 
-func (ss *Session) AddEventsAndDetect(events *Events) *Result {
+func (ss *Session) AddEvents(events *Events) {
 	url := events.Url
 	if es, ok := ss.UrlMap[url]; !ok {
 		ss.UrlMap[url] = events
-		es = events
-		return ss.GetResult(es)
 	} else {
 		es.Data = append(es.Data, events.Data...)
-		return ss.GetResult(es)
 	}
 }
 
-func (ss *Session) GetResult(es *Events) *Result {
+func (ss *Session) GetDetectResult(url string) *Result {
+	es, ok := ss.UrlMap[url]
 	res := Result{}
-	res.IsBot, res.Rule = es.Detect()
+	res.UrlRows = []UrlRow{}
 
 	for _, events := range ss.UrlMap {
 		res.UrlRows = append(res.UrlRows, UrlRow{
@@ -47,5 +45,12 @@ func (ss *Session) GetResult(es *Events) *Result {
 			Count: len(events.Data),
 		})
 	}
+
+	if url == "" || !ok {
+		res.IsBot = -1
+	} else {
+		res.IsBot, res.Rule = es.Detect()
+	}
+
 	return &res
 }

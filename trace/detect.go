@@ -11,7 +11,7 @@ func getDegree(x1 int, y1 int, x2 int, y2 int) float64 {
 	return degree
 }
 
-func (es *Events) Detect() (bool, string) {
+func (es *Events) Detect() (int, string) {
 	//if len(es.Data) > 100 {
 	//	return true, "too many points, > 100"
 	//}
@@ -33,12 +33,12 @@ func (es *Events) Detect() (bool, string) {
 		if math.Abs(es.Degrees[i] - es.Degrees[i+1]) < math.Pi/18 {
 			lineLen += 1
 			if lineLen >= 30 {
-				return true, fmt.Sprintf("straight line found in %d continuous points", th)
+				return 1, fmt.Sprintf("straight line found in %d continuous points", th)
 			}
 		} else {
 			lineLen = 0
 		}
 	}
 
-	return false, ""
+	return 0, ""
 }

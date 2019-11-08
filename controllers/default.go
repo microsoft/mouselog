@@ -42,7 +42,31 @@ func (c *ApiController) UploadTrace() {
 	//sessionId := c.Input().Get("sessionId")
 	data := c.Ctx.Input.RequestBody
 
-	//fmt.Printf("Read event [%s]: %s\n", sessionId, string(data))
+	var events trace.Events
+	err := json.Unmarshal(data, &events)
+	if err != nil {
+		panic(err)
+	}
+
+	ss := getOrCreateSs(sessionId)
+	if len(events.Data) > 0 {
+		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, events.Url, events.Data[0].Timestamp, events.Data[0].X, events.Data[0].Y)
+	} else {
+		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, events.Url)
+	}
+
+	if len(events.Data) != 0 {
+		ss.AddEvents(&events)
+	}
+
+	c.Data["json"] = ss.GetDetectResult(events.Url)
+	c.ServeJSON()
+}
+
+func (c *ApiController) ClearTrace() {
+	sessionId := c.StartSession().SessionID()
+	//sessionId := c.Input().Get("sessionId")
+	data := c.Ctx.Input.RequestBody
 
 	var events trace.Events
 	err := json.Unmarshal(data, &events)
@@ -51,13 +75,12 @@ func (c *ApiController) UploadTrace() {
 	}
 
 	ss := getOrCreateSs(sessionId)
-
-	if len(events.Data) > 0 {
-		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, events.Url, events.Data[0].Timestamp, events.Data[0].X, events.Data[0].Y)
-	} else {
-		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, events.Url)
+	if _, ok := ss.UrlMap[events.Url]; ok {
+		delete(ss.UrlMap, events.Url)
 	}
 
-	c.Data["json"] = ss.AddEventsAndDetect(&events)
+	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, events.Url)
+
+	c.Data["json"] = ss.GetDetectResult(events.Url)
 	c.ServeJSON()
 }
