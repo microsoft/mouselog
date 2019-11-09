@@ -75,8 +75,13 @@ func (c *ApiController) ClearTrace() {
 	}
 
 	ss := getOrCreateSs(sessionId)
-	if _, ok := ss.UrlMap[events.Url]; ok {
+	if es, ok := ss.UrlMap[events.Url]; ok {
 		delete(ss.UrlMap, events.Url)
+		for i, es2 := range ss.Data {
+			if es == es2 {
+				ss.Data = append(ss.Data[:i], ss.Data[i+1:]...)
+			}
+		}
 	}
 
 	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, events.Url)

@@ -28,11 +28,11 @@ func (es *Events) Detect() (int, string) {
 	}
 
 	lineLen := 0
-	th := 30
+	th := 50
 	for i := 0; i < len(es.Degrees)-1; i ++ {
-		if math.Abs(es.Degrees[i] - es.Degrees[i+1]) < math.Pi/18 {
+		if math.Abs(es.Degrees[i] - es.Degrees[i+1]) < math.Pi/36 {
 			lineLen += 1
-			if lineLen >= 30 {
+			if lineLen >= th {
 				return 1, fmt.Sprintf("straight line found in %d continuous points", th)
 			}
 		} else {
