@@ -6,7 +6,7 @@ import (
 
 	"github.com/astaxie/beego"
 
-	"github.com/mouselog/mouselog-server/trace"
+	"github.com/mouselog/mouselog/trace"
 )
 
 type ApiController struct {

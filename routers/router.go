@@ -3,7 +3,7 @@ package routers
 import (
 	"github.com/astaxie/beego"
 
-	"github.com/mouselog/mouselog-server/controllers"
+	"github.com/mouselog/mouselog/controllers"
 )
 
 func init() {
