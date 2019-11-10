@@ -3,9 +3,11 @@ package trace
 type Session struct {
 	Id string `json:"sessionId"`
 
-	IsBot int       `json:"isBot"`
-	Rule  string    `json:"rule"`
-	Data  []*Events `json:"data"`
+	IsBot     int       `json:"isBot"`
+	Rule      string    `json:"rule"`
+	RuleStart int       `json:"ruleStart"`
+	RuleEnd   int       `json:"ruleEnd"`
+	Data      []*Events `json:"data"`
 
 	UrlMap map[string]*Events `json:"-"`
 }
@@ -14,6 +16,8 @@ func NewSession(id string) *Session {
 	ss := Session{}
 	ss.Id = id
 	ss.IsBot = -1
+	ss.RuleStart = -1
+	ss.RuleEnd = -1
 	ss.Data = []*Events{}
 
 	ss.UrlMap = map[string]*Events{}
@@ -35,7 +39,7 @@ func (ss *Session) GetDetectResult(url string) *Session {
 	if url == "" || !ok {
 		ss.IsBot = -1
 	} else {
-		ss.IsBot, ss.Rule = es.Detect()
+		ss.IsBot, ss.Rule, ss.RuleStart, ss.RuleEnd = es.Detect()
 	}
 
 	return ss
