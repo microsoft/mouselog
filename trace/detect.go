@@ -11,6 +11,10 @@ func getDegree(x1 int, y1 int, x2 int, y2 int) float64 {
 	return degree
 }
 
+func isDistanceLargerThan(x1 int, y1 int, x2 int, y2 int, dist int) bool {
+	return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) > dist * dist
+}
+
 func (es *Events) Detect() (int, string, int, int) {
 	//if len(es.Data) > 100 {
 	//	return true, "too many points, > 100"
@@ -28,12 +32,13 @@ func (es *Events) Detect() (int, string, int, int) {
 	}
 
 	lineLen := 0
-	th := 50
+	th := 30
+	pixelTh := 400
 	for i := 0; i < len(es.Degrees)-1; i++ {
-		if math.Abs(es.Degrees[i]-es.Degrees[i+1]) < math.Pi/72 {
+		if math.Abs(es.Degrees[i]-es.Degrees[i+1]) < math.Pi/36 {
 			lineLen += 1
-			if lineLen >= th {
-				return 1, fmt.Sprintf("straight line found in %d continuous points, range = (%d, %d)", th, i - lineLen, i), i - lineLen, i
+			if lineLen >= th && isDistanceLargerThan(es.Data[i - lineLen].X, es.Data[i - lineLen].Y, es.Data[i].X, es.Data[i].Y, pixelTh) {
+				return 1, fmt.Sprintf("straight line found in %d continuous points and %d pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), i - lineLen, i
 			}
 		} else {
 			lineLen = 0
