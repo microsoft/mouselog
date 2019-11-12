@@ -14,3 +14,20 @@ type Event struct {
 	X         int     `json:"x"`
 	Y         int     `json:"y"`
 }
+
+func newEvents(url string) *Events {
+	es := Events{}
+	es.Url = url
+	es.Data = []Event{}
+	return &es
+}
+
+func (es *Events) addEvent(t float64, x int, y int) {
+	e := Event{
+		Timestamp: t,
+		X:         x,
+		Y:         y,
+	}
+
+	es.Data = append(es.Data, e)
+}
