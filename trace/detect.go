@@ -38,7 +38,7 @@ func (es *Events) Detect() (int, string, int, int) {
 		if math.Abs(es.Degrees[i]-es.Degrees[i+1]) < math.Pi/36 {
 			lineLen += 1
 			if lineLen >= th && isDistanceLargerThan(es.Data[i - lineLen].X, es.Data[i - lineLen].Y, es.Data[i].X, es.Data[i].Y, pixelTh) {
-				return 1, fmt.Sprintf("straight line found in %d continuous points and %d pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), i - lineLen, i
+				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), i - lineLen, i
 			}
 		} else {
 			lineLen = 0
