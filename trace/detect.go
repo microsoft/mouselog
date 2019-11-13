@@ -16,10 +16,6 @@ func isDistanceLargerThan(x1 int, y1 int, x2 int, y2 int, dist int) bool {
 }
 
 func (es *Events) Detect() (int, string, int, int) {
-	//if len(es.Data) > 100 {
-	//	return true, "too many points, > 100"
-	//}
-
 	m := 10
 	for i := len(es.Degrees); i < len(es.Data)-m*2; i++ {
 		x1 := es.Data[i+m].X - es.Data[i].X
@@ -35,7 +31,7 @@ func (es *Events) Detect() (int, string, int, int) {
 	th := 30
 	pixelTh := 400
 	for i := 0; i < len(es.Degrees)-1; i++ {
-		if math.Abs(es.Degrees[i]-es.Degrees[i+1]) < math.Pi/36 {
+		if math.Abs(es.Degrees[i]-es.Degrees[i+1]) < math.Pi/72 {
 			lineLen += 1
 			if lineLen >= th && isDistanceLargerThan(es.Data[i - lineLen].X, es.Data[i - lineLen].Y, es.Data[i].X, es.Data[i].Y, pixelTh) {
 				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), i - lineLen, i
