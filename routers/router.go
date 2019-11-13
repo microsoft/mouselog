@@ -24,4 +24,5 @@ func initAPI() {
 	beego.Router("/api/get-session-id", &controllers.ApiController{}, "GET:GetSessionId")
 
 	beego.Router("/api/list-sessions", &controllers.ApiController{}, "GET:ListSessions")
+	beego.Router("/api/list-traces", &controllers.ApiController{}, "GET:ListTraces")
 }

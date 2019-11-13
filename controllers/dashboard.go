@@ -57,22 +57,22 @@ func (c *ApiController) ListSessions() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) GetSessions() {
+func (c *ApiController) ListTraces() {
 	fileId := c.Input().Get("fileId")
 	perPage := util.ParseInt(c.Input().Get("perPage"))
 	page := util.ParseInt(c.Input().Get("page"))
-	ua := getOrCreateSs2(fileId)
+	ss := getOrCreateSs2(fileId)
 
 	last := perPage * (page + 1)
-	if last > len(ua.Data) {
-		last = len(ua.Data)
+	if last > len(ss.Data) {
+		last = len(ss.Data)
 	}
-	table := ua.Data[(perPage * page):last]
+	table := ss.Data[(perPage * page):last]
 
 	c.Data["json"] = map[string]interface{} {
 		"data": table,
 		"page": page,
-		"total": len(ua.Data),
+		"total": len(ss.Data),
 	}
 	c.ServeJSON()
 }
