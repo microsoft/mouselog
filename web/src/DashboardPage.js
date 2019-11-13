@@ -1,7 +1,6 @@
 import React from "react";
 import * as Setting from "./Setting";
-import Table from "react-bootstrap/Table";
-import BootstrapTable from 'react-bootstrap-table-next';
+import {Table, Divider, Tag, Row, Col} from 'antd';
 
 class DashboardPage extends React.Component {
   constructor(props) {
@@ -9,6 +8,8 @@ class DashboardPage extends React.Component {
     this.state = {
       classes: props,
       sessions: [],
+      fileId : "",
+      traces: []
     };
   }
 
@@ -24,32 +25,110 @@ class DashboardPage extends React.Component {
         });
   }
 
-  render() {
-    Setting.initServerUrl();
+  renderTraceTable() {
+    const columns = [
+      {
+        title: 'URL',
+        dataIndex: 'url',
+        key: 'url',
+      },
+      {
+        title: 'Width',
+        dataIndex: 'width',
+        key: 'width',
+      },
+      {
+        title: 'Height',
+        dataIndex: 'height',
+        key: 'height',
+      },
+      {
+        title: 'Event Count',
+        dataIndex: 'events.length',
+        key: 'count',
+      }
+    ];
 
-    const columns = [{
-      dataField: 'sessionId',
-      text: 'File ID'
-    }, {
-      dataField: 'dataLen',
-      text: 'Trace Size'
-    }, {
-      dataField: 'isBot',
-      text: 'IsBot'
-    }, {
-      dataField: 'rule',
-      text: 'Rule'
-    }, {
-      dataField: 'ruleStart',
-      text: 'Rule Start'
-    }, {
-      dataField: 'ruleEnd',
-      text: 'Rule End'
-    }];
+    const rowRadioSelection = {
+      type: 'radio',
+      columnTitle: 'Select',
+      onSelect: (selectedRowKeys, selectedRows) => {
+        console.log(selectedRowKeys, selectedRows)
+      },
+    };
+
+    return (
+      <div>
+        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered title={() => 'Traces: ' + this.state.fileId} />
+      </div>
+    );
+  }
+
+  render() {
+    const columns = [
+      {
+        title: 'File ID',
+        dataIndex: 'sessionId',
+        key: 'sessionId',
+      },
+      {
+        title: 'Trace Size',
+        dataIndex: 'dataLen',
+        key: 'dataLen',
+      },
+      {
+        title: 'Is Bot',
+        dataIndex: 'isBot',
+        key: 'isBot',
+      },
+      {
+        title: 'Rule',
+        dataIndex: 'rule',
+        key: 'rule',
+      },
+      {
+        title: 'Rule Start',
+        dataIndex: 'ruleStart',
+        key: 'ruleStart',
+      },
+      {
+        title: 'Rule End',
+        dataIndex: 'ruleEnd',
+        key: 'ruleEnd',
+      }
+    ];
+
+    const rowRadioSelection = {
+      type: 'radio',
+      columnTitle: 'Select',
+      onSelect: (selectedRowKeys, selectedRows) => {
+        console.log(selectedRowKeys, selectedRows)
+
+        fetch(`${Setting.ServerUrl}/api/list-traces?fileId=${selectedRowKeys.sessionId}&perPage=${10000000}&page=${0}`, {
+          method: "GET",
+          credentials: "include"
+        }).then(res => res.json())
+          .then(res => {
+            this.setState({
+              traces: res.data,
+              fileId: selectedRowKeys.sessionId
+            });
+          });
+      },
+    };
 
     return (
         <div>
-          <BootstrapTable keyField='id' data={ this.state.sessions } columns={ columns } striped hover condensed classes={"table-sm"} />
+          <Row>
+            <Col span={12}>
+              <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small" bordered title={() => 'Sessions'} />
+              {
+                this.renderTraceTable()
+              }
+            </Col>
+            <Col span={12}>col-12</Col>
+          </Row>
+
         </div>
     );
   }

@@ -1,21 +1,22 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Badge from "react-bootstrap/Badge";
 import * as Setting from "./Setting";
-import Navbar from "react-bootstrap/Navbar";
-import {Nav} from "react-bootstrap";
 
 import {Switch, Route} from 'react-router-dom'
 import TestPage from "./TestPage";
 import DashboardPage from "./DashboardPage";
+import {Badge, Button, Layout, Menu, Tag, Typography} from "antd";
+
+const {Title, Paragraph, Text} = Typography;
+const {Header, Footer, Sider, Content} = Layout;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       classes: props,
-      status: false,
+      status: true,
       sessionId: "",
     };
   }
@@ -25,59 +26,61 @@ class App extends React.Component {
       method: "GET",
       credentials: "include"
     }).then(res => res.json())
-        .then(res => {
-          this.setState({
-            sessionId: res,
-            status: true
-          });
-        })
-        .catch(error => {
-          this.setState({
-            status: false
-          });
+      .then(res => {
+        this.setState({
+          sessionId: res,
+          status: true
         });
+      })
+      .catch(error => {
+        this.setState({
+          status: false
+        });
+      });
   }
 
   render() {
     Setting.initServerUrl();
 
     return (
-        <div className="App fill-window" onMouseMove={(e) => Setting.mouseMove(e)}>
-          <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="#home">
-              <img
-                  alt=""
-                  src={logo}
-                  width="30"
-                  height="30"
-                  className="d-inline-block align-top"
-              />{' '}
-              MouseLog
-            </Navbar.Brand>
-            <Nav className="mr-auto">
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-            </Nav>
-            <Navbar.Toggle/>
-            <Navbar.Collapse className="justify-content-end">
-              <Navbar.Text>
-                Server Status: {this.state.status ? <Badge variant="success">On</Badge> :
-                  <Badge variant="danger">Off</Badge>}
-              </Navbar.Text>
-              <Navbar.Text>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              </Navbar.Text>
-              <Navbar.Text>
-                Your Session ID: <Badge
-                  variant="secondary">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Badge>
-              </Navbar.Text>
-            </Navbar.Collapse>
-          </Navbar>
-          <Switch>
-            <Route exact path="/" component={TestPage}/>
-            <Route path="/dashboard/" component={DashboardPage}/>
-          </Switch>
-        </div>
+      <div className="fill-window" onMouseMove={(e) => Setting.mouseMove(e)}>
+        <Layout className="layout">
+          <Header style={{padding: '0'}}>
+            <div className="logo"/>
+
+            <Menu
+              // theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={['1']}
+              style={{lineHeight: '64px'}}
+              inlineCollapsed={false}
+            >
+              <Text>Mouse Tracking</Text>
+
+              <Menu.Item key="1">
+                <a href="/">
+                  Home
+                </a>
+              </Menu.Item>
+              <Menu.Item key="2">
+                <a href="/dashboard">
+                  Dashboard
+                </a>
+              </Menu.Item>
+
+              <Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server Status: </Text>
+              {this.state.status ? <Tag color="#87d068">On</Tag> : <Tag color="#f50">Off</Tag>}
+              <Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: </Text>
+              {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
+            </Menu>
+          </Header>
+        </Layout>
+
+        <Switch>
+          <Route exact path="/" component={TestPage}/>
+          <Route path="/dashboard/" component={DashboardPage}/>
+        </Switch>
+      </div>
     );
   }
 

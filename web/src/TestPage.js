@@ -1,15 +1,8 @@
 import React from "react";
 import * as Setting from "./Setting";
-import Alert from "react-bootstrap/Alert";
 import {Layer, Line, Stage} from "react-konva";
-import Button from "react-bootstrap/Button";
-import ProgressBar from "react-bootstrap/ProgressBar";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Table from "react-bootstrap/Table";
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
+import {Alert, Button, Card, Col, Progress, Row, Table} from "antd";
+import WrappedNormalLoginForm from "./Login";
 
 class TestPage extends React.Component {
   constructor(props) {
@@ -134,43 +127,20 @@ class TestPage extends React.Component {
   renderResult() {
     if (!this.state.status) {
       return (
-          <Alert variant="secondary">
-            <Alert.Heading>Server offline</Alert.Heading>
-          </Alert>
+        <Alert message="Server Offline" description="Server Offline" type="Informational" showIcon banner />
       )
     } else {
       if (this.state.isBot === 1) {
         return (
-            <Alert variant="danger">
-              <Alert.Heading>
-                You Are Bot
-                &nbsp;&nbsp;
-                <Button variant="outline-secondary" onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
-              </Alert.Heading>
-              <p>
-                {this.state.rule}
-              </p>
-            </Alert>
+          <Alert message="You Are Bot" description={this.state.rule} type="error" showIcon banner />
         )
       } else if (this.state.isBot === 0) {
         return (
-            <Alert variant="success">
-              <Alert.Heading>
-                You Are Human
-                &nbsp;&nbsp;
-                <Button variant="outline-secondary" onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
-              </Alert.Heading>
-            </Alert>
+          <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner />
         )
       } else {
         return (
-            <Alert variant="warning">
-              <Alert.Heading>
-                No Mouse Trace
-                &nbsp;&nbsp;
-                <Button variant="outline-secondary" onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
-              </Alert.Heading>
-            </Alert>
+          <Alert message="No Mouse Trace" description="No Mouse Trace" type="warning" showIcon banner />
         )
       }
     }
@@ -207,95 +177,87 @@ class TestPage extends React.Component {
     )
   }
 
-  render() {
-    Setting.initServerUrl();
+  renderSessionTable() {
+    const columns = [
+      {
+        title: 'URL',
+        dataIndex: 'url',
+        key: 'url',
+      },
+      {
+        title: 'Width',
+        dataIndex: 'width',
+        key: 'width',
+      },
+      {
+        title: 'Height',
+        dataIndex: 'height',
+        key: 'height',
+      },
+      {
+        title: 'Event Count',
+        dataIndex: 'events.length',
+        key: 'count',
+      }
+    ];
 
     return (
-        <div>
-          <ProgressBar animated now={this.state.events.length * 2} label={`${this.state.events.length * 2}%`}/>
-          {this.renderResult()}
-          <Container fluid>
-            <Row>
-              <Col>
-                <Table striped bordered hover size="sm">
-                  <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Url</th>
-                    <th>Size</th>
-                    <th>Count</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {
-                    this.state.data.map(function (e, i) {
-                      return (
-                          <tr>
-                            <td>{i}</td>
-                            <td>{e.url}</td>
-                            <td>{`(${e.width}, ${e.height})`}</td>
-                            <td>{e.events.length}</td>
-                          </tr>
-                      )
-                    })
-                  }
-                  </tbody>
-                </Table>
-                <Table striped bordered hover size="sm">
-                  <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Timestamp (seconds)</th>
-                    <th>(X, Y)</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {
-                    this.state.events.slice(-10).map(function (e, i) {
-                      return (
-                          <tr>
-                            <td>{e.no}</td>
-                            <td>{e.timestamp / 100}</td>
-                            <td>{`(${e.x}, ${e.y})`}</td>
-                          </tr>
-                      )
-                    })
-                  }
-                  </tbody>
-                </Table>
-              </Col>
-              <Col>
-                {this.renderCanvas()}
-              </Col>
-              <Col>
-                <Card>
-                  <Card.Header>Beat Me !</Card.Header>
-                  <Card.Body>
-                    <Form>
-                      <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control type="username" placeholder="Enter Username"/>
-                        <Form.Text className="text-muted">
-                          We'll never share your username with anyone else.
-                        </Form.Text>
-                      </Form.Group>
+      <div>
+        <Table columns={columns} dataSource={this.state.data} size="small" bordered title={() => 'Traces: ' + this.state.sessionId} />
+      </div>
+    );
+  }
 
-                      <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password"/>
-                      </Form.Group>
-                      <Form.Group controlId="formBasicCheckbox">
-                        <Form.Check type="checkbox" label="Agree our terms of service."/>
-                      </Form.Group>
-                      <Button variant="primary" type="submit">
-                        Sign Up
-                      </Button>
-                    </Form>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-          </Container>
+  renderPointTable() {
+    const columns = [
+      {
+        title: 'Timestamp (milliseconds)',
+        dataIndex: 'timestamp',
+        key: 'url',
+      },
+      {
+        title: 'X',
+        dataIndex: 'x',
+        key: 'x',
+      },
+      {
+        title: 'Y',
+        dataIndex: 'y',
+        key: 'y',
+      }
+    ];
+
+    return (
+      <div>
+        <Table columns={columns} dataSource={this.state.events.slice(-6)} size="small" bordered title={() => 'Points: ' + window.location.pathname} />
+      </div>
+    );
+  }
+
+  render() {
+    return (
+        <div>
+          <Progress percent={this.state.events.length * 2} status="active" />
+          {this.renderResult()}
+          <Row>
+            <Col span={6}>
+              {
+                this.renderSessionTable()
+              }
+              <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
+              {
+                this.renderPointTable()
+              }
+            </Col>
+            <Col span={12}>
+              {this.renderCanvas()}
+            </Col>
+            <Col span={6}>
+              <Card title="Beat Me !" extra={<a href="#">More</a>} >
+                <WrappedNormalLoginForm />
+              </Card>
+            </Col>
+          </Row>
         </div>
     );
   }

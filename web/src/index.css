@@ -12,6 +12,15 @@ code {
     monospace;
 }
 
+.logo {
+  background: url("logo.svg");
+  width: 33px;
+  height: 33px;
+  /*background: rgba(0, 0, 0, 0.2);*/
+  margin: 18px 10px 16px 10px;
+  float: left;
+}
+
 /*https://stackoverflow.com/questions/38428322/react-component-full-screen-with-height-100*/
 html, body {
   margin: 0;
@@ -26,16 +35,3 @@ html, body {
   overflow: hidden;
 }
 
-/*.react-bootstrap-table {*/
-/*  display: block;*/
-/*  width: 100%;*/
-/*  overflow-x: auto;*/
-/*  -webkit-overflow-scrolling: touch*/
-/*}*/
-.react-bootstrap-table table {
-  table-layout: auto !important
-}
-.table th,
-.table td {
-  white-space: nowrap
-}
