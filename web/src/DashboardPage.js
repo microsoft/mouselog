@@ -1,6 +1,7 @@
 import React from "react";
 import * as Setting from "./Setting";
 import Table from "react-bootstrap/Table";
+import BootstrapTable from 'react-bootstrap-table-next';
 
 class DashboardPage extends React.Component {
   constructor(props) {
@@ -26,38 +27,29 @@ class DashboardPage extends React.Component {
   render() {
     Setting.initServerUrl();
 
+    const columns = [{
+      dataField: 'sessionId',
+      text: 'File ID'
+    }, {
+      dataField: 'dataLen',
+      text: 'Trace Size'
+    }, {
+      dataField: 'isBot',
+      text: 'IsBot'
+    }, {
+      dataField: 'rule',
+      text: 'Rule'
+    }, {
+      dataField: 'ruleStart',
+      text: 'Rule Start'
+    }, {
+      dataField: 'ruleEnd',
+      text: 'Rule End'
+    }];
+
     return (
         <div>
-          <Table striped bordered hover size="sm">
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>File ID</th>
-              <th>Trace Size</th>
-              <th>IsBot</th>
-              <th>Rule</th>
-              <th>Rule Start</th>
-              <th>Rule End</th>
-            </tr>
-            </thead>
-            <tbody>
-            {
-              this.state.sessions.map(function (e, i) {
-                return (
-                    <tr>
-                      <td>{i}</td>
-                      <td>{e.sessionId}</td>
-                      <td>{e.dataLen}</td>
-                      <td>{e.isBot}</td>
-                      <td>{e.rule}</td>
-                      <td>{e.ruleStart}</td>
-                      <td>{e.ruleEnd}</td>
-                    </tr>
-                )
-              })
-            }
-            </tbody>
-          </Table>
+          <BootstrapTable keyField='id' data={ this.state.sessions } columns={ columns } striped hover condensed classes={"table-sm"} />
         </div>
     );
   }
