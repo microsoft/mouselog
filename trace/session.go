@@ -44,3 +44,15 @@ func (ss *Session) GetDetectResult(url string) *Session {
 
 	return ss
 }
+
+func (ss *Session) ToJson() *SessionJson {
+	sj := SessionJson{
+		Id:        ss.Id,
+		IsBot:     ss.IsBot,
+		Rule:      ss.Rule,
+		RuleStart: ss.RuleStart,
+		RuleEnd:   ss.RuleEnd,
+		DataLen: len(ss.Data),
+	}
+	return &sj
+}

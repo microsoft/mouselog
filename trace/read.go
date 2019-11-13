@@ -29,19 +29,25 @@ func ReadTraces(fileId string) *Session {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
+	const maxCapacity = 1024 * 1024 * 8
+	buf := make([]byte, maxCapacity)
+	scanner.Buffer(buf, maxCapacity)
 	i := 0
 	for scanner.Scan() {
-		row := strings.SplitN(scanner.Text(), " ", RowLabel + 1)
+		line := scanner.Text()
+		row := strings.SplitN(line, " ", RowLabel+1)
 
 		no := row[RowNo]
 		trace := row[RowTrace]
 		//target := row[RowTarget]
-		label := row[RowLabel]
 
-		if label == "0" {
-			ss.IsBot = 1
-		} else {
-			ss.IsBot = 0
+		if len(row) == RowLabel+1 {
+			label := row[RowLabel]
+			if label == "0" {
+				ss.IsBot = 1
+			} else {
+				ss.IsBot = 0
+			}
 		}
 
 		es := newEvents(no)
@@ -61,7 +67,7 @@ func ReadTraces(fileId string) *Session {
 
 		ss.AddEvents(es)
 
-		if i % 1000 == 0 {
+		if i%1000 == 0 {
 			fmt.Printf("[%d] Read trace a line\n", i)
 		}
 
