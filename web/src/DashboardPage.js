@@ -25,46 +25,7 @@ class DashboardPage extends React.Component {
         });
   }
 
-  renderTraceTable() {
-    const columns = [
-      {
-        title: 'URL',
-        dataIndex: 'url',
-        key: 'url',
-      },
-      {
-        title: 'Width',
-        dataIndex: 'width',
-        key: 'width',
-      },
-      {
-        title: 'Height',
-        dataIndex: 'height',
-        key: 'height',
-      },
-      {
-        title: 'Event Count',
-        dataIndex: 'events.length',
-        key: 'count',
-      }
-    ];
-
-    const rowRadioSelection = {
-      type: 'radio',
-      columnTitle: 'Select',
-      onSelect: (selectedRowKeys, selectedRows) => {
-        console.log(selectedRowKeys, selectedRows)
-      },
-    };
-
-    return (
-      <div>
-        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered title={() => 'Traces: ' + this.state.fileId} />
-      </div>
-    );
-  }
-
-  render() {
+  renderSessionTable() {
     const columns = [
       {
         title: 'File ID',
@@ -108,20 +69,69 @@ class DashboardPage extends React.Component {
           method: "GET",
           credentials: "include"
         }).then(res => res.json())
-          .then(res => {
-            this.setState({
-              traces: res.data,
-              fileId: selectedRowKeys.sessionId
+            .then(res => {
+              this.setState({
+                traces: res.data,
+                fileId: selectedRowKeys.sessionId
+              });
             });
-          });
       },
     };
 
     return (
         <div>
+          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small" bordered title={() => 'Sessions'} />
+        </div>
+    );
+  }
+
+  renderTraceTable() {
+    const columns = [
+      {
+        title: 'URL',
+        dataIndex: 'url',
+        key: 'url',
+      },
+      {
+        title: 'Width',
+        dataIndex: 'width',
+        key: 'width',
+      },
+      {
+        title: 'Height',
+        dataIndex: 'height',
+        key: 'height',
+      },
+      {
+        title: 'Event Count',
+        dataIndex: 'events.length',
+        key: 'count',
+      }
+    ];
+
+    const rowRadioSelection = {
+      type: 'radio',
+      columnTitle: 'Select',
+      onSelect: (selectedRowKeys, selectedRows) => {
+        console.log(selectedRowKeys, selectedRows)
+      },
+    };
+
+    return (
+      <div>
+        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered title={() => 'Traces: ' + this.state.fileId} />
+      </div>
+    );
+  }
+
+  render() {
+    return (
+        <div>
           <Row>
             <Col span={12}>
-              <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small" bordered title={() => 'Sessions'} />
+              {
+                this.renderSessionTable()
+              }
               {
                 this.renderTraceTable()
               }
