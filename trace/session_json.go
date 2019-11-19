@@ -7,5 +7,5 @@ type SessionJson struct {
 	Rule      string `json:"rule"`
 	RuleStart int    `json:"ruleStart"`
 	RuleEnd   int    `json:"ruleEnd"`
-	DataLen   int    `json:"dataLen"`
+	TraceSize int    `json:"traceSize"`
 }

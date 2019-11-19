@@ -64,15 +64,15 @@ func (c *ApiController) ListTraces() {
 	ss := getOrCreateSs2(fileId)
 
 	last := perPage * (page + 1)
-	if last > len(ss.Data) {
-		last = len(ss.Data)
+	if last > len(ss.Traces) {
+		last = len(ss.Traces)
 	}
-	table := ss.Data[(perPage * page):last]
+	table := ss.Traces[(perPage * page):last]
 
 	c.Data["json"] = map[string]interface{} {
 		"data": table,
 		"page": page,
-		"total": len(ss.Data),
+		"total": len(ss.Traces),
 	}
 	c.ServeJSON()
 }

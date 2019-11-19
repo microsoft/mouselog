@@ -7,7 +7,7 @@ type Session struct {
 	Rule      string    `json:"rule"`
 	RuleStart int       `json:"ruleStart"`
 	RuleEnd   int       `json:"ruleEnd"`
-	Data      []*Events `json:"data"`
+	Traces    []*Events `json:"traces"`
 
 	UrlMap map[string]*Events `json:"-"`
 }
@@ -18,7 +18,7 @@ func NewSession(id string) *Session {
 	ss.IsBot = -1
 	ss.RuleStart = -1
 	ss.RuleEnd = -1
-	ss.Data = []*Events{}
+	ss.Traces = []*Events{}
 
 	ss.UrlMap = map[string]*Events{}
 	return &ss
@@ -28,7 +28,7 @@ func (ss *Session) AddEvents(events *Events) {
 	url := events.Url
 	if es, ok := ss.UrlMap[url]; !ok {
 		ss.UrlMap[url] = events
-		ss.Data = append(ss.Data, events)
+		ss.Traces = append(ss.Traces, events)
 	} else {
 		es.Data = append(es.Data, events.Data...)
 	}
@@ -52,7 +52,7 @@ func (ss *Session) ToJson() *SessionJson {
 		Rule:      ss.Rule,
 		RuleStart: ss.RuleStart,
 		RuleEnd:   ss.RuleEnd,
-		DataLen: len(ss.Data),
+		TraceSize: len(ss.Traces),
 	}
 	return &sj
 }

@@ -34,8 +34,8 @@ class DashboardPage extends React.Component {
       },
       {
         title: 'Trace Size',
-        dataIndex: 'dataLen',
-        key: 'dataLen',
+        dataIndex: 'traceSize',
+        key: 'traceSize',
       },
       {
         title: 'Is Bot',
@@ -136,7 +136,9 @@ class DashboardPage extends React.Component {
                 this.renderTraceTable()
               }
             </Col>
-            <Col span={12}>col-12</Col>
+            <Col span={12}>
+
+            </Col>
           </Row>
 
         </div>

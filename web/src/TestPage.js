@@ -16,7 +16,7 @@ class TestPage extends React.Component {
       rule: "",
       ruleStart: -1,
       ruleEnd: -1,
-      data: [],
+      traces: [],
     };
   }
 
@@ -42,26 +42,32 @@ class TestPage extends React.Component {
         });
   }
 
-  getPoints() {
+  getPointsFromTrace(trace) {
     let points = [];
-    if (this.state.data.length !== 0) {
-      this.state.data[0].events.forEach(function (event) {
-        points.push(event.x);
-        points.push(event.y);
-      });
-    }
+    trace.events.forEach(function (event) {
+      points.push(event.x);
+      points.push(event.y);
+    });
     return points;
+  }
+
+  getPoints() {
+    if (this.state.traces.length !== 0) {
+      return this.getPointsFromTrace(this.state.traces[0]);
+    } else {
+      return [];
+    }
   }
 
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
-    const data = {url: window.location.pathname, width: width, height: height, events: this.state.events};
+    const trace = {url: window.location.pathname, width: width, height: height, events: this.state.events};
 
     fetch(`${Setting.ServerUrl}/api/${action}-trace?sessionId=${this.state.sessionId}`, {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(data)
+      body: JSON.stringify(trace)
     }).then(response => response.json())
         .then(res => {
           this.setState({
@@ -69,7 +75,7 @@ class TestPage extends React.Component {
             rule: res.rule,
             ruleStart: res.ruleStart,
             ruleEnd: res.ruleEnd,
-            data: res.data,
+            traces: res.traces,
             status: true
           });
         })
@@ -88,9 +94,9 @@ class TestPage extends React.Component {
       events: this.state.events
     });
 
-    this.state.data = [];
+    this.state.traces = [];
     this.setState({
-      data: this.state.data
+      traces: this.state.traces
     });
   }
 
@@ -107,15 +113,15 @@ class TestPage extends React.Component {
     let p = {no: this.state.events.length, timestamp: e.timeStamp, x: e.pageX, y: e.pageY};
     this.state.events.push(p);
     let p2 = {timestamp: e.timeStamp, x: e.pageX, y: e.pageY};
-    if (this.state.data.length === 0) {
+    if (this.state.traces.length === 0) {
       const width = document.body.scrollWidth;
       const height = document.body.scrollHeight;
-      this.state.data = [{url: window.location.pathname, width: width, height: height, events: []}];
+      this.state.traces = [{url: window.location.pathname, width: width, height: height, events: []}];
       this.setState({
-        data: this.state.data
+        traces: this.state.traces
       });
     }
-    this.state.data[0].events.push(p2);
+    this.state.traces[0].events.push(p2);
 
     this.setState({
       events: this.state.events
@@ -203,7 +209,7 @@ class TestPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={this.state.data} size="small" bordered title={() => 'Traces: ' + this.state.sessionId} />
+        <Table columns={columns} dataSource={this.state.traces} size="small" bordered title={() => 'Traces: ' + this.state.sessionId} />
       </div>
     );
   }
