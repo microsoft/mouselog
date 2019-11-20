@@ -135,7 +135,7 @@ class TestPage extends React.Component {
     }
   }
 
-  renderSessionTable() {
+  renderTraceTable() {
     const columns = [
       {
         title: 'URL',
@@ -183,7 +183,7 @@ class TestPage extends React.Component {
     return points;
   }
 
-  renderPointTable() {
+  renderEventTable() {
     const columns = [
       {
         title: 'Timestamp (milliseconds)',
@@ -210,8 +210,8 @@ class TestPage extends React.Component {
   }
 
   renderCanvas() {
-    const width = document.body.scrollWidth / 2 - 10 - 2;
-    const height = document.body.scrollHeight / 2;
+    const width = document.body.scrollWidth * 0.49;
+    const height = document.body.scrollHeight * 0.49;
     return (
       <Stage width={width} height={height} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
         <Layer>
@@ -220,8 +220,8 @@ class TestPage extends React.Component {
             y={0}
             points={this.getPoints()}
             stroke="black"
-            scaleX={0.5}
-            scaleY={0.5}
+            scaleX={0.49}
+            scaleY={0.49}
           />
           {
             (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
@@ -248,11 +248,11 @@ class TestPage extends React.Component {
           <Row>
             <Col span={6}>
               {
-                this.renderSessionTable()
+                this.renderTraceTable()
               }
               <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
               {
-                this.renderPointTable()
+                this.renderEventTable()
               }
             </Col>
             <Col span={12}>
