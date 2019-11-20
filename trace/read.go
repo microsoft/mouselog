@@ -52,6 +52,8 @@ func ReadTraces(fileId string) *Session {
 
 		t := newTrace(no)
 		points := strings.Split(trace, ";")
+		maxX := 0
+		maxY := 0
 		for _, point := range points {
 			if point == "" {
 				continue
@@ -59,12 +61,20 @@ func ReadTraces(fileId string) *Session {
 
 			tokens := strings.Split(point, ",")
 			x := util.ParseInt(tokens[0])
+			if maxX < x {
+				maxX = x
+			}
 			y := util.ParseInt(tokens[1])
+			if maxY < y {
+				maxY = y
+			}
 			timestamp := util.ParseFloat(tokens[2])
 
 			t.addEvent(timestamp, x, y)
 		}
 
+		t.Width = maxX
+		t.Height = maxY
 		ss.AddTrace(t)
 
 		if i%1000 == 0 {

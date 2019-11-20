@@ -12,7 +12,7 @@ func TestSessionToJson(t *testing.T) {
 		Url:     "/",
 		Width:   800,
 		Height:  600,
-		Data:    nil,
+		Events:  nil,
 		Degrees: nil,
 	}
 

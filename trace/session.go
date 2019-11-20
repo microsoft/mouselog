@@ -30,7 +30,7 @@ func (ss *Session) AddTrace(t *Trace) {
 		ss.UrlMap[url] = t
 		ss.Traces = append(ss.Traces, t)
 	} else {
-		es.Data = append(es.Data, t.Data...)
+		es.Events = append(es.Events, t.Events...)
 	}
 }
 

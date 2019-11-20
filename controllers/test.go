@@ -49,13 +49,13 @@ func (c *ApiController) UploadTrace() {
 	}
 
 	ss := getOrCreateSs(sessionId)
-	if len(t.Data) > 0 {
-		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Url, t.Data[0].Timestamp, t.Data[0].X, t.Data[0].Y)
+	if len(t.Events) > 0 {
+		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Url, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
 	} else {
 		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, t.Url)
 	}
 
-	if len(t.Data) != 0 {
+	if len(t.Events) != 0 {
 		ss.AddTrace(&t)
 	}
 
