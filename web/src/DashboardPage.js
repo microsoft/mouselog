@@ -1,7 +1,8 @@
 import React from "react";
 import * as Setting from "./Setting";
-import {Table, Divider, Tag, Row, Col} from 'antd';
+import {Table, Divider, Tag, Row, Col, Typography} from 'antd';
 import {Layer, Line, Stage} from "react-konva";
+const {Text} = Typography;
 
 class DashboardPage extends React.Component {
   constructor(props) {
@@ -87,7 +88,7 @@ class DashboardPage extends React.Component {
     );
   }
 
-  renderTraceTable() {
+  renderTraceTable(title) {
     const columns = [
       {
         title: 'URL',
@@ -125,7 +126,7 @@ class DashboardPage extends React.Component {
 
     return (
       <div>
-        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered title={() => 'Traces: ' + this.state.fileId} />
+        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} />
       </div>
     );
   }
@@ -187,7 +188,7 @@ class DashboardPage extends React.Component {
                 this.renderSessionTable()
               }
               {
-                this.renderTraceTable()
+                this.renderTraceTable(this.state.fileId)
               }
             </Col>
             <Col span={12}>

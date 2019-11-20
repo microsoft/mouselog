@@ -1,8 +1,9 @@
 import React from "react";
 import * as Setting from "./Setting";
 import {Layer, Line, Stage} from "react-konva";
-import {Alert, Button, Card, Col, Progress, Row, Table} from "antd";
+import {Alert, Button, Card, Col, Progress, Row, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
+const {Text} = Typography;
 
 class TestPage extends React.Component {
   constructor(props) {
@@ -135,7 +136,7 @@ class TestPage extends React.Component {
     }
   }
 
-  renderTraceTable() {
+  renderTraceTable(title) {
     const columns = [
       {
         title: 'URL',
@@ -161,7 +162,7 @@ class TestPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={this.state.traces} size="small" bordered title={() => 'Traces: ' + this.state.sessionId} />
+        <Table columns={columns} dataSource={this.state.traces} size="small" bordered title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} />
       </div>
     );
   }
@@ -183,7 +184,7 @@ class TestPage extends React.Component {
     return points;
   }
 
-  renderEventTable() {
+  renderEventTable(title) {
     const columns = [
       {
         title: 'Timestamp (milliseconds)',
@@ -204,7 +205,7 @@ class TestPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={this.state.events.slice(-6)} size="small" bordered title={() => 'Points: ' + window.location.pathname} />
+        <Table columns={columns} dataSource={this.state.events.slice(-6)} size="small" bordered title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} />
       </div>
     );
   }
@@ -248,11 +249,11 @@ class TestPage extends React.Component {
           <Row>
             <Col span={6}>
               {
-                this.renderTraceTable()
+                this.renderTraceTable(this.state.sessionId)
               }
               <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
               {
-                this.renderEventTable()
+                this.renderEventTable(window.location.pathname)
               }
             </Col>
             <Col span={12}>
