@@ -210,10 +210,10 @@ class TestPage extends React.Component {
   }
 
   renderCanvas() {
-    const width = document.body.scrollWidth;
-    const height = document.body.scrollHeight;
+    const width = document.body.scrollWidth / 2 - 10 - 2;
+    const height = document.body.scrollHeight / 2;
     return (
-      <Stage width={width / 2} height={height / 2}>
+      <Stage width={width} height={height} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
         <Layer>
           <Line
             x={0}

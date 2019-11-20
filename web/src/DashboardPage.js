@@ -130,36 +130,36 @@ class DashboardPage extends React.Component {
     );
   }
 
-  getPoints() {
+  getPoints(canvasWidth, canvasHeight) {
     if (this.state.trace !== null) {
-      return this.getPointsFromTrace(this.state.trace);
+      return this.getPointsFromTrace(this.state.trace, canvasWidth, canvasHeight);
     } else {
       return [];
     }
   }
 
-  getPointsFromTrace(trace) {
+  getPointsFromTrace(trace, canvasWidth, canvasHeight) {
     let points = [];
     trace.events.forEach(function (event) {
-      points.push(event.x / 5);
-      points.push(event.y / 5);
+      points.push(event.x * canvasWidth / trace.width);
+      points.push(event.y * canvasHeight / trace.height);
     });
     return points;
   }
 
   renderCanvas() {
-    const width = document.body.scrollWidth;
-    const height = document.body.scrollHeight;
+    const width = document.body.scrollWidth / 2 - 20;
+    const height = document.body.scrollHeight / 2 - 20;
     return (
-      <Stage width={width / 2} height={height / 2}>
+      <Stage width={width} height={height} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
         <Layer>
           <Line
-            x={0}
-            y={0}
-            points={this.getPoints()}
+            x={-10}
+            y={-10}
+            points={this.getPoints(width, height)}
             stroke="black"
-            scaleX={0.5}
-            scaleY={0.5}
+            scaleX={1}
+            scaleY={1}
           />
           {/*{*/}
           {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}

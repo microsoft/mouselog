@@ -45,7 +45,7 @@ class App extends React.Component {
     return (
       <div className="fill-window" onMouseMove={(e) => Setting.mouseMove(e)}>
         <Layout className="layout">
-          <Header style={{padding: '0'}}>
+          <Header style={{padding: '0', marginBottom: '3px'}}>
             <div className="logo"/>
 
             <Menu
