@@ -26,20 +26,21 @@ func NewSession(id string) *Session {
 
 func (ss *Session) AddTrace(t *Trace) {
 	url := t.Url
-	if es, ok := ss.UrlMap[url]; !ok {
+	if tOriginal, ok := ss.UrlMap[url]; !ok {
 		ss.UrlMap[url] = t
 		ss.Traces = append(ss.Traces, t)
 	} else {
-		es.Events = append(es.Events, t.Events...)
+		tOriginal.Events = append(tOriginal.Events, t.Events...)
 	}
 }
 
 func (ss *Session) GetDetectResult(url string) *Session {
-	es, ok := ss.UrlMap[url]
+	t, ok := ss.UrlMap[url]
 	if url == "" || !ok {
 		ss.IsBot = -1
 	} else {
-		ss.IsBot, ss.Rule, ss.RuleStart, ss.RuleEnd = es.Detect()
+		ss.IsBot, ss.Rule, ss.RuleStart, ss.RuleEnd = t.Detect()
+		t.IsBot = ss.IsBot
 	}
 
 	return ss

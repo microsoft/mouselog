@@ -41,16 +41,16 @@ func ReadTraces(fileId string) *Session {
 		trace := row[RowTrace]
 		//target := row[RowTarget]
 
+		t := newTrace(no)
+
 		if len(row) == RowLabel+1 {
 			label := row[RowLabel]
 			if label == "0" {
-				ss.IsBot = 1
+				t.IsBot = 1
 			} else {
-				ss.IsBot = 0
+				t.IsBot = 0
 			}
 		}
-
-		t := newTrace(no)
 		points := strings.Split(trace, ";")
 		maxX := 0
 		maxY := 0

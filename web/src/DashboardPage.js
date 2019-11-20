@@ -111,6 +111,11 @@ class DashboardPage extends React.Component {
         title: 'Event Count',
         dataIndex: 'events.length',
         key: 'count',
+      },
+      {
+        title: 'Is Bot',
+        dataIndex: 'isBot',
+        key: 'isBot',
       }
     ];
 

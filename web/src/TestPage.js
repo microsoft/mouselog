@@ -95,24 +95,21 @@ class TestPage extends React.Component {
       });
     }
 
-    let p = {no: this.state.events.length, timestamp: e.timeStamp, x: e.pageX, y: e.pageY};
+    let p = {timestamp: e.timeStamp, x: e.pageX, y: e.pageY};
     this.state.events.push(p);
-    let p2 = {timestamp: e.timeStamp, x: e.pageX, y: e.pageY};
     if (this.state.traces.length === 0) {
       const width = document.body.scrollWidth;
       const height = document.body.scrollHeight;
-      this.state.traces = [{url: window.location.pathname, width: width, height: height, events: []}];
+      this.state.traces = [{url: window.location.pathname, width: width, height: height, isBot: -1, events: []}];
       this.setState({
         traces: this.state.traces
       });
     }
-    this.state.traces[0].events.push(p2);
+    this.state.traces[0].events.push(p);
 
     this.setState({
       events: this.state.events
     });
-
-    // draw(e);
   };
 
   renderResult() {
@@ -158,6 +155,11 @@ class TestPage extends React.Component {
         title: 'Event Count',
         dataIndex: 'events.length',
         key: 'count',
+      },
+      {
+        title: 'Is Bot',
+        dataIndex: 'isBot',
+        key: 'isBot',
       }
     ];
 
