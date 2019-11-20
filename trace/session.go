@@ -3,13 +3,13 @@ package trace
 type Session struct {
 	Id string `json:"sessionId"`
 
-	IsBot     int       `json:"isBot"`
-	Rule      string    `json:"rule"`
-	RuleStart int       `json:"ruleStart"`
-	RuleEnd   int       `json:"ruleEnd"`
-	Traces    []*Events `json:"traces"`
+	IsBot     int      `json:"isBot"`
+	Rule      string   `json:"rule"`
+	RuleStart int      `json:"ruleStart"`
+	RuleEnd   int      `json:"ruleEnd"`
+	Traces    []*Trace `json:"traces"`
 
-	UrlMap map[string]*Events `json:"-"`
+	UrlMap map[string]*Trace `json:"-"`
 }
 
 func NewSession(id string) *Session {
@@ -18,19 +18,19 @@ func NewSession(id string) *Session {
 	ss.IsBot = -1
 	ss.RuleStart = -1
 	ss.RuleEnd = -1
-	ss.Traces = []*Events{}
+	ss.Traces = []*Trace{}
 
-	ss.UrlMap = map[string]*Events{}
+	ss.UrlMap = map[string]*Trace{}
 	return &ss
 }
 
-func (ss *Session) AddEvents(events *Events) {
-	url := events.Url
+func (ss *Session) AddTrace(t *Trace) {
+	url := t.Url
 	if es, ok := ss.UrlMap[url]; !ok {
-		ss.UrlMap[url] = events
-		ss.Traces = append(ss.Traces, events)
+		ss.UrlMap[url] = t
+		ss.Traces = append(ss.Traces, t)
 	} else {
-		es.Data = append(es.Data, events.Data...)
+		es.Data = append(es.Data, t.Data...)
 	}
 }
 

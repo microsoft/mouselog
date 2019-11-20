@@ -1,6 +1,6 @@
 package trace
 
-type Events struct {
+type Trace struct {
 	Url    string `json:"url"`
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
@@ -15,19 +15,19 @@ type Event struct {
 	Y         int     `json:"y"`
 }
 
-func newEvents(url string) *Events {
-	es := Events{}
-	es.Url = url
-	es.Data = []Event{}
-	return &es
+func newTrace(url string) *Trace {
+	t := Trace{}
+	t.Url = url
+	t.Data = []Event{}
+	return &t
 }
 
-func (es *Events) addEvent(t float64, x int, y int) {
+func (t *Trace) addEvent(timestamp float64, x int, y int) {
 	e := Event{
-		Timestamp: t,
+		Timestamp: timestamp,
 		X:         x,
 		Y:         y,
 	}
 
-	es.Data = append(es.Data, e)
+	t.Data = append(t.Data, e)
 }

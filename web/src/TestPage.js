@@ -42,23 +42,6 @@ class TestPage extends React.Component {
         });
   }
 
-  getPointsFromTrace(trace) {
-    let points = [];
-    trace.events.forEach(function (event) {
-      points.push(event.x);
-      points.push(event.y);
-    });
-    return points;
-  }
-
-  getPoints() {
-    if (this.state.traces.length !== 0) {
-      return this.getPointsFromTrace(this.state.traces[0]);
-    } else {
-      return [];
-    }
-  }
-
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
@@ -152,37 +135,6 @@ class TestPage extends React.Component {
     }
   }
 
-  renderCanvas() {
-    const width = document.body.scrollWidth;
-    const height = document.body.scrollHeight;
-    return (
-        <Stage width={width / 2} height={height / 2}>
-          <Layer>
-            <Line
-                x={0}
-                y={0}
-                points={this.getPoints()}
-                stroke="black"
-                scaleX={0.5}
-                scaleY={0.5}
-            />
-            {
-              (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
-                      x={0}
-                      y={0}
-                      points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
-                      stroke="red"
-                      strokeWidth={5}
-                      scaleX={0.5}
-                      scaleY={0.5}
-                  />
-                  : null
-            }
-          </Layer>
-        </Stage>
-    )
-  }
-
   renderSessionTable() {
     const columns = [
       {
@@ -214,6 +166,23 @@ class TestPage extends React.Component {
     );
   }
 
+  getPoints() {
+    if (this.state.traces.length !== 0) {
+      return this.getPointsFromTrace(this.state.traces[0]);
+    } else {
+      return [];
+    }
+  }
+
+  getPointsFromTrace(trace) {
+    let points = [];
+    trace.events.forEach(function (event) {
+      points.push(event.x);
+      points.push(event.y);
+    });
+    return points;
+  }
+
   renderPointTable() {
     const columns = [
       {
@@ -238,6 +207,37 @@ class TestPage extends React.Component {
         <Table columns={columns} dataSource={this.state.events.slice(-6)} size="small" bordered title={() => 'Points: ' + window.location.pathname} />
       </div>
     );
+  }
+
+  renderCanvas() {
+    const width = document.body.scrollWidth;
+    const height = document.body.scrollHeight;
+    return (
+      <Stage width={width / 2} height={height / 2}>
+        <Layer>
+          <Line
+            x={0}
+            y={0}
+            points={this.getPoints()}
+            stroke="black"
+            scaleX={0.5}
+            scaleY={0.5}
+          />
+          {
+            (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
+                x={0}
+                y={0}
+                points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
+                stroke="red"
+                strokeWidth={5}
+                scaleX={0.5}
+                scaleY={0.5}
+              />
+              : null
+          }
+        </Layer>
+      </Stage>
+    )
   }
 
   render() {

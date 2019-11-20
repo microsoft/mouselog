@@ -42,24 +42,24 @@ func (c *ApiController) UploadTrace() {
 	//sessionId := c.Input().Get("sessionId")
 	data := c.Ctx.Input.RequestBody
 
-	var events trace.Events
-	err := json.Unmarshal(data, &events)
+	var t trace.Trace
+	err := json.Unmarshal(data, &t)
 	if err != nil {
 		panic(err)
 	}
 
 	ss := getOrCreateSs(sessionId)
-	if len(events.Data) > 0 {
-		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, events.Url, events.Data[0].Timestamp, events.Data[0].X, events.Data[0].Y)
+	if len(t.Data) > 0 {
+		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Url, t.Data[0].Timestamp, t.Data[0].X, t.Data[0].Y)
 	} else {
-		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, events.Url)
+		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, t.Url)
 	}
 
-	if len(events.Data) != 0 {
-		ss.AddEvents(&events)
+	if len(t.Data) != 0 {
+		ss.AddTrace(&t)
 	}
 
-	c.Data["json"] = ss.GetDetectResult(events.Url)
+	c.Data["json"] = ss.GetDetectResult(t.Url)
 	c.ServeJSON()
 }
 
@@ -68,24 +68,24 @@ func (c *ApiController) ClearTrace() {
 	//sessionId := c.Input().Get("sessionId")
 	data := c.Ctx.Input.RequestBody
 
-	var events trace.Events
-	err := json.Unmarshal(data, &events)
+	var t trace.Trace
+	err := json.Unmarshal(data, &t)
 	if err != nil {
 		panic(err)
 	}
 
 	ss := getOrCreateSs(sessionId)
-	if es, ok := ss.UrlMap[events.Url]; ok {
-		delete(ss.UrlMap, events.Url)
-		for i, es2 := range ss.Traces {
-			if es == es2 {
+	if t2, ok := ss.UrlMap[t.Url]; ok {
+		delete(ss.UrlMap, t.Url)
+		for i, t3 := range ss.Traces {
+			if t2 == t3 {
 				ss.Traces = append(ss.Traces[:i], ss.Traces[i+1:]...)
 			}
 		}
 	}
 
-	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, events.Url)
+	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, t.Url)
 
-	c.Data["json"] = ss.GetDetectResult(events.Url)
+	c.Data["json"] = ss.GetDetectResult(t.Url)
 	c.ServeJSON()
 }

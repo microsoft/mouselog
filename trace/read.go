@@ -50,7 +50,7 @@ func ReadTraces(fileId string) *Session {
 			}
 		}
 
-		es := newEvents(no)
+		t := newTrace(no)
 		points := strings.Split(trace, ";")
 		for _, point := range points {
 			if point == "" {
@@ -60,12 +60,12 @@ func ReadTraces(fileId string) *Session {
 			tokens := strings.Split(point, ",")
 			x := util.ParseInt(tokens[0])
 			y := util.ParseInt(tokens[1])
-			t := util.ParseFloat(tokens[2])
+			timestamp := util.ParseFloat(tokens[2])
 
-			es.addEvent(t, x, y)
+			t.addEvent(timestamp, x, y)
 		}
 
-		ss.AddEvents(es)
+		ss.AddTrace(t)
 
 		if i%1000 == 0 {
 			fmt.Printf("[%d] Read trace a line\n", i)

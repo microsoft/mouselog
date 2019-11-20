@@ -1,6 +1,7 @@
 import React from "react";
 import * as Setting from "./Setting";
 import {Table, Divider, Tag, Row, Col} from 'antd';
+import {Layer, Line, Stage} from "react-konva";
 
 class DashboardPage extends React.Component {
   constructor(props) {
@@ -9,7 +10,8 @@ class DashboardPage extends React.Component {
       classes: props,
       sessions: [],
       fileId : "",
-      traces: []
+      traces: [],
+      trace: null,
     };
   }
 
@@ -63,7 +65,7 @@ class DashboardPage extends React.Component {
       type: 'radio',
       columnTitle: 'Select',
       onSelect: (selectedRowKeys, selectedRows) => {
-        console.log(selectedRowKeys, selectedRows)
+        // console.log(selectedRowKeys, selectedRows);
 
         fetch(`${Setting.ServerUrl}/api/list-traces?fileId=${selectedRowKeys.sessionId}&perPage=${10000000}&page=${0}`, {
           method: "GET",
@@ -71,7 +73,7 @@ class DashboardPage extends React.Component {
         }).then(res => res.json())
             .then(res => {
               this.setState({
-                traces: res.data,
+                traces: res.traces,
                 fileId: selectedRowKeys.sessionId
               });
             });
@@ -113,7 +115,11 @@ class DashboardPage extends React.Component {
       type: 'radio',
       columnTitle: 'Select',
       onSelect: (selectedRowKeys, selectedRows) => {
-        console.log(selectedRowKeys, selectedRows)
+        console.log(selectedRowKeys, selectedRows);
+
+        this.setState({
+          trace: selectedRowKeys,
+        });
       },
     };
 
@@ -122,6 +128,54 @@ class DashboardPage extends React.Component {
         <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered title={() => 'Traces: ' + this.state.fileId} />
       </div>
     );
+  }
+
+  getPoints() {
+    if (this.state.trace !== null) {
+      return this.getPointsFromTrace(this.state.trace);
+    } else {
+      return [];
+    }
+  }
+
+  getPointsFromTrace(trace) {
+    let points = [];
+    trace.events.forEach(function (event) {
+      points.push(event.x / 5);
+      points.push(event.y / 5);
+    });
+    return points;
+  }
+
+  renderCanvas() {
+    const width = document.body.scrollWidth;
+    const height = document.body.scrollHeight;
+    return (
+      <Stage width={width / 2} height={height / 2}>
+        <Layer>
+          <Line
+            x={0}
+            y={0}
+            points={this.getPoints()}
+            stroke="black"
+            scaleX={0.5}
+            scaleY={0.5}
+          />
+          {/*{*/}
+          {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}
+          {/*      x={0}*/}
+          {/*      y={0}*/}
+          {/*      points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}*/}
+          {/*      stroke="red"*/}
+          {/*      strokeWidth={5}*/}
+          {/*      scaleX={0.5}*/}
+          {/*      scaleY={0.5}*/}
+          {/*    />*/}
+          {/*    : null*/}
+          {/*}*/}
+        </Layer>
+      </Stage>
+    )
   }
 
   render() {
@@ -137,7 +191,7 @@ class DashboardPage extends React.Component {
               }
             </Col>
             <Col span={12}>
-
+              {this.renderCanvas()}
             </Col>
           </Row>
 

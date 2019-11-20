@@ -70,7 +70,7 @@ func (c *ApiController) ListTraces() {
 	table := ss.Traces[(perPage * page):last]
 
 	c.Data["json"] = map[string]interface{} {
-		"data": table,
+		"traces": table,
 		"page": page,
 		"total": len(ss.Traces),
 	}

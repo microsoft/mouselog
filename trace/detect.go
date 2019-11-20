@@ -15,25 +15,25 @@ func isDistanceLargerThan(x1 int, y1 int, x2 int, y2 int, dist int) bool {
 	return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) > dist * dist
 }
 
-func (es *Events) Detect() (int, string, int, int) {
+func (t *Trace) Detect() (int, string, int, int) {
 	m := 10
-	for i := len(es.Degrees); i < len(es.Data)-m*2; i++ {
-		x1 := es.Data[i+m].X - es.Data[i].X
-		y1 := es.Data[i+m].Y - es.Data[i].Y
-		x2 := es.Data[i+2*m].X - es.Data[i+m].X
-		y2 := es.Data[i+2*m].Y - es.Data[i+m].Y
+	for i := len(t.Degrees); i < len(t.Data)-m*2; i++ {
+		x1 := t.Data[i+m].X - t.Data[i].X
+		y1 := t.Data[i+m].Y - t.Data[i].Y
+		x2 := t.Data[i+2*m].X - t.Data[i+m].X
+		y2 := t.Data[i+2*m].Y - t.Data[i+m].Y
 		degree := getDegree(x1, y1, x2, y2)
 
-		es.Degrees = append(es.Degrees, degree)
+		t.Degrees = append(t.Degrees, degree)
 	}
 
 	lineLen := 0
 	th := 30
 	pixelTh := 400
-	for i := 0; i < len(es.Degrees)-1; i++ {
-		if math.Abs(es.Degrees[i]-es.Degrees[i+1]) < math.Pi/72 {
+	for i := 0; i < len(t.Degrees)-1; i++ {
+		if math.Abs(t.Degrees[i]-t.Degrees[i+1]) < math.Pi/72 {
 			lineLen += 1
-			if lineLen >= th && isDistanceLargerThan(es.Data[i - lineLen].X, es.Data[i - lineLen].Y, es.Data[i].X, es.Data[i].Y, pixelTh) {
+			if lineLen >= th && isDistanceLargerThan(t.Data[i - lineLen].X, t.Data[i - lineLen].Y, t.Data[i].X, t.Data[i].Y, pixelTh) {
 				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), i - lineLen, i
 			}
 		} else {

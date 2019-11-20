@@ -8,7 +8,7 @@ import (
 func TestSessionToJson(t *testing.T) {
 	ss := NewSession("123")
 	ss.IsBot = 1
-	ss.UrlMap["/"] = &Events{
+	ss.UrlMap["/"] = &Trace{
 		Url:     "/",
 		Width:   800,
 		Height:  600,
