@@ -18,7 +18,18 @@ class App extends React.Component {
       classes: props,
       status: true,
       sessionId: "",
+      selectedMenuKey: 1,
     };
+  }
+
+  componentWillMount() {
+    // eslint-disable-next-line no-restricted-globals
+    const uri = location.pathname;
+    if (uri.includes('dashboard')) {
+      this.setState({ selectedMenuKey: 2 });
+    } else {
+      this.setState({ selectedMenuKey: 1 });
+    }
   }
 
   componentDidMount() {
@@ -51,7 +62,7 @@ class App extends React.Component {
             <Menu
               // theme="dark"
               mode="horizontal"
-              defaultSelectedKeys={['1']}
+              defaultSelectedKeys={[`${this.state.selectedMenuKey}`]}
               style={{lineHeight: '64px'}}
               inlineCollapsed={false}
             >
