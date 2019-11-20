@@ -3,6 +3,7 @@ import * as Setting from "./Setting";
 import {Layer, Line, Stage} from "react-konva";
 import {Alert, Button, Card, Col, Progress, Row, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
+
 const {Text} = Typography;
 
 class TestPage extends React.Component {
@@ -117,20 +118,20 @@ class TestPage extends React.Component {
   renderResult() {
     if (!this.state.status) {
       return (
-        <Alert message="Server Offline" description="Server Offline" type="Informational" showIcon banner />
+          <Alert message="Server Offline" description="Server Offline" type="Informational" showIcon banner/>
       )
     } else {
       if (this.state.isBot === 1) {
         return (
-          <Alert message="You Are Bot" description={this.state.rule} type="error" showIcon banner />
+            <Alert message="You Are Bot" description={this.state.rule} type="error" showIcon banner/>
         )
       } else if (this.state.isBot === 0) {
         return (
-          <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner />
+            <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner/>
         )
       } else {
         return (
-          <Alert message="No Mouse Trace" description="No Mouse Trace" type="warning" showIcon banner />
+            <Alert message="No Mouse Trace" description="No Mouse Trace" type="warning" showIcon banner/>
         )
       }
     }
@@ -161,9 +162,37 @@ class TestPage extends React.Component {
     ];
 
     return (
-      <div>
-        <Table columns={columns} dataSource={this.state.traces} size="small" bordered title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} />
-      </div>
+        <div>
+          <Table columns={columns} dataSource={this.state.traces} size="small" bordered
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+        </div>
+    );
+  }
+
+  renderEventTable(title, events) {
+    const columns = [
+      {
+        title: 'Timestamp (milliseconds)',
+        dataIndex: 'timestamp',
+        key: 'url',
+      },
+      {
+        title: 'X',
+        dataIndex: 'x',
+        key: 'x',
+      },
+      {
+        title: 'Y',
+        dataIndex: 'y',
+        key: 'y',
+      }
+    ];
+
+    return (
+        <div>
+          <Table columns={columns} dataSource={events.slice(-6)} size="small" bordered
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+        </div>
     );
   }
 
@@ -184,67 +213,42 @@ class TestPage extends React.Component {
     return points;
   }
 
-  renderEventTable(title) {
-    const columns = [
-      {
-        title: 'Timestamp (milliseconds)',
-        dataIndex: 'timestamp',
-        key: 'url',
-      },
-      {
-        title: 'X',
-        dataIndex: 'x',
-        key: 'x',
-      },
-      {
-        title: 'Y',
-        dataIndex: 'y',
-        key: 'y',
-      }
-    ];
-
-    return (
-      <div>
-        <Table columns={columns} dataSource={this.state.events.slice(-6)} size="small" bordered title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} />
-      </div>
-    );
-  }
-
   renderCanvas() {
     const width = document.body.scrollWidth * 0.49;
     const height = document.body.scrollHeight * 0.49;
     return (
-      <Stage width={width} height={height} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
-        <Layer>
-          <Line
-            x={0}
-            y={0}
-            points={this.getPoints()}
-            stroke="black"
-            scaleX={0.49}
-            scaleY={0.49}
-          />
-          {
-            (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
+        <Stage width={width} height={height}
+               style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
+          <Layer>
+            <Line
                 x={0}
                 y={0}
-                points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
-                stroke="red"
-                strokeWidth={5}
-                scaleX={0.5}
-                scaleY={0.5}
-              />
-              : null
-          }
-        </Layer>
-      </Stage>
+                points={this.getPoints()}
+                stroke="black"
+                scaleX={0.49}
+                scaleY={0.49}
+            />
+            {
+              (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
+                      x={0}
+                      y={0}
+                      points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
+                      stroke="red"
+                      strokeWidth={5}
+                      scaleX={0.5}
+                      scaleY={0.5}
+                  />
+                  : null
+            }
+          </Layer>
+        </Stage>
     )
   }
 
   render() {
     return (
         <div>
-          <Progress percent={this.state.events.length * 2} status="active" />
+          <Progress percent={this.state.events.length * 2} status="active"/>
           {this.renderResult()}
           <Row>
             <Col span={6}>
@@ -253,15 +257,15 @@ class TestPage extends React.Component {
               }
               <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
               {
-                this.renderEventTable(window.location.pathname)
+                this.renderEventTable(window.location.pathname, this.state.events)
               }
             </Col>
             <Col span={12}>
               {this.renderCanvas()}
             </Col>
             <Col span={6}>
-              <Card title="Beat Me !" extra={<a href="#">More</a>} >
-                <WrappedNormalLoginForm />
+              <Card title="Beat Me !" extra={<a href="#">More</a>}>
+                <WrappedNormalLoginForm/>
               </Card>
             </Col>
           </Row>

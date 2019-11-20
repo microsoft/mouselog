@@ -2,6 +2,7 @@ import React from "react";
 import * as Setting from "./Setting";
 import {Table, Divider, Tag, Row, Col, Typography} from 'antd';
 import {Layer, Line, Stage} from "react-konva";
+
 const {Text} = Typography;
 
 class DashboardPage extends React.Component {
@@ -10,7 +11,7 @@ class DashboardPage extends React.Component {
     this.state = {
       classes: props,
       sessions: [],
-      fileId : "",
+      fileId: "",
       traces: [],
       trace: null,
     };
@@ -83,7 +84,8 @@ class DashboardPage extends React.Component {
 
     return (
         <div>
-          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small" bordered title={() => 'Sessions'} />
+          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small"
+                 bordered title={() => 'Sessions'}/>
         </div>
     );
   }
@@ -125,9 +127,37 @@ class DashboardPage extends React.Component {
     };
 
     return (
-      <div>
-        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} />
-      </div>
+        <div>
+          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+        </div>
+    );
+  }
+
+  renderEventTable(title, events) {
+    const columns = [
+      {
+        title: 'Timestamp (milliseconds)',
+        dataIndex: 'timestamp',
+        key: 'url',
+      },
+      {
+        title: 'X',
+        dataIndex: 'x',
+        key: 'x',
+      },
+      {
+        title: 'Y',
+        dataIndex: 'y',
+        key: 'y',
+      }
+    ];
+
+    return (
+        <div>
+          <Table columns={columns} dataSource={events} size="small" bordered
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+        </div>
     );
   }
 
@@ -152,30 +182,30 @@ class DashboardPage extends React.Component {
     const width = document.body.scrollWidth / 2 - 20;
     const height = document.body.scrollHeight / 2 - 20;
     return (
-      <Stage width={width} height={height} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
-        <Layer>
-          <Line
-            x={-10}
-            y={-10}
-            points={this.getPoints(width, height)}
-            stroke="black"
-            scaleX={1}
-            scaleY={1}
-          />
-          {/*{*/}
-          {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}
-          {/*      x={0}*/}
-          {/*      y={0}*/}
-          {/*      points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}*/}
-          {/*      stroke="red"*/}
-          {/*      strokeWidth={5}*/}
-          {/*      scaleX={0.5}*/}
-          {/*      scaleY={0.5}*/}
-          {/*    />*/}
-          {/*    : null*/}
-          {/*}*/}
-        </Layer>
-      </Stage>
+        <Stage width={width} height={height} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
+          <Layer>
+            <Line
+                x={-10}
+                y={-10}
+                points={this.getPoints(width, height)}
+                stroke="black"
+                scaleX={1}
+                scaleY={1}
+            />
+            {/*{*/}
+            {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}
+            {/*      x={0}*/}
+            {/*      y={0}*/}
+            {/*      points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}*/}
+            {/*      stroke="red"*/}
+            {/*      strokeWidth={5}*/}
+            {/*      scaleX={0.5}*/}
+            {/*      scaleY={0.5}*/}
+            {/*    />*/}
+            {/*    : null*/}
+            {/*}*/}
+          </Layer>
+        </Stage>
     )
   }
 
@@ -187,9 +217,18 @@ class DashboardPage extends React.Component {
               {
                 this.renderSessionTable()
               }
-              {
-                this.renderTraceTable(this.state.fileId)
-              }
+              <Row>
+                <Col span={12} style={{paddingRight: '2.5px'}}>
+                  {
+                    this.renderTraceTable(this.state.fileId)
+                  }
+                </Col>
+                <Col span={12} style={{paddingLeft: '2.5px'}}>
+                  {
+                    (this.state.trace !== null) ? this.renderEventTable(this.state.trace.url, this.state.trace.events) : this.renderEventTable('', [])
+                  }
+                </Col>
+              </Row>
             </Col>
             <Col span={12}>
               {this.renderCanvas()}
