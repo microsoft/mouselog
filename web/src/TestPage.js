@@ -14,6 +14,9 @@ class TestPage extends React.Component {
       status: false,
       events: [],
       isBackground: false,
+      eventBuckets: Array(11).fill(0),
+      eventCount: 0,
+      speed: 0,
       sessionId: "",
       isBot: -1,
       rule: "",
@@ -25,6 +28,17 @@ class TestPage extends React.Component {
 
   componentDidMount() {
     Setting.setMouseMove(this, this.mousemove);
+
+    setInterval(() => {
+      let eventBuckets = this.state.eventBuckets;
+      eventBuckets = eventBuckets.slice(1);
+      eventBuckets.push(this.state.eventCount);
+
+      this.setState({
+        eventBuckets: eventBuckets,
+        speed: eventBuckets[10] - eventBuckets[0],
+      })
+    }, 100);
 
     fetch(`${Setting.ServerUrl}/api/get-session-id`, {
       method: "GET",
@@ -87,6 +101,12 @@ class TestPage extends React.Component {
   }
 
   mousemove(e) {
+    let eventCount = this.state.eventCount;
+    eventCount += 1;
+    this.setState({
+      eventCount: eventCount
+    });
+
     if (this.state.events.length === 50) {
       this.uploadTrace();
 
@@ -282,11 +302,18 @@ class TestPage extends React.Component {
                 !this.state.isBackground? this.renderTraceTable(this.state.sessionId, this.state.traces) : this.renderTraceTable('', [])
               }
               <Row>
-                <Col span={16}>
+                <Col span={12}>
+                  {/*<div><Text>Events for: </Text><Tag color="#108ee9">{this.state.speed}</Tag></div>*/}
+                  <Text>Events/s: </Text>
+                  <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80} />
+                </Col>
+                <Col span={12}>
                   Background recording: <Switch onChange={this.onChange.bind(this)} />
+                  <Text>&nbsp;</Text>
+                  <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
                 </Col>
                 <Col span={8}>
-                  <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
+
                 </Col>
               </Row>
               {
