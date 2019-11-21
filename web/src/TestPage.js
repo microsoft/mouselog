@@ -1,7 +1,7 @@
 import React from "react";
 import * as Setting from "./Setting";
 import {Layer, Line, Stage} from "react-konva";
-import {Alert, Button, Card, Col, Progress, Row, Table, Tag, Typography} from "antd";
+import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
 
 const {Text} = Typography;
@@ -13,6 +13,7 @@ class TestPage extends React.Component {
       classes: props,
       status: false,
       events: [],
+      isBackground: false,
       sessionId: "",
       isBot: -1,
       rule: "",
@@ -134,7 +135,7 @@ class TestPage extends React.Component {
     }
   }
 
-  renderTraceTable(title) {
+  renderTraceTable(title, traces) {
     const columns = [
       {
         title: 'URL',
@@ -165,7 +166,7 @@ class TestPage extends React.Component {
 
     return (
         <div>
-          <Table columns={columns} dataSource={this.state.traces} size="small" bordered
+          <Table columns={columns} dataSource={traces} size="small" bordered
                  title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
         </div>
     );
@@ -218,48 +219,78 @@ class TestPage extends React.Component {
   renderCanvas() {
     const width = document.body.scrollWidth * 0.49;
     const height = document.body.scrollHeight * 0.49;
-    return (
-        <Stage width={width} height={height}
-               style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
-          <Layer>
-            <Line
-                x={0}
-                y={0}
-                points={this.getPoints()}
-                stroke="black"
-                scaleX={0.49}
-                scaleY={0.49}
-            />
-            {
-              (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
-                      x={0}
-                      y={0}
-                      points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
-                      stroke="red"
-                      strokeWidth={5}
-                      scaleX={0.5}
-                      scaleY={0.5}
-                  />
-                  : null
-            }
-          </Layer>
-        </Stage>
-    )
+
+    if (!this.state.isBackground) {
+      return (
+          <Stage width={width} height={height}
+                 style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
+            <Layer>
+              <Line
+                  x={0}
+                  y={0}
+                  points={this.getPoints()}
+                  stroke="black"
+                  scaleX={0.49}
+                  scaleY={0.49}
+              />
+              {
+                (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
+                        x={0}
+                        y={0}
+                        points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
+                        stroke="red"
+                        strokeWidth={5}
+                        scaleX={0.5}
+                        scaleY={0.5}
+                    />
+                    : null
+              }
+            </Layer>
+          </Stage>
+      )
+    } else {
+      return (
+          <Stage width={width} height={height}
+                 style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px', background: 'rgb(245,245,245)'}}>
+          </Stage>
+      )
+    }
+  }
+
+  onChange(checked) {
+    this.setState({
+      isBackground: checked
+    });
+  }
+
+  renderProgress() {
+    if (!this.state.isBackground) {
+      return <Progress percent={this.state.events.length * 2} status="active"/>
+    } else {
+      return <Progress percent={0} status="exception"/>
+    }
   }
 
   render() {
     return (
         <div>
-          <Progress percent={this.state.events.length * 2} status="active"/>
+          {this.renderProgress()}
           {this.renderResult()}
           <Row>
             <Col span={6}>
               {
-                this.renderTraceTable(this.state.sessionId)
+                !this.state.isBackground? this.renderTraceTable(this.state.sessionId, this.state.traces) : this.renderTraceTable('', [])
               }
-              <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
+              <Row>
+                <Col span={16}>
+                  Background recording: <Switch onChange={this.onChange.bind(this)} />
+                </Col>
+                <Col span={8}>
+                  <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
+                </Col>
+              </Row>
               {
-                this.renderEventTable(window.location.pathname, this.state.events)
+                !this.state.isBackground? this.renderEventTable(window.location.pathname, this.state.events) : this.renderEventTable('', [])
               }
             </Col>
             <Col span={12}>
