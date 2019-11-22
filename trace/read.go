@@ -3,6 +3,7 @@ package trace
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strings"
 
@@ -15,6 +16,14 @@ const (
 	RowTarget
 	RowLabel
 )
+
+func getFloor(i int) int {
+	i = i - i % 100 - 100
+	if i < 0 {
+		i = 0
+	}
+	return i
+}
 
 func getCeil(i int) int {
 	return i - i % 100 + 200
@@ -56,6 +65,8 @@ func ReadTraces(fileId string) *Session {
 			}
 		}
 		points := strings.Split(trace, ";")
+		minX := math.MaxInt32
+		minY := math.MaxInt32
 		maxX := 0
 		maxY := 0
 		for _, point := range points {
@@ -68,9 +79,15 @@ func ReadTraces(fileId string) *Session {
 			if maxX < x {
 				maxX = x
 			}
+			if minX > x {
+				minX = x
+			}
 			y := util.ParseInt(tokens[1])
 			if maxY < y {
 				maxY = y
+			}
+			if minY > y {
+				minY = y
 			}
 			timestamp := util.ParseFloat(tokens[2])
 
@@ -79,6 +96,16 @@ func ReadTraces(fileId string) *Session {
 
 		t.Width = getCeil(maxX)
 		t.Height = getCeil(maxY)
+
+		floorX := getFloor(minX)
+		floorY := getFloor(minY)
+		for i := 0; i < len(t.Events); i++ {
+			t.Events[i].X -= floorX
+			t.Events[i].Y -= floorY
+		}
+		t.Width -= floorX
+		t.Height -= floorY
+
 		ss.AddTrace(t)
 
 		if i%1000 == 0 {
