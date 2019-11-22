@@ -134,7 +134,7 @@ class TestPage extends React.Component {
       });
     }
 
-    let p = {timestamp: e.timeStamp, x: e.pageX, y: e.pageY};
+    let p = {timestamp: Math.trunc(e.timeStamp), x: e.pageX, y: e.pageY};
     this.state.events.push(p);
     if (this.state.traces.length === 0) {
       const width = document.body.scrollWidth;
