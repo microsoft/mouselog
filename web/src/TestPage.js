@@ -17,6 +17,7 @@ class TestPage extends React.Component {
       eventBuckets: Array(11).fill(0),
       eventCount: 0,
       speed: 0,
+      payloadSize: 0,
       sessionId: "",
       isBot: -1,
       rule: "",
@@ -59,15 +60,32 @@ class TestPage extends React.Component {
         });
   }
 
+  getByteCount(s) {
+    let count = 0, stringLength = s.length, i;
+    s = String(s || "");
+    for (i = 0; i < stringLength; i++) {
+      const partCount = encodeURI(s[i]).split("%").length;
+      count += partCount === 1 ? 1 : partCount - 1;
+    }
+    return count;
+  }
+
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
     const trace = {url: window.location.pathname, width: width, height: height, events: this.state.events};
+    const traceStr = JSON.stringify(trace);
+
+    if (this.state.events.length === 50) {
+      this.setState({
+        payloadSize: this.getByteCount(traceStr)
+      });
+    }
 
     fetch(`${Setting.ServerUrl}/api/${action}-trace?sessionId=${this.state.sessionId}`, {
       method: "POST",
       credentials: "include",
-      body: JSON.stringify(trace)
+      body: traceStr
     }).then(response => response.json())
         .then(res => {
           this.setState({
@@ -240,7 +258,7 @@ class TestPage extends React.Component {
     let objs = [];
 
     trace.events.forEach(function (event) {
-      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue" />);
+      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue"/>);
     });
 
     return objs;
@@ -262,7 +280,7 @@ class TestPage extends React.Component {
                   strokeWidth={1}
               />
               {
-                (this.state.traces.length !== 0)? this.renderEvents(this.state.traces[0], scale) : null
+                (this.state.traces.length !== 0) ? this.renderEvents(this.state.traces[0], scale) : null
               }
               {
                 (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
@@ -278,7 +296,12 @@ class TestPage extends React.Component {
     } else {
       return (
           <Stage width={width} height={height}
-                 style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px', background: 'rgb(245,245,245)'}}>
+                 style={{
+                   border: '1px solid rgb(232,232,232)',
+                   marginLeft: '5px',
+                   marginRight: '5px',
+                   background: 'rgb(245,245,245)'
+                 }}>
           </Stage>
       )
     }
@@ -306,26 +329,32 @@ class TestPage extends React.Component {
           <Row>
             <Col span={6}>
               {
-                !this.state.isBackground? this.renderTraceTable(this.state.sessionId, this.state.traces) : this.renderTraceTable('', [])
+                !this.state.isBackground ? this.renderTraceTable(this.state.sessionId, this.state.traces) : this.renderTraceTable('', [])
               }
               <Row>
                 <Col span={12}>
                   {/*<div><Text>Events for: </Text><Tag color="#108ee9">{this.state.speed}</Tag></div>*/}
                   <Text>Events/s: </Text>
-                  <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80} />
+                  <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80}/>
                 </Col>
                 <Col span={12}>
-                  Background recording: <Switch onChange={this.onChange.bind(this)} />
-                  <Text>&nbsp;</Text>
+                  <div><Text>Sent payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>
+                </Col>
+                <Text>&nbsp;</Text>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  Background recording: <Switch onChange={this.onChange.bind(this)}/>
+                </Col>
+                <Col span={12}>
                   <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
                 </Col>
-                <Col span={8}>
-
-                </Col>
               </Row>
-              {
-                !this.state.isBackground? this.renderEventTable(window.location.pathname, this.state.events) : this.renderEventTable('', [])
-              }
+              <Row>
+                {
+                  !this.state.isBackground ? this.renderEventTable(window.location.pathname, this.state.events) : this.renderEventTable('', [])
+                }
+              </Row>
             </Col>
             <Col span={12}>
               {this.renderCanvas()}
