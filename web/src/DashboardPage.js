@@ -223,6 +223,16 @@ class DashboardPage extends React.Component {
     return objs;
   }
 
+  renderEvents(trace, scale) {
+    let objs = [];
+
+    trace.events.forEach(function (event) {
+      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue" />);
+    });
+
+    return objs;
+  }
+
   renderCanvas() {
     let canvasWidth = Math.trunc(document.body.scrollWidth / 2 - 20);
     let canvasHeight = Math.trunc(document.body.scrollHeight / 2 - 20);
@@ -250,6 +260,9 @@ class DashboardPage extends React.Component {
             />
             {
               (this.state.trace !== null)? this.renderRuler(this.state.trace.width, this.state.trace.height, scale) : null
+            }
+            {
+              (this.state.trace !== null)? this.renderEvents(this.state.trace, scale) : null
             }
             {/*{*/}
             {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}

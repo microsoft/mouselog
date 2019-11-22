@@ -1,6 +1,6 @@
 import React from "react";
 import * as Setting from "./Setting";
-import {Layer, Line, Stage} from "react-konva";
+import {Circle, Layer, Line, Stage} from "react-konva";
 import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
 
@@ -219,26 +219,37 @@ class TestPage extends React.Component {
     );
   }
 
-  getPoints() {
+  getPoints(scale) {
     if (this.state.traces.length !== 0) {
-      return this.getPointsFromTrace(this.state.traces[0]);
+      return this.getPointsFromTrace(this.state.traces[0], scale);
     } else {
       return [];
     }
   }
 
-  getPointsFromTrace(trace) {
+  getPointsFromTrace(trace, scale) {
     let points = [];
     trace.events.forEach(function (event) {
-      points.push(event.x);
-      points.push(event.y);
+      points.push(event.x * scale);
+      points.push(event.y * scale);
     });
     return points;
   }
 
+  renderEvents(trace, scale) {
+    let objs = [];
+
+    trace.events.forEach(function (event) {
+      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue" />);
+    });
+
+    return objs;
+  }
+
   renderCanvas() {
-    const width = document.body.scrollWidth * 0.49;
-    const height = document.body.scrollHeight * 0.49;
+    const scale = 0.49;
+    const width = document.body.scrollWidth * scale;
+    const height = document.body.scrollHeight * scale;
 
     if (!this.state.isBackground) {
       return (
@@ -246,22 +257,18 @@ class TestPage extends React.Component {
                  style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
             <Layer>
               <Line
-                  x={0}
-                  y={0}
-                  points={this.getPoints()}
+                  points={this.getPoints(scale)}
                   stroke="black"
-                  scaleX={0.49}
-                  scaleY={0.49}
+                  strokeWidth={1}
               />
               {
+                (this.state.traces.length !== 0)? this.renderEvents(this.state.traces[0], scale) : null
+              }
+              {
                 (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
-                        x={0}
-                        y={0}
-                        points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
+                        points={this.getPoints(scale).slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
                         stroke="red"
-                        strokeWidth={5}
-                        scaleX={0.5}
-                        scaleY={0.5}
+                        strokeWidth={2}
                     />
                     : null
               }
