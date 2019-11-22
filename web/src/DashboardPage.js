@@ -166,19 +166,19 @@ class DashboardPage extends React.Component {
     );
   }
 
-  getPoints(canvasWidth, canvasHeight) {
+  getPoints(scale) {
     if (this.state.trace !== null) {
-      return this.getPointsFromTrace(this.state.trace, canvasWidth, canvasHeight);
+      return this.getPointsFromTrace(this.state.trace, scale);
     } else {
       return [];
     }
   }
 
-  getPointsFromTrace(trace) {
+  getPointsFromTrace(trace, scale) {
     let points = [];
     trace.events.forEach(function (event) {
-      points.push(event.x);
-      points.push(event.y);
+      points.push(event.x * scale);
+      points.push(event.y * scale);
     });
     return points;
   }
@@ -192,8 +192,6 @@ class DashboardPage extends React.Component {
               points={[x * scale, 0, x * scale, 5]}
               stroke="black"
               strokeWidth={0.5}
-              scaleX={1}
-              scaleY={1}
           />
       );
       objs.push(
@@ -211,8 +209,6 @@ class DashboardPage extends React.Component {
               points={[0, y * scale, 5, y * scale]}
               stroke="black"
               strokeWidth={0.5}
-              // scaleX={1}
-              // scaleY={1}
           />
       );
       objs.push(
@@ -248,10 +244,9 @@ class DashboardPage extends React.Component {
                style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
           <Layer>
             <Line
-                points={this.getPoints(canvasWidth, canvasHeight)}
+                points={this.getPoints(scale)}
                 stroke="black"
-                scaleX={scale}
-                scaleY={scale}
+                strokeWidth={1}
             />
             {
               (this.state.trace !== null)? this.renderRuler(this.state.trace.width, this.state.trace.height, scale) : null
