@@ -1,7 +1,7 @@
 import React from "react";
 import * as Setting from "./Setting";
 import {Table, Divider, Tag, Row, Col, Typography} from 'antd';
-import {Circle, Layer, Line, Stage} from "react-konva";
+import {Circle, Layer, Line, Stage, Text as KonvaText} from "react-konva";
 
 const {Text} = Typography;
 
@@ -183,6 +183,50 @@ class DashboardPage extends React.Component {
     return points;
   }
 
+  renderRuler(width, height, scale) {
+    let objs = [];
+
+    for (let x = 0; x < width; x += 200) {
+      objs.push(
+          <Line
+              points={[x * scale, 0, x * scale, 5]}
+              stroke="black"
+              strokeWidth={0.5}
+              scaleX={1}
+              scaleY={1}
+          />
+      );
+      objs.push(
+          <KonvaText
+              x={x * scale - 25}
+              y={10}
+              text={x.toString()}
+          />
+      );
+    }
+
+    for (let y = 0; y < height; y += 200) {
+      objs.push(
+          <Line
+              points={[0, y * scale, 5, y * scale]}
+              stroke="black"
+              strokeWidth={0.5}
+              // scaleX={1}
+              // scaleY={1}
+          />
+      );
+      objs.push(
+          <KonvaText
+              x={10}
+              y={y * scale - 10}
+              text={y.toString()}
+          />
+      );
+    }
+
+    return objs;
+  }
+
   renderCanvas() {
     let canvasWidth = Math.trunc(document.body.scrollWidth / 2 - 20);
     let canvasHeight = Math.trunc(document.body.scrollHeight / 2 - 20);
@@ -197,20 +241,21 @@ class DashboardPage extends React.Component {
         canvasWidth = Math.trunc(canvasHeight * this.state.trace.width / this.state.trace.height);
       }
       scale = canvasHeight / this.state.trace.height;
-      console.log(scale);
     }
 
     return (
-        <Stage width={canvasWidth} height={canvasHeight} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
+        <Stage width={canvasWidth} height={canvasHeight}
+               style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
           <Layer>
             <Line
-                x={-10}
-                y={-10}
                 points={this.getPoints(canvasWidth, canvasHeight)}
                 stroke="black"
                 scaleX={scale}
                 scaleY={scale}
             />
+            {
+              (this.state.trace !== null)? this.renderRuler(this.state.trace.width, this.state.trace.height, scale) : null
+            }
             {/*{*/}
             {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}
             {/*      x={0}*/}

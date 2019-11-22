@@ -16,6 +16,10 @@ const (
 	RowLabel
 )
 
+func getCeil(i int) int {
+	return i - i % 100 + 200
+}
+
 func ReadTraces(fileId string) *Session {
 	fmt.Printf("Read traces for file: [%s].\n", fileId)
 
@@ -73,8 +77,8 @@ func ReadTraces(fileId string) *Session {
 			t.addEvent(timestamp, x, y)
 		}
 
-		t.Width = maxX
-		t.Height = maxY
+		t.Width = getCeil(maxX)
+		t.Height = getCeil(maxY)
 		ss.AddTrace(t)
 
 		if i%1000 == 0 {
