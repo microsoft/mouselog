@@ -1,7 +1,7 @@
 import React from "react";
 import * as Setting from "./Setting";
 import {Table, Divider, Tag, Row, Col, Typography} from 'antd';
-import {Layer, Line, Stage} from "react-konva";
+import {Circle, Layer, Line, Stage} from "react-konva";
 
 const {Text} = Typography;
 
@@ -174,28 +174,42 @@ class DashboardPage extends React.Component {
     }
   }
 
-  getPointsFromTrace(trace, canvasWidth, canvasHeight) {
+  getPointsFromTrace(trace) {
     let points = [];
     trace.events.forEach(function (event) {
-      points.push(event.x * canvasWidth / trace.width);
-      points.push(event.y * canvasHeight / trace.height);
+      points.push(event.x);
+      points.push(event.y);
     });
     return points;
   }
 
   renderCanvas() {
-    const width = document.body.scrollWidth / 2 - 20;
-    const height = document.body.scrollHeight / 2 - 20;
+    let canvasWidth = Math.trunc(document.body.scrollWidth / 2 - 20);
+    let canvasHeight = Math.trunc(document.body.scrollHeight / 2 - 20);
+    let scale = 1;
+    if (this.state.trace !== null) {
+      let h = Math.trunc(canvasWidth * this.state.trace.height / this.state.trace.width);
+      const hMax = document.body.scrollHeight - 100;
+      if (h < hMax) {
+        canvasHeight = h;
+      } else {
+        canvasHeight = hMax;
+        canvasWidth = Math.trunc(canvasHeight * this.state.trace.width / this.state.trace.height);
+      }
+      scale = canvasHeight / this.state.trace.height;
+      console.log(scale);
+    }
+
     return (
-        <Stage width={width} height={height} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
+        <Stage width={canvasWidth} height={canvasHeight} style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
           <Layer>
             <Line
                 x={-10}
                 y={-10}
-                points={this.getPoints(width, height)}
+                points={this.getPoints(canvasWidth, canvasHeight)}
                 stroke="black"
-                scaleX={1}
-                scaleY={1}
+                scaleX={scale}
+                scaleY={scale}
             />
             {/*{*/}
             {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}
