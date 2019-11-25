@@ -96,26 +96,31 @@ class DashboardPage extends React.Component {
         title: 'URL',
         dataIndex: 'url',
         key: 'url',
+        sorter: (a, b) => a.url - b.url,
       },
       {
         title: 'Width',
         dataIndex: 'width',
         key: 'width',
+        sorter: (a, b) => a.width - b.width,
       },
       {
         title: 'Height',
         dataIndex: 'height',
         key: 'height',
+        sorter: (a, b) => a.height - b.height,
       },
       {
         title: 'Event Count',
         dataIndex: 'events.length',
         key: 'count',
+        sorter: (a, b) => a.events.length - b.events.length,
       },
       {
         title: 'Is Bot',
         dataIndex: 'isBot',
         key: 'isBot',
+        sorter: (a, b) => a.isBot - b.isBot,
       }
     ];
 
