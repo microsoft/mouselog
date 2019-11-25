@@ -134,7 +134,7 @@ class TestPage extends React.Component {
       });
     }
 
-    let p = {timestamp: Math.trunc(e.timeStamp), x: e.pageX, y: e.pageY};
+    let p = {timestamp: Math.trunc(e.timeStamp), x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
     this.state.events.push(p);
     if (this.state.traces.length === 0) {
       const width = document.body.scrollWidth;
@@ -226,6 +226,12 @@ class TestPage extends React.Component {
         title: 'Y',
         dataIndex: 'y',
         key: 'y',
+      },
+      {
+        title: 'Is Trusted',
+        dataIndex: 'isTrusted',
+        key: 'isTrusted',
+        render: isTrusted => isTrusted.toString(),
       }
     ];
 
