@@ -28,7 +28,7 @@ class TestPage extends React.Component {
   }
 
   componentDidMount() {
-    Setting.setMouseMove(this, this.mousemove);
+    Setting.setMouseHandler(this, this.mouseHandler);
 
     setInterval(() => {
       let eventBuckets = this.state.eventBuckets;
@@ -151,7 +151,7 @@ class TestPage extends React.Component {
     document.dispatchEvent(e);
   }
 
-  mousemove(e) {
+  mouseHandler(type, e) {
     let eventCount = this.state.eventCount;
     eventCount += 1;
     this.setState({
@@ -167,7 +167,7 @@ class TestPage extends React.Component {
       });
     }
 
-    let p = {timestamp: Math.trunc(e.timeStamp), x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
+    let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
     this.state.events.push(p);
     if (this.state.traces.length === 0) {
       const width = document.body.scrollWidth;
@@ -249,6 +249,11 @@ class TestPage extends React.Component {
         title: 'Timestamp (milliseconds)',
         dataIndex: 'timestamp',
         key: 'url',
+      },
+      {
+        title: 'Type',
+        dataIndex: 'type',
+        key: 'type',
       },
       {
         title: 'X',

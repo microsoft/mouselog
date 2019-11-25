@@ -8,14 +8,14 @@ export function initServerUrl() {
 
 export let component = null;
 
-export function mouseMove(e) {
+export function mouseHandler(type, e) {
   if (component === null) {
     return
   }
 
-  component.mousemove(e);
+  component.mouseHandler(type, e);
 }
 
-export function setMouseMove(comp) {
+export function setMouseHandler(comp) {
   component = comp;
 }

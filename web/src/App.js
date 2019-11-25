@@ -54,7 +54,15 @@ class App extends React.Component {
     Setting.initServerUrl();
 
     return (
-      <div className="fill-window" onMouseMove={(e) => Setting.mouseMove(e)}>
+      <div className="fill-window"
+           // React: https://reactjs.org/docs/events.html
+           // MDN: https://developer.mozilla.org/en-US/docs/Web/Events
+           onMouseMove={(e) => Setting.mouseHandler('mousemove', e)}
+           onClick={(e) => Setting.mouseHandler('click', e)}
+           onContextMenu={(e) => Setting.mouseHandler('contextmenu', e)}
+           onScroll={(e) => Setting.mouseHandler('scroll', e)}
+           onWheel={(e) => Setting.mouseHandler('wheel', e)}
+      >
         <Layout className="layout">
           <Header style={{padding: '0', marginBottom: '3px'}}>
             <div className="logo"/>
