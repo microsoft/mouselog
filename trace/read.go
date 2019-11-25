@@ -91,7 +91,7 @@ func ReadTraces(fileId string) *Session {
 			}
 			timestamp := util.ParseFloat(tokens[2])
 
-			t.addEvent(timestamp, x, y)
+			t.addEvent(timestamp, "mousemove", x, y, true)
 		}
 
 		t.Width = getCeil(maxX)

@@ -18,11 +18,13 @@ func newTrace(url string) *Trace {
 	return &t
 }
 
-func (t *Trace) addEvent(timestamp float64, x int, y int) {
+func (t *Trace) addEvent(timestamp float64, typ string, x int, y int, isTrusted bool) {
 	e := Event{
 		Timestamp: timestamp,
+		Type:      typ,
 		X:         x,
 		Y:         y,
+		IsTrusted: isTrusted,
 	}
 
 	t.Events = append(t.Events, e)

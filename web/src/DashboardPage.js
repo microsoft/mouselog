@@ -147,6 +147,11 @@ class DashboardPage extends React.Component {
         key: 'url',
       },
       {
+        title: 'Type',
+        dataIndex: 'type',
+        key: 'type',
+      },
+      {
         title: 'X',
         dataIndex: 'x',
         key: 'x',
@@ -155,6 +160,12 @@ class DashboardPage extends React.Component {
         title: 'Y',
         dataIndex: 'y',
         key: 'y',
+      },
+      {
+        title: 'Is Trusted',
+        dataIndex: 'isTrusted',
+        key: 'isTrusted',
+        render: isTrusted => isTrusted.toString(),
       }
     ];
 
