@@ -54,7 +54,7 @@ class App extends React.Component {
     Setting.initServerUrl();
 
     return (
-      <div className="fill-window"
+      <div id="mouseArea" className="fill-window"
            // React: https://reactjs.org/docs/events.html
            // MDN: https://developer.mozilla.org/en-US/docs/Web/Events
            onMouseMove={(e) => Setting.mouseHandler('mousemove', e)}

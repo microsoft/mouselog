@@ -119,36 +119,35 @@ class TestPage extends React.Component {
   }
 
   simulateMouse() {
-    let mouseMoveEvent = document.createEvent("MouseEvents");
+    // let mouseMoveEvent = document.createEvent("MouseEvents");
+    // mouseMoveEvent.initMouseEvent(
+    //     "mousemove", //event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
+    //     true, //canBubble
+    //     false, //cancelable
+    //     window, //event's AbstractView : should be window
+    //     1, // detail : Event's mouse click count
+    //     50, // screenX
+    //     50, // screenY
+    //     50, // clientX
+    //     50, // clientY
+    //     false, // ctrlKey
+    //     false, // altKey
+    //     false, // shiftKey
+    //     false, // metaKey
+    //     0, // button : 0 = click, 1 = middle button, 2 = right button
+    //     null // relatedTarget : Only used with some event types (e.g. mouseover and mouseout). In other cases, pass null.
+    // );
 
-    mouseMoveEvent.initMouseEvent(
-        "mousemove", //event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
-        true, //canBubble
-        false, //cancelable
-        window, //event's AbstractView : should be window
-        1, // detail : Event's mouse click count
-        50, // screenX
-        50, // screenY
-        50, // clientX
-        50, // clientY
-        false, // ctrlKey
-        false, // altKey
-        false, // shiftKey
-        false, // metaKey
-        0, // button : 0 = click, 1 = middle button, 2 = right button
-        null // relatedTarget : Only used with some event types (e.g. mouseover and mouseout). In other cases, pass null.
-    );
-
-    var e = new MouseEvent("click", {
+    let e = new MouseEvent("click", {
       view: window,
       bubbles: true,
       cancelable: true,
-      clientX: 200,
-      clientY: 200,
-      /* whatever properties you want to give it */
+      clientX: 165,
+      clientY: 430,
     });
 
-    document.dispatchEvent(e);
+    let element = document.getElementById("mouseArea");
+    element.dispatchEvent(e);
   }
 
   mouseHandler(type, e) {
