@@ -6,6 +6,7 @@ import (
 
 	"github.com/astaxie/beego"
 
+	"github.com/mouselog/mouselog/detect"
 	"github.com/mouselog/mouselog/trace"
 )
 
@@ -59,7 +60,7 @@ func (c *ApiController) UploadTrace() {
 		ss.AddTrace(&t)
 	}
 
-	c.Data["json"] = ss.GetDetectResult(t.Url)
+	c.Data["json"] = detect.GetDetectResult(ss, t.Url)
 	c.ServeJSON()
 }
 
@@ -86,6 +87,6 @@ func (c *ApiController) ClearTrace() {
 
 	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, t.Url)
 
-	c.Data["json"] = ss.GetDetectResult(t.Url)
+	c.Data["json"] = detect.GetDetectResult(ss, t.Url)
 	c.ServeJSON()
 }

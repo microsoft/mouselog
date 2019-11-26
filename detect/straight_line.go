@@ -1,8 +1,10 @@
-package trace
+package detect
 
 import (
 	"fmt"
 	"math"
+
+	"github.com/mouselog/mouselog/trace"
 )
 
 func getDegree(x1 int, y1 int, x2 int, y2 int) float64 {
@@ -15,7 +17,7 @@ func isDistanceLargerThan(x1 int, y1 int, x2 int, y2 int, dist int) bool {
 	return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) > dist * dist
 }
 
-func (t *Trace) Detect() (int, string, int, int) {
+func checkStraightLine(t *trace.Trace) (int, string, int, int, int) {
 	m := 10
 	for i := len(t.Degrees); i < len(t.Events)-m*2; i++ {
 		x1 := t.Events[i+m].X - t.Events[i].X
@@ -34,12 +36,12 @@ func (t *Trace) Detect() (int, string, int, int) {
 		if math.Abs(t.Degrees[i]-t.Degrees[i+1]) < math.Pi/72 {
 			lineLen += 1
 			if lineLen >= th && isDistanceLargerThan(t.Events[i - lineLen].X, t.Events[i - lineLen].Y, t.Events[i].X, t.Events[i].Y, pixelTh) {
-				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), i - lineLen, i
+				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), RuleStraightLine, i - lineLen, i
 			}
 		} else {
 			lineLen = 0
 		}
 	}
 
-	return 0, "", -1, -1
+	return 0, "", RuleNone, -1, -1
 }

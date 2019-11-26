@@ -19,11 +19,12 @@ class TestPage extends React.Component {
       speed: 0,
       payloadSize: 0,
       sessionId: "",
+      traces: [],
       isBot: -1,
-      rule: "",
+      reason: "",
+      ruleId: 0,
       ruleStart: -1,
       ruleEnd: -1,
-      traces: [],
     };
   }
 
@@ -89,11 +90,12 @@ class TestPage extends React.Component {
     }).then(response => response.json())
         .then(res => {
           this.setState({
-            isBot: res.isBot,
-            rule: res.rule,
-            ruleStart: res.ruleStart,
-            ruleEnd: res.ruleEnd,
             traces: res.traces,
+            isBot: res.traces[0].isBot,
+            reason: res.traces[0].reason,
+            ruleId: res.traces[0].ruleId,
+            ruleStart: res.traces[0].ruleStart,
+            ruleEnd: res.traces[0].ruleEnd,
             status: true
           });
         })
@@ -191,7 +193,7 @@ class TestPage extends React.Component {
     } else {
       if (this.state.isBot === 1) {
         return (
-            <Alert message="You Are Bot" description={this.state.rule} type="error" showIcon banner/>
+            <Alert message="You Are Bot" description={this.state.reason} type="error" showIcon banner/>
         )
       } else if (this.state.isBot === 0) {
         return (
@@ -395,7 +397,7 @@ class TestPage extends React.Component {
               </Row>
               <Row>
                 <Col span={12}>
-                  <Button type="primary" block onClick={this.simulateMouse.bind(this)}>Simulate Mouse</Button>
+                  <Button type="primary" block onClick={this.simulateMouse.bind(this)}>Perform Fake Click</Button>
                 </Col>
                 <Col span={12}>
 

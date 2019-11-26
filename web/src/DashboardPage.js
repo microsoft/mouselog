@@ -11,7 +11,7 @@ class DashboardPage extends React.Component {
     this.state = {
       classes: props,
       sessions: [],
-      fileId: "",
+      sessionId: "",
       traces: [],
       trace: null,
     };
@@ -32,35 +32,15 @@ class DashboardPage extends React.Component {
   renderSessionTable() {
     const columns = [
       {
-        title: 'File ID',
+        title: 'Session ID (dataset)',
         dataIndex: 'sessionId',
         key: 'sessionId',
       },
       {
-        title: 'Trace Size',
+        title: 'Trace Count',
         dataIndex: 'traceSize',
         key: 'traceSize',
       },
-      {
-        title: 'Is Bot',
-        dataIndex: 'isBot',
-        key: 'isBot',
-      },
-      {
-        title: 'Rule',
-        dataIndex: 'rule',
-        key: 'rule',
-      },
-      {
-        title: 'Rule Start',
-        dataIndex: 'ruleStart',
-        key: 'ruleStart',
-      },
-      {
-        title: 'Rule End',
-        dataIndex: 'ruleEnd',
-        key: 'ruleEnd',
-      }
     ];
 
     const rowRadioSelection = {
