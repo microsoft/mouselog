@@ -71,102 +71,23 @@ class DashboardPage extends React.Component {
     );
   }
 
-  renderRuler(width, height, scale) {
-    let objs = [];
-
-    for (let x = 0; x < width; x += 200) {
-      objs.push(
-          <Line
-              points={[x * scale, 0, x * scale, 5]}
-              stroke="black"
-              strokeWidth={0.5}
-          />
-      );
-      objs.push(
-          <KonvaText
-              x={x * scale - 25}
-              y={10}
-              text={x.toString()}
-          />
-      );
-    }
-
-    for (let y = 0; y < height; y += 200) {
-      objs.push(
-          <Line
-              points={[0, y * scale, 5, y * scale]}
-              stroke="black"
-              strokeWidth={0.5}
-          />
-      );
-      objs.push(
-          <KonvaText
-              x={10}
-              y={y * scale - 10}
-              text={y.toString()}
-          />
-      );
-    }
-
-    return objs;
-  }
-
-  renderEvents(trace, scale) {
-    let objs = [];
-
-    trace.events.forEach(function (event) {
-      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue" />);
-    });
-
-    return objs;
-  }
-
   renderCanvas() {
-    let canvasWidth = Math.trunc(document.body.scrollWidth / 2 - 20);
-    let canvasHeight = Math.trunc(document.body.scrollHeight / 2 - 20);
+    let width = Math.trunc(document.body.scrollWidth / 2 - 20);
+    let height = Math.trunc(document.body.scrollHeight / 2 - 20);
     let scale = 1;
     if (this.state.trace !== null) {
-      let h = Math.trunc(canvasWidth * this.state.trace.height / this.state.trace.width);
+      let h = Math.trunc(width * this.state.trace.height / this.state.trace.width);
       const hMax = document.body.scrollHeight - 100;
       if (h < hMax) {
-        canvasHeight = h;
+        height = h;
       } else {
-        canvasHeight = hMax;
-        canvasWidth = Math.trunc(canvasHeight * this.state.trace.width / this.state.trace.height);
+        height = hMax;
+        width = Math.trunc(height * this.state.trace.width / this.state.trace.height);
       }
-      scale = canvasHeight / this.state.trace.height;
+      scale = height / this.state.trace.height;
     }
 
-    return (
-        <Stage width={canvasWidth} height={canvasHeight}
-               style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
-          <Layer>
-            <Line
-                points={Shared.getPoints(this.state.trace, scale)}
-                stroke="black"
-                strokeWidth={1}
-            />
-            {
-              (this.state.trace !== null)? this.renderRuler(this.state.trace.width, this.state.trace.height, scale) : null
-            }
-            {
-              (this.state.trace !== null)? this.renderEvents(this.state.trace, scale) : null
-            }
-            {/*{*/}
-            {/*  (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line*/}
-            {/*      x={0}*/}
-            {/*      y={0}*/}
-            {/*      points={this.getPoints().slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}*/}
-            {/*      stroke="red"*/}
-            {/*      strokeWidth={5}*/}
-            {/*      scaleX={0.5}*/}
-            {/*      scaleY={0.5}*/}
-            {/*    />*/}
-            {/*    : null*/}
-            {/*}*/}
-          </Layer>
-        </Stage>
-    )
+    return Shared.renderCanvas(this.state.trace, scale, width, height);
   }
 
   render() {

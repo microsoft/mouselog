@@ -200,65 +200,12 @@ class TestPage extends React.Component {
     }
   }
 
-  getPoints(scale) {
-    if (this.state.traces.length !== 0) {
-      return Shared.getPoints(this.state.traces[0], scale);
-    } else {
-      return [];
-    }
-  }
-
-  renderEvents(trace, scale) {
-    let objs = [];
-
-    trace.events.forEach(function (event) {
-      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue"/>);
-    });
-
-    return objs;
-  }
-
   renderCanvas() {
     const scale = 0.49;
     const width = document.body.scrollWidth * scale;
     const height = document.body.scrollHeight * scale;
 
-    if (!this.state.isBackground) {
-      return (
-          <Stage width={width} height={height}
-                 style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
-            <Layer>
-              <Line
-                  points={this.getPoints(scale)}
-                  stroke="black"
-                  strokeWidth={1}
-              />
-              {
-                (this.state.traces.length !== 0) ? this.renderEvents(this.state.traces[0], scale) : null
-              }
-              {
-                (this.state.trace !== null && this.state.trace.ruleStart !== -1 && this.state.trace.ruleEnd !== -1) ? <Line
-                        points={this.getPoints(scale).slice(this.state.trace.ruleStart * 2, this.state.trace.ruleEnd * 2)}
-                        stroke="red"
-                        strokeWidth={2}
-                    />
-                    : null
-              }
-            </Layer>
-          </Stage>
-      )
-    } else {
-      return (
-          <Stage width={width} height={height}
-                 style={{
-                   border: '1px solid rgb(232,232,232)',
-                   marginLeft: '5px',
-                   marginRight: '5px',
-                   background: 'rgb(245,245,245)'
-                 }}>
-          </Stage>
-      )
-    }
+    return Shared.renderCanvas(this.state.trace, scale, width, height, this.state.isBackground);
   }
 
   onChange(checked) {
