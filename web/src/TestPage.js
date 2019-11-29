@@ -21,11 +21,7 @@ class TestPage extends React.Component {
       payloadSize: 0,
       sessionId: "",
       traces: [],
-      isBot: -1,
-      reason: "",
-      ruleId: 0,
-      ruleStart: -1,
-      ruleEnd: -1,
+      trace: null,
     };
   }
 
@@ -92,11 +88,7 @@ class TestPage extends React.Component {
         .then(res => {
           this.setState({
             traces: res.traces,
-            isBot: res.traces[0].isBot,
-            reason: res.traces[0].reason,
-            ruleId: res.traces[0].ruleId,
-            ruleStart: res.traces[0].ruleStart,
-            ruleEnd: res.traces[0].ruleEnd,
+            trace: res.traces[0],
             status: true
           });
         })
@@ -192,17 +184,17 @@ class TestPage extends React.Component {
           <Alert message="Server Offline" description="Server Offline" type="Informational" showIcon banner/>
       )
     } else {
-      if (this.state.isBot === 1) {
-        return (
-            <Alert message="You Are Bot" description={this.state.reason} type="error" showIcon banner/>
-        )
-      } else if (this.state.isBot === 0) {
-        return (
-            <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner/>
-        )
-      } else {
+      if (this.state.trace === null || this.state.trace.isBot === -1) {
         return (
             <Alert message="No Mouse Trace" description="No Mouse Trace" type="warning" showIcon banner/>
+        )
+      } else if (this.state.trace.isBot === 1) {
+        return (
+            <Alert message="You Are Bot" description={this.state.trace.reason} type="error" showIcon banner/>
+        )
+      } else if (this.state.trace.isBot === 0) {
+        return (
+            <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner/>
         )
       }
     }
@@ -245,8 +237,8 @@ class TestPage extends React.Component {
                 (this.state.traces.length !== 0) ? this.renderEvents(this.state.traces[0], scale) : null
               }
               {
-                (this.state.ruleStart !== -1 && this.state.ruleEnd !== -1) ? <Line
-                        points={this.getPoints(scale).slice(this.state.ruleStart * 2, this.state.ruleEnd * 2)}
+                (this.state.trace !== null && this.state.trace.ruleStart !== -1 && this.state.trace.ruleEnd !== -1) ? <Line
+                        points={this.getPoints(scale).slice(this.state.trace.ruleStart * 2, this.state.trace.ruleEnd * 2)}
                         stroke="red"
                         strokeWidth={2}
                     />
