@@ -1,5 +1,6 @@
 import React from "react";
 import * as Setting from "./Setting";
+import * as Shared from "./Shared";
 import {Table, Divider, Tag, Row, Col, Typography} from 'antd';
 import {Circle, Layer, Line, Stage, Text as KonvaText} from "react-konva";
 
@@ -68,115 +69,6 @@ class DashboardPage extends React.Component {
                  bordered title={() => 'Sessions'}/>
         </div>
     );
-  }
-
-  renderTraceTable(title) {
-    const columns = [
-      {
-        title: 'URL',
-        dataIndex: 'url',
-        key: 'url',
-        sorter: (a, b) => a.url - b.url,
-      },
-      {
-        title: 'Width',
-        dataIndex: 'width',
-        key: 'width',
-        sorter: (a, b) => a.width - b.width,
-      },
-      {
-        title: 'Height',
-        dataIndex: 'height',
-        key: 'height',
-        sorter: (a, b) => a.height - b.height,
-      },
-      {
-        title: 'Event Count',
-        dataIndex: 'events.length',
-        key: 'count',
-        sorter: (a, b) => a.events.length - b.events.length,
-      },
-      {
-        title: 'Is Bot',
-        dataIndex: 'isBot',
-        key: 'isBot',
-        sorter: (a, b) => a.isBot - b.isBot,
-      }
-    ];
-
-    const rowRadioSelection = {
-      type: 'radio',
-      columnTitle: 'Select',
-      onSelect: (selectedRowKeys, selectedRows) => {
-        console.log(selectedRowKeys, selectedRows);
-
-        this.setState({
-          trace: selectedRowKeys,
-        });
-      },
-    };
-
-    return (
-        <div>
-          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
-        </div>
-    );
-  }
-
-  renderEventTable(title, events) {
-    const columns = [
-      {
-        title: 'Timestamp (milliseconds)',
-        dataIndex: 'timestamp',
-        key: 'url',
-      },
-      {
-        title: 'Type',
-        dataIndex: 'type',
-        key: 'type',
-      },
-      {
-        title: 'X',
-        dataIndex: 'x',
-        key: 'x',
-      },
-      {
-        title: 'Y',
-        dataIndex: 'y',
-        key: 'y',
-      },
-      {
-        title: 'Is Trusted',
-        dataIndex: 'isTrusted',
-        key: 'isTrusted',
-        render: isTrusted => isTrusted.toString(),
-      }
-    ];
-
-    return (
-        <div>
-          <Table columns={columns} dataSource={events} size="small" bordered
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
-        </div>
-    );
-  }
-
-  getPoints(scale) {
-    if (this.state.trace !== null) {
-      return this.getPointsFromTrace(this.state.trace, scale);
-    } else {
-      return [];
-    }
-  }
-
-  getPointsFromTrace(trace, scale) {
-    let points = [];
-    trace.events.forEach(function (event) {
-      points.push(event.x * scale);
-      points.push(event.y * scale);
-    });
-    return points;
   }
 
   renderRuler(width, height, scale) {
@@ -250,7 +142,7 @@ class DashboardPage extends React.Component {
                style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px'}}>
           <Layer>
             <Line
-                points={this.getPoints(scale)}
+                points={Shared.getPoints(this.state.trace, scale)}
                 stroke="black"
                 strokeWidth={1}
             />
@@ -288,12 +180,12 @@ class DashboardPage extends React.Component {
               <Row>
                 <Col span={12} style={{paddingRight: '2.5px'}}>
                   {
-                    this.renderTraceTable(this.state.fileId)
+                    Shared.renderTraceTable(this.state.fileId, this.state.traces, this)
                   }
                 </Col>
                 <Col span={12} style={{paddingLeft: '2.5px'}}>
                   {
-                    (this.state.trace !== null) ? this.renderEventTable(this.state.trace.url, this.state.trace.events) : this.renderEventTable('', [])
+                    (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.url, this.state.trace.events) : Shared.renderEventTable('', [])
                   }
                 </Col>
               </Row>

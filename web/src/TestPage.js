@@ -3,6 +3,7 @@ import * as Setting from "./Setting";
 import {Circle, Layer, Line, Stage} from "react-konva";
 import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
+import * as Shared from "./Shared";
 
 const {Text} = Typography;
 
@@ -207,96 +208,12 @@ class TestPage extends React.Component {
     }
   }
 
-  renderTraceTable(title, traces) {
-    const columns = [
-      {
-        title: 'URL',
-        dataIndex: 'url',
-        key: 'url',
-      },
-      {
-        title: 'Width',
-        dataIndex: 'width',
-        key: 'width',
-      },
-      {
-        title: 'Height',
-        dataIndex: 'height',
-        key: 'height',
-      },
-      {
-        title: 'Event Count',
-        dataIndex: 'events.length',
-        key: 'count',
-      },
-      {
-        title: 'Is Bot',
-        dataIndex: 'isBot',
-        key: 'isBot',
-      }
-    ];
-
-    return (
-        <div>
-          <Table columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
-        </div>
-    );
-  }
-
-  renderEventTable(title, events) {
-    const columns = [
-      {
-        title: 'Timestamp (milliseconds)',
-        dataIndex: 'timestamp',
-        key: 'url',
-      },
-      {
-        title: 'Type',
-        dataIndex: 'type',
-        key: 'type',
-      },
-      {
-        title: 'X',
-        dataIndex: 'x',
-        key: 'x',
-      },
-      {
-        title: 'Y',
-        dataIndex: 'y',
-        key: 'y',
-      },
-      {
-        title: 'Is Trusted',
-        dataIndex: 'isTrusted',
-        key: 'isTrusted',
-        render: isTrusted => isTrusted.toString(),
-      }
-    ];
-
-    return (
-        <div>
-          <Table columns={columns} dataSource={events.slice(-6)} size="small" bordered
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
-        </div>
-    );
-  }
-
   getPoints(scale) {
     if (this.state.traces.length !== 0) {
-      return this.getPointsFromTrace(this.state.traces[0], scale);
+      return Shared.getPoints(this.state.traces[0], scale);
     } else {
       return [];
     }
-  }
-
-  getPointsFromTrace(trace, scale) {
-    let points = [];
-    trace.events.forEach(function (event) {
-      points.push(event.x * scale);
-      points.push(event.y * scale);
-    });
-    return points;
   }
 
   renderEvents(trace, scale) {
@@ -374,7 +291,7 @@ class TestPage extends React.Component {
           <Row>
             <Col span={6}>
               {
-                !this.state.isBackground ? this.renderTraceTable(this.state.sessionId, this.state.traces) : this.renderTraceTable('', [])
+                !this.state.isBackground ? Shared.renderTraceTable(this.state.sessionId, this.state.traces, null) : Shared.renderTraceTable('', [], null)
               }
               <Row>
                 <Col span={12}>
@@ -405,7 +322,7 @@ class TestPage extends React.Component {
               </Row>
               <Row>
                 {
-                  !this.state.isBackground ? this.renderEventTable(window.location.pathname, this.state.events) : this.renderEventTable('', [])
+                  !this.state.isBackground ? Shared.renderEventTable(window.location.pathname, this.state.events.slice(-6)) : Shared.renderEventTable('', [])
                 }
               </Row>
             </Col>
