@@ -74,23 +74,23 @@ class DashboardPage extends React.Component {
     );
   }
 
-  renderCanvas() {
+  renderCanvas(trace) {
     let width = Math.trunc(document.body.scrollWidth / 2 - 20);
     let height = Math.trunc(document.body.scrollHeight / 2 - 20);
     let scale = 1;
-    if (this.state.trace !== null) {
-      let h = Math.trunc(width * this.state.trace.height / this.state.trace.width);
+    if (trace !== null) {
+      let h = Math.trunc(width * trace.height / trace.width);
       const hMax = document.body.scrollHeight - 100;
       if (h < hMax) {
         height = h;
       } else {
         height = hMax;
-        width = Math.trunc(height * this.state.trace.width / this.state.trace.height);
+        width = Math.trunc(height * trace.width / trace.height);
       }
-      scale = height / this.state.trace.height;
+      scale = height / trace.height;
     }
 
-    return Shared.renderCanvas(this.state.trace, scale, width, height);
+    return Shared.renderCanvas(trace, scale, width, height);
   }
 
   render() {
@@ -115,7 +115,7 @@ class DashboardPage extends React.Component {
               </Row>
             </Col>
             <Col span={12}>
-              {this.renderCanvas()}
+              {this.renderCanvas(this.state.trace)}
             </Col>
           </Row>
 

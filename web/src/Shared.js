@@ -2,6 +2,7 @@ import React from "react";
 import {Table, Tag, Typography} from "antd";
 import {Circle, Layer, Line, Stage} from "react-konva";
 import {Text as KonvaText} from "react-konva/lib/ReactKonvaCore";
+import {Link} from "react-router-dom";
 const {Text} = Typography;
 
 export function getPoints(trace, scale) {
@@ -17,7 +18,7 @@ export function getPoints(trace, scale) {
   return points;
 }
 
-export function renderTraceTable(title, traces, self, isLong=false) {
+export function renderTraceTable(title, traces, self, isLong=false, renderCanvas=null) {
   const columns = [
     {
       title: 'URL',
@@ -51,6 +52,19 @@ export function renderTraceTable(title, traces, self, isLong=false) {
     }
   ];
 
+  if (renderCanvas !== null) {
+    columns.push(
+        {
+          title: 'Canvas',
+          key: 'canvas',
+          width: 800,
+          render: (text, record, index) => {
+            return renderCanvas(traces[index]);
+          }
+        }
+    );
+  }
+
   let rowRadioSelection = {
     type: 'radio',
     columnTitle: 'Select',
@@ -71,14 +85,15 @@ export function renderTraceTable(title, traces, self, isLong=false) {
     return (
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}
+                 rowClassName={(record, index) => { return record.isBot ? 'bot-row' : '' }} />
         </div>
     );
   } else {
     return (
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 600}}
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 700}}
                  rowClassName={(record, index) => { return record.isBot ? 'bot-row' : '' }} />
         </div>
     );
@@ -127,7 +142,7 @@ export function renderEventTable(title, events, isLong=false) {
     return (
         <div>
           <Table columns={columns} dataSource={events} size="small" bordered
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 600}} />
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 700}} />
         </div>
     );
   }
