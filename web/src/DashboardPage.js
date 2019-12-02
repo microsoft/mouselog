@@ -1,8 +1,8 @@
 import React from "react";
 import * as Setting from "./Setting";
 import * as Shared from "./Shared";
-import {Table, Divider, Tag, Row, Col, Typography} from 'antd';
-import {Circle, Layer, Line, Stage, Text as KonvaText} from "react-konva";
+import {Table, Row, Col, Typography} from 'antd';
+import {Link} from "react-router-dom";
 
 const {Text} = Typography;
 
@@ -36,6 +36,9 @@ class DashboardPage extends React.Component {
         title: 'Session ID (dataset)',
         dataIndex: 'sessionId',
         key: 'sessionId',
+        render: (text, record, index) => {
+          return <Link to={`/trace/${text}`} target='_blank'>{text}</Link>
+        }
       },
       {
         title: 'Trace Count',

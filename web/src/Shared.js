@@ -17,7 +17,7 @@ export function getPoints(trace, scale) {
   return points;
 }
 
-export function renderTraceTable(title, traces, self) {
+export function renderTraceTable(title, traces, self, isLong=false) {
   const columns = [
     {
       title: 'URL',
@@ -67,15 +67,24 @@ export function renderTraceTable(title, traces, self) {
     rowRadioSelection = null;
   }
 
-  return (
-      <div>
-        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-               title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
-      </div>
-  );
+  if (!isLong) {
+    return (
+        <div>
+          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+        </div>
+    );
+  } else {
+    return (
+        <div>
+          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{defaultPageSize: 20}}/>
+        </div>
+    );
+  }
 }
 
-export function renderEventTable(title, events) {
+export function renderEventTable(title, events, isLong=false) {
   const columns = [
     {
       title: 'Timestamp (milliseconds)',
@@ -105,12 +114,21 @@ export function renderEventTable(title, events) {
     }
   ];
 
-  return (
-      <div>
-        <Table columns={columns} dataSource={events} size="small" bordered
-               title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
-      </div>
-  );
+  if (!isLong) {
+    return (
+        <div>
+          <Table columns={columns} dataSource={events} size="small" bordered
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+        </div>
+    );
+  } else {
+    return (
+        <div>
+          <Table columns={columns} dataSource={events} size="small" bordered
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{defaultPageSize: 20}}/>
+        </div>
+    );
+  }
 }
 
 function renderEvents(trace, scale) {

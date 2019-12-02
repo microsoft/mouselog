@@ -7,6 +7,7 @@ import {Switch, Route} from 'react-router-dom'
 import TestPage from "./TestPage";
 import DashboardPage from "./DashboardPage";
 import {Badge, Button, Layout, Menu, Tag, Typography} from "antd";
+import TracePage from "./TracePage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -27,6 +28,8 @@ class App extends React.Component {
     const uri = location.pathname;
     if (uri.includes('dashboard')) {
       this.setState({ selectedMenuKey: 2 });
+    } else if (uri.includes('trace')) {
+      this.setState({ selectedMenuKey: 3 });
     } else {
       this.setState({ selectedMenuKey: 1 });
     }
@@ -86,6 +89,11 @@ class App extends React.Component {
                   Dashboard
                 </a>
               </Menu.Item>
+              <Menu.Item key="3">
+                <a href="/trace">
+                  Trace
+                </a>
+              </Menu.Item>
 
               <Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server Status: </Text>
               {this.state.status ? <Tag color="#87d068">On</Tag> : <Tag color="#f50">Off</Tag>}
@@ -98,6 +106,7 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={TestPage}/>
           <Route path="/dashboard/" component={DashboardPage}/>
+          <Route path="/trace/:sessionId" component={TracePage}/>
         </Switch>
       </div>
     );

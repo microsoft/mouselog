@@ -1,6 +1,5 @@
 import React from "react";
 import * as Setting from "./Setting";
-import {Circle, Layer, Line, Stage} from "react-konva";
 import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
 import * as Shared from "./Shared";
