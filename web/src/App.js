@@ -21,6 +21,8 @@ class App extends React.Component {
       sessionId: "",
       selectedMenuKey: 1,
     };
+
+    Setting.initServerUrl();
   }
 
   componentWillMount() {
@@ -33,29 +35,25 @@ class App extends React.Component {
     } else {
       this.setState({ selectedMenuKey: 1 });
     }
-  }
 
-  componentDidMount() {
     fetch(`${Setting.ServerUrl}/api/get-session-id`, {
       method: "GET",
       credentials: "include"
     }).then(res => res.json())
-      .then(res => {
-        this.setState({
-          sessionId: res,
-          status: true
+        .then(res => {
+          this.setState({
+            sessionId: res,
+            status: true
+          });
+        })
+        .catch(error => {
+          this.setState({
+            status: false
+          });
         });
-      })
-      .catch(error => {
-        this.setState({
-          status: false
-        });
-      });
   }
 
   render() {
-    Setting.initServerUrl();
-
     return (
       <div id="mouseArea" className="fill-window"
            // React: https://reactjs.org/docs/events.html
@@ -95,10 +93,12 @@ class App extends React.Component {
                 </a>
               </Menu.Item>
 
-              <Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server Status: </Text>
-              {this.state.status ? <Tag color="#87d068">On</Tag> : <Tag color="#f50">Off</Tag>}
-              <Text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: </Text>
-              {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
+              <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: &nbsp;
+                {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
+              </Text>
+              <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server Status: &nbsp;
+                {this.state.status ? <Tag color="#87d068">On</Tag> : <Tag color="#f50">Off</Tag>}
+              </Text>
             </Menu>
           </Header>
         </Layout>
