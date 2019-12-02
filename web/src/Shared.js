@@ -78,7 +78,7 @@ export function renderTraceTable(title, traces, self, isLong=false) {
     return (
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{defaultPageSize: 20}}/>
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 600}} />
         </div>
     );
   }
@@ -87,7 +87,7 @@ export function renderTraceTable(title, traces, self, isLong=false) {
 export function renderEventTable(title, events, isLong=false) {
   const columns = [
     {
-      title: 'Timestamp (milliseconds)',
+      title: 'Timestamp',
       dataIndex: 'timestamp',
       key: 'url',
     },
@@ -95,6 +95,7 @@ export function renderEventTable(title, events, isLong=false) {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
+      render: type => type.replace('mouse', ''),
     },
     {
       title: 'X',
@@ -125,7 +126,7 @@ export function renderEventTable(title, events, isLong=false) {
     return (
         <div>
           <Table columns={columns} dataSource={events} size="small" bordered
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{defaultPageSize: 20}}/>
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 600}} />
         </div>
     );
   }
@@ -135,7 +136,13 @@ function renderEvents(trace, scale) {
   let objs = [];
 
   trace.events.forEach(function (event) {
-    objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue"/>);
+    if (event.type === 'mousemove') {
+      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue"/>);
+    } else if (event.type === 'click') {
+      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={8} fill="red" opacity={0.5}/>);
+    } else if (event.type === 'contextmenu') {
+      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={8} fill="green" opacity={0.5}/>);
+    }
   });
 
   return objs;
