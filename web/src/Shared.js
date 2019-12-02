@@ -78,7 +78,8 @@ export function renderTraceTable(title, traces, self, isLong=false) {
     return (
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 600}} />
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 600}}
+                 rowClassName={(record, index) => { return record.isBot ? 'bot-row' : '' }} />
         </div>
     );
   }
