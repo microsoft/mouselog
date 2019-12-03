@@ -26,37 +26,13 @@ class TracePage extends React.Component {
         });
   }
 
-  renderCanvas(trace) {
-    let width = Math.trunc(document.body.scrollWidth / 2 - 20);
-    let height = Math.trunc(document.body.scrollHeight / 2 - 20);
-    let scale = 1;
-    if (trace !== null) {
-      let h = Math.trunc(width * trace.height / trace.width);
-      const hMax = document.body.scrollHeight - 100;
-      if (h < hMax) {
-        height = h;
-      } else {
-        height = hMax;
-        width = Math.trunc(height * trace.width / trace.height);
-      }
-      scale = height / trace.height;
-    }
-
-    return Shared.renderCanvas(trace, scale, width, height);
-  }
-
   render() {
     return (
         <div>
           <Row>
-            <Col span={18} style={{paddingRight: '2.5px'}}>
+            <Col span={24} style={{paddingRight: '2.5px'}}>
               {
-                Shared.renderTraceTable(this.state.sessionId, this.state.traces, this, true, this.renderCanvas)
-              }
-            </Col>
-            <Col span={6} style={{paddingLeft: '2.5px'}}>
-              {
-                (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events, true) : Shared.renderEventTable('', [], true)
+                Shared.renderTraceTable(this.state.sessionId, this.state.traces, this, true, true)
               }
             </Col>
           </Row>

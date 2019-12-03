@@ -201,14 +201,6 @@ class TestPage extends React.Component {
     }
   }
 
-  renderCanvas() {
-    const scale = 0.49;
-    const width = document.body.scrollWidth * scale;
-    const height = document.body.scrollHeight * scale;
-
-    return Shared.renderCanvas(this.state.trace, scale, width, height, this.state.isBackground);
-  }
-
   onChange(checked) {
     this.setState({
       isBackground: checked
@@ -267,7 +259,9 @@ class TestPage extends React.Component {
               </Row>
             </Col>
             <Col span={12}>
-              {this.renderCanvas()}
+              {
+                Shared.renderCanvas(this.state.trace, Shared.getSizeSmall(this.state.trace), this.state.isBackground)
+              }
             </Col>
             <Col span={6}>
               <Card title="Beat Me !" extra={<a href="#">More</a>}>

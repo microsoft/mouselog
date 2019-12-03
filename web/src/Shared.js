@@ -18,7 +18,7 @@ export function getPoints(trace, scale) {
   return points;
 }
 
-export function renderTraceTable(title, traces, self, isLong=false, renderCanvas=null) {
+export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=false) {
   const columns = [
     {
       title: 'Id',
@@ -52,14 +52,14 @@ export function renderTraceTable(title, traces, self, isLong=false, renderCanvas
     }
   ];
 
-  if (renderCanvas !== null) {
+  if (hasCanvas) {
     columns.push(
         {
           title: 'Canvas',
           key: 'canvas',
           width: 800,
           render: (text, record, index) => {
-            return renderCanvas(traces[index]);
+            return renderCanvas(traces[index], getSize(traces[index]));
           }
         }
     );
@@ -204,7 +204,38 @@ function renderRuler(width, height, scale) {
   return objs;
 }
 
-export function renderCanvas(trace, scale, width, height, isBackground=false) {
+export function getSizeSmall() {
+  const scale = 0.49;
+  const width = document.body.scrollWidth * scale;
+  const height = document.body.scrollHeight * scale;
+
+  return {scale: scale, width: width, height: height};
+}
+
+export function getSize(trace) {
+  let width = Math.trunc(document.body.scrollWidth / 2 - 20);
+  let height = Math.trunc(document.body.scrollHeight / 2 - 20);
+  let scale = 1;
+  if (trace !== null) {
+    let h = Math.trunc(width * trace.height / trace.width);
+    const hMax = document.body.scrollHeight - 100;
+    if (h < hMax) {
+      height = h;
+    } else {
+      height = hMax;
+      width = Math.trunc(height * trace.width / trace.height);
+    }
+    scale = height / trace.height;
+  }
+
+  return {scale: scale, width: width, height: height};
+}
+
+export function renderCanvas(trace, size, isBackground=false) {
+  const scale = size.scale;
+  const width = size.width;
+  const height = size.height;
+
   if (!isBackground) {
     return (
         <Stage width={width} height={height}
