@@ -25,6 +25,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
       dataIndex: 'id',
       key: 'id',
       sorter: (a, b) => a.id - b.id,
+      ellipsis: true,
     },
     {
       title: 'Width',

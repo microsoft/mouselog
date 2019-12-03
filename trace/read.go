@@ -9,6 +9,12 @@ import (
 	"github.com/mouselog/mouselog/util"
 )
 
+const (
+	TypeMouseMove = "mousemove"
+	TypeClick = "click"
+	TypeContextMenu = "contextmenu"
+)
+
 func getFloor(i int) int {
 	i = i - i % 100 - 100
 	if i < 0 {

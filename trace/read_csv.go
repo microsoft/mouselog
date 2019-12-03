@@ -1,6 +1,7 @@
 package trace
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"strings"
@@ -64,7 +65,18 @@ func readCsvLine(ss *Session, line string, i int) {
 			minY = y
 		}
 		timestamp := util.ParseFloat(timestampList[i])
-		typ := typeList[i]
+		var typ string
+		if typeList[i] == "Move" {
+			typ = TypeMouseMove
+		} else if typeList[i] == "Click" {
+			typ = TypeClick
+		} else if typeList[i] == "Down" {
+			typ = TypeClick
+		} else if typeList[i] == "Up" {
+			continue
+		} else {
+			panic(errors.New("unknown event type: " + typeList[i]))
+		}
 
 		t.addEvent(timestamp, typ, x, y, true)
 	}
