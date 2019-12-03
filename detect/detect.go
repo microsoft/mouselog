@@ -12,6 +12,10 @@ func checkBot(t *trace.Trace) (int, string, int, int, int) {
 }
 
 func CheckBot(t *trace.Trace) (int, string, int, int, int) {
+	if t == nil {
+		return 0, "", RuleNone, -1, -1
+	}
+
 	isBot, reason, rule, start, end := checkBot(t)
 	t.IsBot = isBot
 	t.Reason = reason
