@@ -51,16 +51,16 @@ func (c *ApiController) UploadTrace() {
 
 	ss := getOrCreateSs(sessionId)
 	if len(t.Events) > 0 {
-		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Url, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
+		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
 	} else {
-		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, t.Url)
+		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, t.Id)
 	}
 
 	if len(t.Events) != 0 {
 		ss.AddTrace(&t)
 	}
 
-	c.Data["json"] = detect.GetDetectResult(ss, t.Url)
+	c.Data["json"] = detect.GetDetectResult(ss, t.Id)
 	c.ServeJSON()
 }
 
@@ -76,8 +76,8 @@ func (c *ApiController) ClearTrace() {
 	}
 
 	ss := getOrCreateSs(sessionId)
-	if t2, ok := ss.UrlMap[t.Url]; ok {
-		delete(ss.UrlMap, t.Url)
+	if t2, ok := ss.TraceMap[t.Id]; ok {
+		delete(ss.TraceMap, t.Id)
 		for i, t3 := range ss.Traces {
 			if t2 == t3 {
 				ss.Traces = append(ss.Traces[:i], ss.Traces[i+1:]...)
@@ -85,8 +85,8 @@ func (c *ApiController) ClearTrace() {
 		}
 	}
 
-	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, t.Url)
+	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, t.Id)
 
-	c.Data["json"] = detect.GetDetectResult(ss, t.Url)
+	c.Data["json"] = detect.GetDetectResult(ss, t.Id)
 	c.ServeJSON()
 }

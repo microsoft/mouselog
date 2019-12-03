@@ -109,7 +109,7 @@ class DashboardPage extends React.Component {
                 </Col>
                 <Col span={12} style={{paddingLeft: '2.5px'}}>
                   {
-                    (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.url, this.state.trace.events) : Shared.renderEventTable('', [])
+                    (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events) : Shared.renderEventTable('', [])
                   }
                 </Col>
               </Row>

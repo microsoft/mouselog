@@ -22,9 +22,9 @@ func CheckBot(t *trace.Trace) (int, string, int, int, int) {
 	return isBot, reason, rule, start, end
 }
 
-func GetDetectResult(ss *trace.Session, url string) *trace.Session {
-	t, ok := ss.UrlMap[url]
-	if url != "" || ok {
+func GetDetectResult(ss *trace.Session, traceId string) *trace.Session {
+	t, ok := ss.TraceMap[traceId]
+	if traceId != "" || ok {
 		CheckBot(t)
 	}
 

@@ -21,10 +21,10 @@ export function getPoints(trace, scale) {
 export function renderTraceTable(title, traces, self, isLong=false, renderCanvas=null) {
   const columns = [
     {
-      title: 'URL',
-      dataIndex: 'url',
-      key: 'url',
-      sorter: (a, b) => a.url - b.url,
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: 'Width',
@@ -86,7 +86,7 @@ export function renderTraceTable(title, traces, self, isLong=false, renderCanvas
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
                  title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}
-                 rowClassName={(record, index) => { return record.isBot ? 'bot-row' : '' }} />
+                 rowClassName={(record, index) => { return record.isBot === 1 ? 'bot-row' : '' }} />
         </div>
     );
   } else {
@@ -105,7 +105,7 @@ export function renderEventTable(title, events, isLong=false) {
     {
       title: 'Timestamp',
       dataIndex: 'timestamp',
-      key: 'url',
+      key: 'timestamp',
     },
     {
       title: 'Type',

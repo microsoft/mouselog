@@ -1,7 +1,7 @@
 package trace
 
 type Trace struct {
-	Url    string `json:"url"`
+	Id     string `json:"id"`
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
 
@@ -15,9 +15,9 @@ type Trace struct {
 	Degrees []float64 `json:"-"`
 }
 
-func newTrace(url string) *Trace {
+func newTrace(id string) *Trace {
 	t := Trace{}
-	t.Url = url
+	t.Id = id
 	t.IsBot = -1
 	t.RuleStart = -1
 	t.RuleEnd = -1

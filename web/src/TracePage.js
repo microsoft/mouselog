@@ -56,7 +56,7 @@ class TracePage extends React.Component {
             </Col>
             <Col span={6} style={{paddingLeft: '2.5px'}}>
               {
-                (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.url, this.state.trace.events, true) : Shared.renderEventTable('', [], true)
+                (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events, true) : Shared.renderEventTable('', [], true)
               }
             </Col>
           </Row>

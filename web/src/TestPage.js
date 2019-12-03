@@ -70,7 +70,7 @@ class TestPage extends React.Component {
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
-    const trace = {url: window.location.pathname, width: width, height: height, events: this.state.events};
+    const trace = {id: window.location.pathname, width: width, height: height, events: this.state.events};
     const traceStr = JSON.stringify(trace);
 
     if (this.state.events.length === 50) {
@@ -165,7 +165,7 @@ class TestPage extends React.Component {
     if (this.state.traces.length === 0) {
       const width = document.body.scrollWidth;
       const height = document.body.scrollHeight;
-      this.state.traces = [{url: window.location.pathname, width: width, height: height, isBot: -1, events: []}];
+      this.state.traces = [{id: window.location.pathname, width: width, height: height, isBot: -1, events: []}];
       this.setState({
         traces: this.state.traces
       });

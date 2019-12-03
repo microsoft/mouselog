@@ -5,7 +5,7 @@ type Session struct {
 
 	Traces []*Trace `json:"traces"`
 
-	UrlMap map[string]*Trace `json:"-"`
+	TraceMap map[string]*Trace `json:"-"`
 }
 
 func NewSession(id string) *Session {
@@ -13,14 +13,14 @@ func NewSession(id string) *Session {
 	ss.Id = id
 	ss.Traces = []*Trace{}
 
-	ss.UrlMap = map[string]*Trace{}
+	ss.TraceMap = map[string]*Trace{}
 	return &ss
 }
 
 func (ss *Session) AddTrace(t *Trace) {
-	url := t.Url
-	if tOriginal, ok := ss.UrlMap[url]; !ok {
-		ss.UrlMap[url] = t
+	id := t.Id
+	if tOriginal, ok := ss.TraceMap[id]; !ok {
+		ss.TraceMap[id] = t
 		ss.Traces = append(ss.Traces, t)
 	} else {
 		tOriginal.Events = append(tOriginal.Events, t.Events...)
