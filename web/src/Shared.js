@@ -59,7 +59,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
           key: 'canvas',
           width: 800,
           render: (text, record, index) => {
-            return renderCanvas(traces[index], getSize(traces[index]));
+            return renderCanvas(traces[record.id], getSize(traces[record.id]));
           }
         }
     );
