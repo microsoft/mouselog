@@ -2,11 +2,12 @@ package util
 
 import (
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 )
 
-func filterTxtFile(name string) bool {
-	return strings.HasSuffix(name, ".txt")
+func filterFile(name string) bool {
+	return strings.HasSuffix(name, ".txt") || strings.HasSuffix(name, ".csv")
 }
 
 func ListFileIds(path string) []string {
@@ -18,8 +19,8 @@ func ListFileIds(path string) []string {
 	}
 
 	for _, f := range files {
-		if !f.IsDir() && filterTxtFile(f.Name()) {
-			fileId := strings.TrimSuffix(f.Name(), ".txt")
+		if !f.IsDir() && filterFile(f.Name()) {
+			fileId := strings.TrimSuffix(f.Name(), filepath.Ext(f.Name()))
 			res = append(res, fileId)
 		}
 	}
