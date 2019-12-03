@@ -107,8 +107,10 @@ class TestPage extends React.Component {
     });
 
     this.state.traces = [];
+    this.state.trace = null;
     this.setState({
-      traces: this.state.traces
+      traces: this.state.traces,
+      trace: this.state.trace
     });
   }
 
@@ -162,15 +164,15 @@ class TestPage extends React.Component {
 
     let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
     this.state.events.push(p);
-    if (this.state.traces.length === 0) {
+    if (this.state.trace === null) {
       const width = document.body.scrollWidth;
       const height = document.body.scrollHeight;
-      this.state.traces = [{id: window.location.pathname, width: width, height: height, isBot: -1, events: []}];
+      this.state.trace = {id: window.location.pathname, width: width, height: height, isBot: -1, events: []};
       this.setState({
-        traces: this.state.traces
+        trace: this.state.trace
       });
     }
-    this.state.traces[0].events.push(p);
+    this.state.trace.events.push(p);
 
     this.setState({
       events: this.state.events
