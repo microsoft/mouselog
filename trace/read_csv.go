@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"strconv"
 	"strings"
 
 	"github.com/mouselog/mouselog/util"
@@ -26,9 +27,8 @@ const (
 func readCsvLine(ss *Session, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
 
-	requestId := row[RowRequestId]
-
-	t := newTrace(requestId)
+	t := newTrace(strconv.Itoa(i))
+	t.RequestId = row[RowRequestId]
 	t.Timestamp = row[RowTimestamp]
 	t.Url = row[RowUrl]
 	t.UserAgent = row[RowUserAgent]
@@ -88,7 +88,5 @@ func readCsvLine(ss *Session, line string, i int) {
 	if i%1000 == 0 {
 		fmt.Printf("[%d] Read trace a line\n", i)
 	}
-
-	i += 1
 }
 

@@ -69,7 +69,5 @@ func readTxtLine(ss *Session, line string, i int) {
 	if i%1000 == 0 {
 		fmt.Printf("[%d] Read trace a line\n", i)
 	}
-
-	i += 1
 }
 

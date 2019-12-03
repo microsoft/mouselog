@@ -70,6 +70,8 @@ func ReadTraces(fileId string) *Session {
 		line := scanner.Text()
 
 		readLine(ss, line, i)
+
+		i += 1
 	}
 
 	if err := scanner.Err(); err != nil {

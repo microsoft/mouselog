@@ -14,6 +14,7 @@ type Trace struct {
 	Events  []Event   `json:"events"`
 	Degrees []float64 `json:"-"`
 
+	RequestId string `json:"requestId"`
 	Timestamp string `json:"timestamp"`
 	Url       string `json:"url"`
 	UserAgent string `json:"userAgent"`
