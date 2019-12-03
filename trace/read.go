@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/mouselog/mouselog/util"
 )
@@ -37,9 +38,17 @@ func normalizeWidthAndHeight(t *Trace, maxX int, minX int, maxY int, minY int) {
 func ReadTraces(fileId string) *Session {
 	fmt.Printf("Read traces for file: [%s].\n", fileId)
 
+	var path string
+	var readLine func(*Session, string, int)
+	path = util.GetDataPath(fileId)
+	readLine = readTxtLine
+	if strings.HasPrefix(fileId, "logs_") {
+		path = util.GetCsvDataPath(fileId)
+		readLine = readCsvLine
+	}
+
 	ss := NewSession(fileId)
 
-	path := util.GetDataPath(fileId)
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -54,7 +63,7 @@ func ReadTraces(fileId string) *Session {
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		readTxtLine(ss, line, i)
+		readLine(ss, line, i)
 	}
 
 	if err := scanner.Err(); err != nil {
