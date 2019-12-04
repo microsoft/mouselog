@@ -10,9 +10,14 @@ import (
 )
 
 const (
-	TypeMouseMove = "mousemove"
-	TypeClick = "click"
-	TypeContextMenu = "contextmenu"
+	EventTypeMouseMove   = "mousemove"
+	EventTypeClick       = "click"
+	EventTypeContextMenu = "contextmenu"
+)
+
+const (
+	PointerTypeMouse = "Mouse"
+	PointerTypeTouch = "Touch"
 )
 
 func getFloor(i int) int {

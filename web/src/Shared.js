@@ -27,17 +27,23 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
       sorter: (a, b) => a.id - b.id,
       ellipsis: true,
     },
+    // {
+    //   title: 'Width',
+    //   dataIndex: 'width',
+    //   key: 'width',
+    //   sorter: (a, b) => a.width - b.width,
+    // },
+    // {
+    //   title: 'Height',
+    //   dataIndex: 'height',
+    //   key: 'height',
+    //   sorter: (a, b) => a.height - b.height,
+    // },
     {
-      title: 'Width',
-      dataIndex: 'width',
-      key: 'width',
-      sorter: (a, b) => a.width - b.width,
-    },
-    {
-      title: 'Height',
-      dataIndex: 'height',
-      key: 'height',
-      sorter: (a, b) => a.height - b.height,
+      title: 'Pointer Type',
+      dataIndex: 'pointerType',
+      key: 'pointerType',
+      sorter: (a, b) => a.events.pointerType - b.events.pointerType,
     },
     {
       title: 'Event Count',
@@ -168,10 +174,9 @@ export function renderEventTable(title, events, isLong=false) {
       key: 'y',
     },
     {
-      title: 'Is Trusted',
-      dataIndex: 'isTrusted',
-      key: 'isTrusted',
-      render: isTrusted => isTrusted.toString(),
+      title: 'Pointer Type',
+      dataIndex: 'pointerType',
+      key: 'pointerType',
     }
   ];
 

@@ -27,14 +27,16 @@ const (
 )
 
 func getUnifiedPointerType(pointerTypeList []string) string {
-	res := pointerTypeList[0]
-	for _, pointerType := range pointerTypeList {
-		if res != pointerType {
-			panic(errors.New("multiple pointer types found: " + res + " != " + pointerType))
+	resList := []string{}
+	resMap := map[string]int{}
+	for _, pt := range pointerTypeList {
+		if _, ok := resMap[pt]; !ok {
+			resMap[pt] = 1
+			resList = append(resList, pt)
 		}
 	}
 
-	return res
+	return strings.Join(resList, ", ")
 }
 
 func readCsvLine(ss *Session, line string, i int) {
@@ -83,22 +85,23 @@ func readCsvLine(ss *Session, line string, i int) {
 		timestamp := util.ParseFloat(timestampList[i])
 		var typ string
 		if eventTypeList[i] == "Move" {
-			typ = TypeMouseMove
+			typ = EventTypeMouseMove
 		} else if eventTypeList[i] == "Click" {
 			if buttonList[i] == "Left" {
-				typ = TypeClick
+				typ = EventTypeClick
 			} else if buttonList[i] == "Right" {
-				typ = TypeContextMenu
+				typ = EventTypeContextMenu
 			} else {
 				panic(errors.New("unknown button: " + buttonList[i]))
 			}
 		} else if eventTypeList[i] == "Down" {
 			if buttonList[i] == "Left" {
-				typ = TypeClick
+				typ = EventTypeClick
 			} else if buttonList[i] == "Right" {
-				typ = TypeContextMenu
+				typ = EventTypeContextMenu
 			} else {
-				panic(errors.New("unknown button: " + buttonList[i]))
+				continue
+				//panic(errors.New("unknown button: " + buttonList[i]))
 			}
 		} else if eventTypeList[i] == "Up" {
 			continue
@@ -106,7 +109,7 @@ func readCsvLine(ss *Session, line string, i int) {
 			panic(errors.New("unknown event type: " + eventTypeList[i]))
 		}
 
-		t.addEvent(timestamp, typ, x, y, true)
+		t.addEvent(timestamp, typ, x, y, pointerTypeList[i])
 	}
 
 	t.sortEvents()

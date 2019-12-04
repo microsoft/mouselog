@@ -34,13 +34,13 @@ func newTrace(id string) *Trace {
 	return &t
 }
 
-func (t *Trace) addEvent(timestamp float64, typ string, x int, y int, isTrusted bool) {
+func (t *Trace) addEvent(timestamp float64, typ string, x int, y int, pointerType string) {
 	e := Event{
-		Timestamp: timestamp,
-		Type:      typ,
-		X:         x,
-		Y:         y,
-		IsTrusted: isTrusted,
+		Timestamp:   timestamp,
+		Type:        typ,
+		X:           x,
+		Y:           y,
+		PointerType: pointerType,
 	}
 
 	t.Events = append(t.Events, e)

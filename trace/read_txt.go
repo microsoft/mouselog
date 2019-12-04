@@ -59,7 +59,7 @@ func readTxtLine(ss *Session, line string, i int) {
 		}
 		timestamp := util.ParseFloat(tokens[2])
 
-		t.addEvent(timestamp, TypeMouseMove, x, y, true)
+		t.addEvent(timestamp, EventTypeMouseMove, x, y, PointerTypeMouse)
 	}
 
 	normalizeWidthAndHeight(t, maxX, minX, maxY, minY)
