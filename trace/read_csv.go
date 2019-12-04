@@ -19,10 +19,23 @@ const (
 	RowIsBot
 	RowPointCount
 	RowTimestampList
-	RowTypeList
+	RowEventTypeList
+	RowButtonList
+	RowPointerTypeList
 	RowXList
 	RowYList
 )
+
+func getUnifiedPointerType(pointerTypeList []string) string {
+	res := pointerTypeList[0]
+	for _, pointerType := range pointerTypeList {
+		if res != pointerType {
+			panic(errors.New("multiple pointer types found: " + res + " != " + pointerType))
+		}
+	}
+
+	return res
+}
 
 func readCsvLine(ss *Session, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
@@ -42,7 +55,10 @@ func readCsvLine(ss *Session, line string, i int) {
 	}
 
 	timestampList := strings.Split(row[RowTimestampList], "|")
-	typeList := strings.Split(row[RowTypeList], "|")
+	eventTypeList := strings.Split(row[RowEventTypeList], "|")
+	buttonList := strings.Split(row[RowButtonList], "|")
+	pointerTypeList := strings.Split(row[RowPointerTypeList], "|")
+	t.PointerType = getUnifiedPointerType(pointerTypeList)
 	xList := strings.Split(row[RowXList], "|")
 	yList := strings.Split(row[RowYList], "|")
 	minX := math.MaxInt32
@@ -66,16 +82,28 @@ func readCsvLine(ss *Session, line string, i int) {
 		}
 		timestamp := util.ParseFloat(timestampList[i])
 		var typ string
-		if typeList[i] == "Move" {
+		if eventTypeList[i] == "Move" {
 			typ = TypeMouseMove
-		} else if typeList[i] == "Click" {
-			typ = TypeClick
-		} else if typeList[i] == "Down" {
-			typ = TypeClick
-		} else if typeList[i] == "Up" {
+		} else if eventTypeList[i] == "Click" {
+			if buttonList[i] == "Left" {
+				typ = TypeClick
+			} else if buttonList[i] == "Right" {
+				typ = TypeContextMenu
+			} else {
+				panic(errors.New("unknown button: " + buttonList[i]))
+			}
+		} else if eventTypeList[i] == "Down" {
+			if buttonList[i] == "Left" {
+				typ = TypeClick
+			} else if buttonList[i] == "Right" {
+				typ = TypeContextMenu
+			} else {
+				panic(errors.New("unknown button: " + buttonList[i]))
+			}
+		} else if eventTypeList[i] == "Up" {
 			continue
 		} else {
-			panic(errors.New("unknown event type: " + typeList[i]))
+			panic(errors.New("unknown event type: " + eventTypeList[i]))
 		}
 
 		t.addEvent(timestamp, typ, x, y, true)

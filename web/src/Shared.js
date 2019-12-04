@@ -81,6 +81,12 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
         sorter: (a, b) => a.clientIp - b.clientIp,
       },
       {
+        title: 'PointerType',
+        dataIndex: 'pointerType',
+        key: 'pointerType',
+        sorter: (a, b) => a.pointerType - b.pointerType,
+      },
+      {
         title: 'Is Bot',
         dataIndex: 'isBot',
         key: 'isBot',
