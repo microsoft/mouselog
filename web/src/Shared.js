@@ -102,7 +102,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
           key: 'canvas',
           width: 800,
           render: (text, record, index) => {
-            return renderCanvas(traces[record.id], getSize(traces[record.id]));
+            return renderCanvas(traces[record.id], getSize(traces[record.id], 4));
           }
         }
     );
@@ -128,15 +128,16 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
     return (
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 450px)'}}
                  rowClassName={(record, index) => { return record.isBot === 1 ? 'bot-row' : '' }} />
         </div>
     );
   } else {
     return (
         <div>
+          {/*Dynamic height: https://github.com/ant-design/ant-design/issues/14379#issuecomment-458402994 */}
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 700}}
+                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 150px)'}}
                  rowClassName={(record, index) => { return record.isBot ? 'bot-row' : '' }} />
         </div>
     );
@@ -177,7 +178,7 @@ export function renderEventTable(title, events, isLong=false) {
   if (!isLong) {
     return (
         <div>
-          <Table columns={columns} dataSource={events} size="small" bordered
+          <Table columns={columns} dataSource={events} size="small" bordered pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 450px)'}}
                  title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
         </div>
     );
@@ -255,9 +256,9 @@ export function getSizeSmall() {
   return {scale: scale, width: width, height: height};
 }
 
-export function getSize(trace) {
-  let width = Math.trunc(document.body.scrollWidth / 2 - 20);
-  let height = Math.trunc(document.body.scrollHeight / 2 - 20);
+export function getSize(trace, divider) {
+  let width = Math.trunc(document.body.scrollWidth / divider - 20);
+  let height = Math.trunc(document.body.scrollHeight / divider - 20);
   let scale = 1;
   if (trace !== null) {
     let h = Math.trunc(width * trace.height / trace.width);

@@ -97,7 +97,7 @@ class DashboardPage extends React.Component {
             </Col>
             <Col span={12}>
               {
-                Shared.renderCanvas(this.state.trace, Shared.getSize(this.state.trace))
+                Shared.renderCanvas(this.state.trace, Shared.getSize(this.state.trace, 2))
               }
             </Col>
           </Row>

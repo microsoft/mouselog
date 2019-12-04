@@ -48,7 +48,7 @@ func readCsvLine(ss *Session, line string, i int) {
 	t.ClientIp = row[RowClientIp]
 
 	isBot := row[RowIsBot]
-	if isBot == "TRUE" {
+	if isBot == "True" {
 		t.IsBot = 1
 	} else {
 		t.IsBot = 0
