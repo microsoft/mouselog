@@ -81,6 +81,7 @@ func readCsvLine(ss *Session, line string, i int) {
 		t.addEvent(timestamp, typ, x, y, true)
 	}
 
+	t.sortEvents()
 	normalizeWidthAndHeight(t, maxX, minX, maxY, minY)
 
 	ss.AddTrace(t)

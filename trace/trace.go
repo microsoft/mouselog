@@ -1,5 +1,7 @@
 package trace
 
+import "sort"
+
 type Trace struct {
 	Id     string `json:"id"`
 	Width  int    `json:"width"`
@@ -41,4 +43,10 @@ func (t *Trace) addEvent(timestamp float64, typ string, x int, y int, isTrusted 
 	}
 
 	t.Events = append(t.Events, e)
+}
+
+func (t *Trace) sortEvents() {
+	sort.Slice(t.Events, func(i, j int) bool {
+		return t.Events[i].Timestamp < t.Events[j].Timestamp
+	})
 }
