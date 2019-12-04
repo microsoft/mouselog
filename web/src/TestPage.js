@@ -87,7 +87,7 @@ class TestPage extends React.Component {
         .then(res => {
           this.setState({
             traces: res.traces,
-            trace: res.traces[0],
+            trace: res.traces.length === 0 ? null : res.traces[0],
             status: true
           });
         })
