@@ -19,7 +19,7 @@ export function getPoints(trace, scale) {
 }
 
 export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=false) {
-  const columns = [
+  let columns = [
     {
       title: 'Id',
       dataIndex: 'id',
@@ -52,6 +52,42 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
       sorter: (a, b) => a.isBot - b.isBot,
     }
   ];
+
+  if (hasCanvas) {
+    columns = [
+      {
+        title: 'Id',
+        dataIndex: 'id',
+        key: 'id',
+        sorter: (a, b) => a.id - b.id,
+        ellipsis: true,
+      },
+      {
+        title: 'Url',
+        dataIndex: 'url',
+        key: 'url',
+        sorter: (a, b) => a.url - b.url,
+      },
+      {
+        title: 'UserAgent',
+        dataIndex: 'userAgent',
+        key: 'userAgent',
+        sorter: (a, b) => a.userAgent - b.userAgent,
+      },
+      {
+        title: 'ClientIp',
+        dataIndex: 'clientIp',
+        key: 'clientIp',
+        sorter: (a, b) => a.clientIp - b.clientIp,
+      },
+      {
+        title: 'Is Bot',
+        dataIndex: 'isBot',
+        key: 'isBot',
+        sorter: (a, b) => a.isBot - b.isBot,
+      }
+    ];
+  }
 
   if (hasCanvas) {
     columns.push(
