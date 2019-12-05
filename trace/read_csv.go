@@ -26,6 +26,27 @@ const (
 	RowYList
 )
 
+const (
+	CsvPointerTypeMouse = "Mouse"
+	CsvPointerTypeTouch = "Touch"
+)
+
+const (
+	CsvEventTypeMove  = "Move"
+	CsvEventTypeClick = "Click"
+	CsvEventTypeDown  = "Down"
+	CsvEventTypeUp    = "Up"
+)
+
+const (
+	CsvButtonNone    = "None"
+	CsvButtonLeft    = "Left"
+	CsvButtonRight   = "Right"
+	CsvButtonX1      = "X1"
+	CsvButtonX2      = "X2"
+	CsvButtonUnknown = "Unknown"
+)
+
 func getUnifiedPointerType(pointerTypeList []string) string {
 	resList := []string{}
 	resMap := map[string]int{}
@@ -67,7 +88,7 @@ func readCsvLine(ss *Session, line string, i int) {
 	minY := math.MaxInt32
 	maxX := 0
 	maxY := 0
-	for i := 0; i < len(timestampList); i ++ {
+	for i := 0; i < len(timestampList); i++ {
 		x := util.ParseInt(xList[i])
 		if maxX < x {
 			maxX = x
@@ -83,33 +104,62 @@ func readCsvLine(ss *Session, line string, i int) {
 			minY = y
 		}
 		timestamp := util.ParseFloat(timestampList[i])
-		var typ string
-		if eventTypeList[i] == "Move" {
-			typ = EventTypeMouseMove
-		} else if eventTypeList[i] == "Click" {
-			if buttonList[i] == "Left" {
-				typ = EventTypeClick
-			} else if buttonList[i] == "Right" {
-				typ = EventTypeContextMenu
-			} else {
-				panic(errors.New("unknown button: " + buttonList[i]))
+
+		var eventType string
+		var button string
+		switch pointerTypeList[i] {
+		case CsvPointerTypeMouse:
+			switch eventTypeList[i] {
+			case CsvEventTypeMove:
+				eventType = EventTypeMouseMove
+				if buttonList[i] != CsvButtonNone {
+					panic(errors.New(fmt.Sprintf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])))
+				}
+			case CsvEventTypeClick:
+				eventType = EventTypeClick
+				button = buttonList[i]
+				if button != CsvButtonLeft {
+					fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+				}
+			case CsvEventTypeDown:
+				eventType = EventTypeMouseDown
+				button = buttonList[i]
+				if button != CsvButtonLeft && button != CsvButtonRight && button != CsvButtonX1 && button != CsvButtonX2 {
+					fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+				}
+			case CsvEventTypeUp:
+				eventType = EventTypeMouseUp
+				button = buttonList[i]
+				if button != CsvButtonLeft && button != CsvButtonRight && button != CsvButtonX1 && button != CsvButtonX2 {
+					fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+				}
+			default:
+				panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
 			}
-		} else if eventTypeList[i] == "Down" {
-			if buttonList[i] == "Left" {
-				typ = EventTypeClick
-			} else if buttonList[i] == "Right" {
-				typ = EventTypeContextMenu
-			} else {
-				continue
-				//panic(errors.New("unknown button: " + buttonList[i]))
+		case CsvPointerTypeTouch:
+			//fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+			button = buttonList[i]
+			if button != CsvButtonLeft && button != CsvButtonUnknown {
+				fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
 			}
-		} else if eventTypeList[i] == "Up" {
-			continue
-		} else {
-			panic(errors.New("unknown event type: " + eventTypeList[i]))
+
+			switch eventTypeList[i] {
+			case CsvEventTypeMove:
+				eventType = EventTypeTouchMove
+			case CsvEventTypeClick:
+				eventType = EventTypeClick
+			case CsvEventTypeDown:
+				eventType = EventTypeTouchStart
+			case CsvEventTypeUp:
+				eventType = EventTypeTouchEnd
+			default:
+				panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
+			}
+		default:
+			panic(errors.New(fmt.Sprintf("[%f] unknown pointer type: %s for (%s, %s)", timestamp, pointerTypeList[i], eventTypeList[i], buttonList[i])))
 		}
 
-		t.addEvent(timestamp, typ, x, y, pointerTypeList[i])
+		t.addEvent(timestamp, eventType, button, x, y)
 	}
 
 	t.sortEvents()
@@ -121,4 +171,3 @@ func readCsvLine(ss *Session, line string, i int) {
 		fmt.Printf("[%d] Read trace a line\n", i)
 	}
 }
-

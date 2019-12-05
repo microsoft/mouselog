@@ -9,19 +9,25 @@ import (
 	"github.com/mouselog/mouselog/util"
 )
 
+// https://developer.mozilla.org/en-US/docs/Web/Events
 const (
-	EventTypeMouseMove   = "mousemove"
 	EventTypeClick       = "click"
 	EventTypeContextMenu = "contextmenu"
+	EventTypeMouseDown   = "mousedown"
+	EventTypeMouseMove   = "mousemove"
+	EventTypeMouseUp     = "mouseup"
+	EventTypeTouchStart  = "touchstart"
+	EventTypeTouchMove   = "touchmove"
+	EventTypeTouchEnd    = "touchend"
 )
 
 const (
-	PointerTypeMouse = "Mouse"
-	PointerTypeTouch = "Touch"
+	ButtonLeft  = "Left"
+	ButtonRight = "Right"
 )
 
 func getFloor(i int) int {
-	i = i - i % 100 - 100
+	i = i - i%100 - 100
 	if i < 0 {
 		i = 0
 	}
@@ -29,7 +35,7 @@ func getFloor(i int) int {
 }
 
 func getCeil(i int) int {
-	return i - i % 100 + 200
+	return i - i%100 + 200
 }
 
 func normalizeWidthAndHeight(t *Trace, maxX int, minX int, maxY int, minY int) {

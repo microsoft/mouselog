@@ -56,13 +56,15 @@ class App extends React.Component {
   render() {
     return (
       <div id="mouseArea" className="fill-window"
-           // React: https://reactjs.org/docs/events.html
+           // React: https://reactjs.org/docs/events.html#mouse-events
            // MDN: https://developer.mozilla.org/en-US/docs/Web/Events
            onMouseMove={(e) => Setting.mouseHandler('mousemove', e)}
            onClick={(e) => Setting.mouseHandler('click', e)}
            onContextMenu={(e) => Setting.mouseHandler('contextmenu', e)}
-           onScroll={(e) => Setting.mouseHandler('scroll', e)}
            onWheel={(e) => Setting.mouseHandler('wheel', e)}
+           onTouchStart={(e) => Setting.mouseHandler('touchstart', e)}
+           onTouchMove={(e) => Setting.mouseHandler('touchmove', e)}
+           onTouchEnd={(e) => Setting.mouseHandler('touchend', e)}
       >
         <Layout className="layout">
           <Header style={{padding: '0', marginBottom: '3px'}}>

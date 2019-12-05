@@ -162,7 +162,7 @@ class TestPage extends React.Component {
       });
     }
 
-    let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, pointerType: 'Mouse'};
+    let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, button: e.button};
     // let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
     this.state.events.push(p);
     if (this.state.trace === null) {

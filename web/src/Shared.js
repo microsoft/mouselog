@@ -158,10 +158,14 @@ export function renderEventTable(title, events, isLong=false) {
       key: 'timestamp',
     },
     {
-      title: 'Type',
+      title: 'Event Type',
       dataIndex: 'type',
       key: 'type',
-      render: type => type.replace('mouse', ''),
+    },
+    {
+      title: 'Button',
+      dataIndex: 'button',
+      key: 'button',
     },
     {
       title: 'X',
@@ -172,11 +176,6 @@ export function renderEventTable(title, events, isLong=false) {
       title: 'Y',
       dataIndex: 'y',
       key: 'y',
-    },
-    {
-      title: 'Pointer Type',
-      dataIndex: 'pointerType',
-      key: 'pointerType',
     }
   ];
 
@@ -203,6 +202,8 @@ function renderEvents(trace, scale) {
   trace.events.forEach(function (event) {
     if (event.type === 'mousemove') {
       objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue"/>);
+    } else if (event.type === 'touchmove') {
+      objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="purple"/>);
     } else if (event.type === 'click') {
       objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={8} fill="red" opacity={0.5}/>);
     } else if (event.type === 'contextmenu') {
