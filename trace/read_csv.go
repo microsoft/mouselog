@@ -109,33 +109,47 @@ func readCsvLine(ss *Session, line string, i int) {
 		var button string
 		switch pointerTypeList[i] {
 		case CsvPointerTypeMouse:
-			switch eventTypeList[i] {
-			case CsvEventTypeMove:
-				eventType = EventTypeMouseMove
-				if buttonList[i] != CsvButtonNone {
-					panic(errors.New(fmt.Sprintf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])))
+			// "Right" button should only have "Up", "Down" events, we translate "Down" to "contextmenu",
+			// and ignore "Up".
+			if buttonList[i] == CsvButtonRight {
+				if eventTypeList[i] == CsvEventTypeDown {
+					eventType = EventTypeContextMenu
+					button = buttonList[i]
+				} else if eventTypeList[i] == CsvEventTypeUp {
+					continue
+				} else {
+					panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
 				}
-			case CsvEventTypeClick:
-				eventType = EventTypeClick
-				button = buttonList[i]
-				if button != CsvButtonLeft {
-					fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+			} else {
+				switch eventTypeList[i] {
+				case CsvEventTypeMove:
+					eventType = EventTypeMouseMove
+					if buttonList[i] != CsvButtonNone {
+						panic(errors.New(fmt.Sprintf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])))
+					}
+				case CsvEventTypeClick:
+					eventType = EventTypeClick
+					button = buttonList[i]
+					if button != CsvButtonLeft {
+						fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+					}
+				case CsvEventTypeDown:
+					eventType = EventTypeMouseDown
+					button = buttonList[i]
+					if button != CsvButtonLeft && button != CsvButtonRight && button != CsvButtonX1 && button != CsvButtonX2 {
+						fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+					}
+				case CsvEventTypeUp:
+					eventType = EventTypeMouseUp
+					button = buttonList[i]
+					if button != CsvButtonLeft && button != CsvButtonRight && button != CsvButtonX1 && button != CsvButtonX2 {
+						fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+					}
+				default:
+					panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
 				}
-			case CsvEventTypeDown:
-				eventType = EventTypeMouseDown
-				button = buttonList[i]
-				if button != CsvButtonLeft && button != CsvButtonRight && button != CsvButtonX1 && button != CsvButtonX2 {
-					fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
-				}
-			case CsvEventTypeUp:
-				eventType = EventTypeMouseUp
-				button = buttonList[i]
-				if button != CsvButtonLeft && button != CsvButtonRight && button != CsvButtonX1 && button != CsvButtonX2 {
-					fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
-				}
-			default:
-				panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
 			}
+
 		case CsvPointerTypeTouch:
 			//fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
 			button = buttonList[i]

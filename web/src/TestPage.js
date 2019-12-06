@@ -146,7 +146,20 @@ class TestPage extends React.Component {
     element.dispatchEvent(e);
   }
 
+  getButton(button) {
+    if (button === '2') {
+      return "Right";
+    } else {
+      return "";
+    }
+  }
+
   mouseHandler(type, e) {
+    // PC's Chrome on Mobile mode can still receive "contextmenu" event with zero X, Y, so we ignore these events.
+    if (e.type === 'contextmenu' && e.pageX === 0 && e.pageY === 0) {
+      return;
+    }
+
     let eventCount = this.state.eventCount;
     eventCount += 1;
     this.setState({
@@ -162,7 +175,14 @@ class TestPage extends React.Component {
       });
     }
 
-    let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, button: e.button};
+    let x = e.pageX;
+    let y = e.pageY;
+    if (x === undefined) {
+      x = e.changedTouches[0].pageX;
+      y = e.changedTouches[0].pageY;
+    }
+
+    let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: x, y: y, button: this.getButton(e.button)};
     // let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
     this.state.events.push(p);
     if (this.state.trace === null) {
