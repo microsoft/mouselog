@@ -74,15 +74,29 @@ class DashboardPage extends React.Component {
       {
         title: 'Confusing Matrix',
         key: 'cm',
-        render: (text, record, index) => {
-          return this.getCMTable(record.tn, record.fp, record.fn, record.tp);
+        render: (text, session, index) => {
+          return this.getCMTable(session.tn, session.fp, session.fn, session.tp);
         }
       },
       {
-        title: 'UN',
-        dataIndex: 'un',
-        key: 'un',
+        title: 'Precision (%)',
+        key: 'precision',
+        render: (text, session, index) => {
+          return (session.tp * 100.0 / (session.tp + session.fp)).toFixed(2)
+        }
       },
+      {
+        title: 'Recall (%)',
+        key: 'recall',
+        render: (text, session, index) => {
+          return (session.tp * 100.0 / (session.tp + session.fn)).toFixed(2)
+        }
+      },
+      // {
+      //   title: 'UN',
+      //   dataIndex: 'un',
+      //   key: 'un',
+      // },
     ];
 
     const rowRadioSelection = {
