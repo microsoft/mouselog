@@ -23,6 +23,7 @@ func getOrCreateSs2(fileId string) *trace.Session {
 		ssm[fileId] = ss
 
 		detect.SyncGuesses(ss)
+		ss.SyncStatistics()
 	}
 
 	return ss

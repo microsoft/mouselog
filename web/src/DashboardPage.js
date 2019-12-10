@@ -1,7 +1,7 @@
 import React from "react";
 import * as Setting from "./Setting";
 import * as Shared from "./Shared";
-import {Table, Row, Col, Typography} from 'antd';
+import {Table, Row, Col, Typography, Tag} from 'antd';
 import {Link} from "react-router-dom";
 
 const {Text} = Typography;
@@ -30,6 +30,32 @@ class DashboardPage extends React.Component {
         });
   }
 
+  getCMTable(tn, fp, fn, tp) {
+    // return (
+    //     <table>
+    //       <tr>
+    //         <td>TN: <Tag color="rgb(68,1,84)">{`${tn}`}</Tag></td>
+    //         <td>FP: <Tag color="rgb(253,231,36)">{`${fp}`}</Tag></td>
+    //       </tr>
+    //       <tr>
+    //         <td>FN: <Tag color="rgb(253,231,36)">{`${fn}`}</Tag></td>
+    //         <td>TP: <Tag color="rgb(68,1,84)">{`${tp}`}</Tag></td>
+    //       </tr>
+    //     </table>
+    // )
+
+    return (
+        <table>
+          <tr>
+            <td>TN: <Tag color="rgb(68,1,84)">{`${tn}`}</Tag></td>
+            <td>FP: <Tag color="rgb(253,231,36)">{`${fp}`}</Tag></td>
+            <td>FN: <Tag color="rgb(253,231,36)">{`${fn}`}</Tag></td>
+            <td>TP: <Tag color="rgb(68,1,84)">{`${tp}`}</Tag></td>
+          </tr>
+        </table>
+    )
+  }
+
   renderSessionTable() {
     const columns = [
       {
@@ -44,6 +70,18 @@ class DashboardPage extends React.Component {
         title: 'Trace Count',
         dataIndex: 'traceSize',
         key: 'traceSize',
+      },
+      {
+        title: 'Confusing Matrix',
+        key: 'cm',
+        render: (text, record, index) => {
+          return this.getCMTable(record.tn, record.fp, record.fn, record.tp);
+        }
+      },
+      {
+        title: 'UN',
+        dataIndex: 'un',
+        key: 'un',
       },
     ];
 
