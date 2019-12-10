@@ -142,24 +142,19 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
     rowRadioSelection = null;
   }
 
-  if (!isLong) {
-    return (
-        <div>
-          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 450px)'}}
-                 rowClassName={(record, index) => { return record.label === 1 ? 'bot-row' : '' }} />
-        </div>
-    );
-  } else {
-    return (
-        <div>
-          {/*Dynamic height: https://github.com/ant-design/ant-design/issues/14379#issuecomment-458402994 */}
-          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-                 title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 150px)'}}
-                 rowClassName={(record, index) => { return record.label ? 'bot-row' : '' }} />
-        </div>
-    );
+  let scrollY = 'calc(95vh - 450px)';
+  if (isLong) {
+    scrollY = 'calc(95vh - 150px)';
   }
+
+  // Dynamic height: https://github.com/ant-design/ant-design/issues/14379#issuecomment-458402994
+  return (
+      <div>
+        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
+               title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: scrollY}}
+               rowClassName={(record, index) => { return record.label === 1 ? 'bot-row' : '' }} />
+      </div>
+  );
 }
 
 export function renderEventTable(title, events, isLong=false) {
