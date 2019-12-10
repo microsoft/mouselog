@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/mouselog/mouselog/trace"
+	"github.com/microsoft/mouselog/trace"
 )
 
 func getDegree(x1 int, y1 int, x2 int, y2 int) float64 {

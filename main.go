@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
 
-	_ "github.com/mouselog/mouselog/routers"
+	_ "github.com/microsoft/mouselog/routers"
 )
 
 func main() {

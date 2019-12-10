@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mouselog/mouselog/util"
+	"github.com/microsoft/mouselog/util"
 )
 
 // https://developer.mozilla.org/en-US/docs/Web/Events

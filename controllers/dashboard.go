@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"github.com/mouselog/mouselog/detect"
-	"github.com/mouselog/mouselog/util"
+	"github.com/microsoft/mouselog/detect"
+	"github.com/microsoft/mouselog/util"
 
-	"github.com/mouselog/mouselog/trace"
+	"github.com/microsoft/mouselog/trace"
 )
 
 var ssm2 map[string]*trace.Session

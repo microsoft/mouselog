@@ -1,6 +1,6 @@
 package detect
 
-import "github.com/mouselog/mouselog/trace"
+import "github.com/microsoft/mouselog/trace"
 
 func checkBot(t *trace.Trace) (int, string, int, int, int) {
 	//isBot, reason, rule, start, end := checkStraightLine(t)

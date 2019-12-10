@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mouselog/mouselog/util"
+	"github.com/microsoft/mouselog/util"
 )
 
 const (

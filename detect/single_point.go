@@ -1,6 +1,6 @@
 package detect
 
-import "github.com/mouselog/mouselog/trace"
+import "github.com/microsoft/mouselog/trace"
 
 func checkSinglePoint(t *trace.Trace) (int, string, int, int, int) {
 	if len(t.Events) == 1 {

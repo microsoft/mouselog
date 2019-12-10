@@ -6,8 +6,8 @@ import (
 
 	"github.com/astaxie/beego"
 
-	"github.com/mouselog/mouselog/detect"
-	"github.com/mouselog/mouselog/trace"
+	"github.com/microsoft/mouselog/detect"
+	"github.com/microsoft/mouselog/trace"
 )
 
 type ApiController struct {
