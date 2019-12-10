@@ -12,7 +12,6 @@ func checkSinglePoint(t *trace.Trace) (int, string, int, int, int) {
 	for i := 1; i < len(t.Events); i ++ {
 		if t.Events[i].X != x || t.Events[i].Y != y {
 			return 0, "", RuleNone, -1, -1
-
 		}
 	}
 

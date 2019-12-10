@@ -109,6 +109,12 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
         dataIndex: 'guess',
         key: 'guess',
         sorter: (a, b) => a.guess - b.guess,
+      },
+      {
+        title: 'Reason',
+        dataIndex: 'reason',
+        key: 'reason',
+        sorter: (a, b) => a.reason - b.reason,
       }
     ];
   }
@@ -174,7 +180,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
       <div>
         <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
                title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: scrollY}}
-               rowClassName={(record, index) => { return record.label === 1 ? 'bot-row' : '' }} />
+               rowClassName={(record, index) => { return (record.label === 1 || record.guess === 1) ? 'bot-row' : '' }} />
       </div>
   );
 }

@@ -5,6 +5,7 @@ const (
 	RuleStraightLine
 	RuleEquallySpacedPoints
 	RuleSinglePoint
+	RuleOverspeed
 )
 
 func GetRuleName(rule int) string {
