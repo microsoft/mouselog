@@ -4,7 +4,7 @@ const (
 	RuleNone = iota
 	RuleStraightLine
 	RuleEquallySpacedPoints
-	RuleSingleEvent
+	RuleSinglePoint
 )
 
 func GetRuleName(rule int) string {
