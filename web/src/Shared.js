@@ -52,10 +52,16 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
       sorter: (a, b) => a.events.length - b.events.length,
     },
     {
-      title: 'Is Bot',
-      dataIndex: 'isBot',
-      key: 'isBot',
-      sorter: (a, b) => a.isBot - b.isBot,
+      title: 'Label',
+      dataIndex: 'label',
+      key: 'label',
+      sorter: (a, b) => a.label - b.label,
+    },
+    {
+      title: 'Guess',
+      dataIndex: 'guess',
+      key: 'guess',
+      sorter: (a, b) => a.guess - b.guess,
     }
   ];
 
@@ -93,10 +99,16 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
         sorter: (a, b) => a.pointerType - b.pointerType,
       },
       {
-        title: 'Is Bot',
-        dataIndex: 'isBot',
-        key: 'isBot',
-        sorter: (a, b) => a.isBot - b.isBot,
+        title: 'Label',
+        dataIndex: 'label',
+        key: 'label',
+        sorter: (a, b) => a.label - b.label,
+      },
+      {
+        title: 'Guess',
+        dataIndex: 'guess',
+        key: 'guess',
+        sorter: (a, b) => a.guess - b.guess,
       }
     ];
   }
@@ -135,7 +147,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
                  title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 450px)'}}
-                 rowClassName={(record, index) => { return record.isBot === 1 ? 'bot-row' : '' }} />
+                 rowClassName={(record, index) => { return record.label === 1 ? 'bot-row' : '' }} />
         </div>
     );
   } else {
@@ -144,7 +156,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
           {/*Dynamic height: https://github.com/ant-design/ant-design/issues/14379#issuecomment-458402994 */}
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
                  title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 150px)'}}
-                 rowClassName={(record, index) => { return record.isBot ? 'bot-row' : '' }} />
+                 rowClassName={(record, index) => { return record.label ? 'bot-row' : '' }} />
         </div>
     );
   }

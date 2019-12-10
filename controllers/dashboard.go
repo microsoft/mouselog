@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/mouselog/mouselog/detect"
 	"github.com/mouselog/mouselog/util"
 
 	"github.com/mouselog/mouselog/trace"
@@ -21,7 +22,7 @@ func getOrCreateSs2(fileId string) *trace.Session {
 		ss = trace.ReadTraces(fileId)
 		ssm[fileId] = ss
 
-		//ss.SyncGuesses()
+		detect.SyncGuesses(ss)
 	}
 
 	return ss

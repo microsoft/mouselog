@@ -73,9 +73,9 @@ func readCsvLine(ss *Session, line string, i int) {
 
 	isBot := row[RowIsBot]
 	if isBot == "True" {
-		t.IsBot = 1
+		t.Label = 1
 	} else {
-		t.IsBot = 0
+		t.Label = 0
 	}
 
 	timestampList := strings.Split(row[RowTimestampList], "|")
@@ -178,7 +178,9 @@ func readCsvLine(ss *Session, line string, i int) {
 		case CsvPointerTypePen:
 			//fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
 			button = buttonList[i]
-			if button != CsvButtonLeft && button != CsvButtonUnknown {
+			// "Pen" uses "None" button for "Move".
+			// None for (Pen, Move)
+			if button != CsvButtonLeft && button != CsvButtonUnknown && button != CsvButtonNone {
 				fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
 			}
 

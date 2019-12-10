@@ -3,7 +3,12 @@ package detect
 import "github.com/mouselog/mouselog/trace"
 
 func checkBot(t *trace.Trace) (int, string, int, int, int) {
-	isBot, reason, rule, start, end := checkStraightLine(t)
+	//isBot, reason, rule, start, end := checkStraightLine(t)
+	//if isBot != 0 {
+	//	return isBot, reason, rule, start, end
+	//}
+
+	isBot, reason, rule, start, end := checkSingleEvent(t)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
@@ -17,7 +22,7 @@ func CheckBot(t *trace.Trace) (int, string, int, int, int) {
 	}
 
 	isBot, reason, rule, start, end := checkBot(t)
-	t.IsBot = isBot
+	t.Guess = isBot
 	t.Reason = reason
 	t.RuleId = rule
 	t.RuleStart = start

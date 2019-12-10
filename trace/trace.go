@@ -7,7 +7,8 @@ type Trace struct {
 	Width  int    `json:"width"`
 	Height int    `json:"height"`
 
-	IsBot     int    `json:"isBot"`
+	Label     int    `json:"label"`
+	Guess     int    `json:"guess"`
 	Reason    string `json:"reason"`
 	RuleId    int    `json:"ruleId"`
 	RuleStart int    `json:"ruleStart"`
@@ -27,7 +28,8 @@ type Trace struct {
 func newTrace(id string) *Trace {
 	t := Trace{}
 	t.Id = id
-	t.IsBot = -1
+	t.Label = -1
+	t.Guess = -1
 	t.RuleStart = -1
 	t.RuleEnd = -1
 	t.Events = []Event{}
@@ -36,11 +38,11 @@ func newTrace(id string) *Trace {
 
 func (t *Trace) addEvent(timestamp float64, typ string, button string, x int, y int) {
 	e := Event{
-		Timestamp:   timestamp,
-		Type:        typ,
-		Button:      button,
-		X:           x,
-		Y:           y,
+		Timestamp: timestamp,
+		Type:      typ,
+		Button:    button,
+		X:         x,
+		Y:         y,
 	}
 
 	t.Events = append(t.Events, e)

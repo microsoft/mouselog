@@ -27,9 +27,9 @@ func readTxtLine(ss *Session, line string, i int) {
 	if len(row) == RowLabel+1 {
 		label := row[RowLabel]
 		if label == "0" {
-			t.IsBot = 1
+			t.Label = 1
 		} else {
-			t.IsBot = 0
+			t.Label = 0
 		}
 	}
 	points := strings.Split(trace, ";")

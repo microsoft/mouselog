@@ -70,7 +70,7 @@ class TestPage extends React.Component {
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
-    const trace = {id: window.location.pathname, width: width, height: height, events: this.state.events};
+    const trace = {id: window.location.pathname, width: width, height: height, label: -1, guess: -1, events: this.state.events};
     const traceStr = JSON.stringify(trace);
 
     if (this.state.events.length === 50) {
@@ -188,7 +188,7 @@ class TestPage extends React.Component {
     if (this.state.trace === null) {
       const width = document.body.scrollWidth;
       const height = document.body.scrollHeight;
-      this.state.trace = {id: window.location.pathname, width: width, height: height, isBot: -1, events: []};
+      this.state.trace = {id: window.location.pathname, width: width, height: height, label: -1, guess: -1, events: []};
       this.setState({
         trace: this.state.trace
       });
@@ -206,15 +206,15 @@ class TestPage extends React.Component {
           <Alert message="Server Offline" description="Server Offline" type="Informational" showIcon banner/>
       )
     } else {
-      if (this.state.trace === null || this.state.trace.isBot === -1) {
+      if (this.state.trace === null || this.state.trace.guess === -1) {
         return (
             <Alert message="No Mouse Trace" description="No Mouse Trace" type="warning" showIcon banner/>
         )
-      } else if (this.state.trace.isBot === 1) {
+      } else if (this.state.trace.guess === 1) {
         return (
             <Alert message="You Are Bot" description={this.state.trace.reason} type="error" showIcon banner/>
         )
-      } else if (this.state.trace.isBot === 0) {
+      } else if (this.state.trace.guess === 0) {
         return (
             <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner/>
         )
