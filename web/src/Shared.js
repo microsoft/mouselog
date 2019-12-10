@@ -1,5 +1,5 @@
 import React from "react";
-import {Table, Tag, Typography} from "antd";
+import {Button, Popover, Table, Tag, Typography} from "antd";
 import {Circle, Layer, Line, Stage} from "react-konva";
 import {Text as KonvaText} from "react-konva/lib/ReactKonvaCore";
 import {Link} from "react-router-dom";
@@ -114,6 +114,28 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
   }
 
   if (hasCanvas) {
+    const content = (trace) => (
+        <div style={{ width: '500px' }}>
+          {
+            renderEventTable(trace.id, trace.events)
+          }
+        </div>
+    );
+
+    columns.push(
+        {
+          title: 'Events',
+          key: 'events',
+          render: (text, trace, index) => {
+            return (
+                <Popover placement="topRight" content={content(trace)} title="" trigger="click">
+                  <Button>View</Button>
+                </Popover>
+            )
+          }
+        }
+    );
+
     columns.push(
         {
           title: 'Canvas',
@@ -138,7 +160,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
     },
   };
 
-  if (self === null) {
+  if (self === null || hasCanvas) {
     rowRadioSelection = null;
   }
 
