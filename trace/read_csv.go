@@ -29,6 +29,7 @@ const (
 const (
 	CsvPointerTypeMouse = "Mouse"
 	CsvPointerTypeTouch = "Touch"
+	CsvPointerTypePen   = "Pen"
 )
 
 const (
@@ -117,6 +118,10 @@ func readCsvLine(ss *Session, line string, i int) {
 					button = buttonList[i]
 				} else if eventTypeList[i] == CsvEventTypeUp {
 					continue
+				}  else if eventTypeList[i] == CsvEventTypeClick {
+					// Click for (Mouse, Right)
+					eventType = EventTypeContextMenu
+					button = buttonList[i]
 				} else {
 					panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
 				}
@@ -169,6 +174,27 @@ func readCsvLine(ss *Session, line string, i int) {
 			default:
 				panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
 			}
+
+		case CsvPointerTypePen:
+			//fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+			button = buttonList[i]
+			if button != CsvButtonLeft && button != CsvButtonUnknown {
+				fmt.Printf("[%f] unknown button: %s for (%s, %s)\n", timestamp, buttonList[i], pointerTypeList[i], eventTypeList[i])
+			}
+
+			switch eventTypeList[i] {
+			case CsvEventTypeMove:
+				eventType = EventTypeTouchMove
+			case CsvEventTypeClick:
+				eventType = EventTypeClick
+			case CsvEventTypeDown:
+				eventType = EventTypeTouchStart
+			case CsvEventTypeUp:
+				eventType = EventTypeTouchEnd
+			default:
+				panic(errors.New(fmt.Sprintf("[%f] unknown event type: %s for (%s, %s)", timestamp, eventTypeList[i], pointerTypeList[i], buttonList[i])))
+			}
+
 		default:
 			panic(errors.New(fmt.Sprintf("[%f] unknown pointer type: %s for (%s, %s)", timestamp, pointerTypeList[i], eventTypeList[i], buttonList[i])))
 		}
