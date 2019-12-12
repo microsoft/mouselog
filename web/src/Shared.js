@@ -39,64 +39,43 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
     //   key: 'height',
     //   sorter: (a, b) => a.height - b.height,
     // },
-    {
-      title: 'Pointer Type',
-      dataIndex: 'pointerType',
-      key: 'pointerType',
-      sorter: (a, b) => a.events.pointerType - b.events.pointerType,
-    },
-    {
-      title: 'Event Count',
-      dataIndex: 'events.length',
-      key: 'count',
-      sorter: (a, b) => a.events.length - b.events.length,
-    },
-    {
-      title: 'Label',
-      dataIndex: 'label',
-      key: 'label',
-      sorter: (a, b) => a.label - b.label,
-    },
-    {
-      title: 'Guess',
-      dataIndex: 'guess',
-      key: 'guess',
-      sorter: (a, b) => a.guess - b.guess,
-    }
   ];
 
   if (hasCanvas) {
-    columns = [
+    columns.push(
+        {
+          title: 'Url',
+          dataIndex: 'url',
+          key: 'url',
+          sorter: (a, b) => a.url.localeCompare(b.url),
+        },
+        {
+          title: 'UserAgent',
+          dataIndex: 'userAgent',
+          key: 'userAgent',
+          sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
+        },
+        {
+          title: 'ClientIp',
+          dataIndex: 'clientIp',
+          key: 'clientIp',
+          sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
+        },
+    );
+  }
+
+  columns.push(
       {
-        title: 'Id',
-        dataIndex: 'id',
-        key: 'id',
-        sorter: (a, b) => a.id - b.id,
-        ellipsis: true,
-      },
-      {
-        title: 'Url',
-        dataIndex: 'url',
-        key: 'url',
-        sorter: (a, b) => a.url - b.url,
-      },
-      {
-        title: 'UserAgent',
-        dataIndex: 'userAgent',
-        key: 'userAgent',
-        sorter: (a, b) => a.userAgent - b.userAgent,
-      },
-      {
-        title: 'ClientIp',
-        dataIndex: 'clientIp',
-        key: 'clientIp',
-        sorter: (a, b) => a.clientIp - b.clientIp,
+        title: 'Event Count',
+        dataIndex: 'events.length',
+        key: 'count',
+        sorter: (a, b) => a.events.length - b.events.length,
       },
       {
         title: 'PointerType',
         dataIndex: 'pointerType',
         key: 'pointerType',
-        sorter: (a, b) => a.pointerType - b.pointerType,
+        sorter: (a, b) => a.pointerType.localeCompare(b.pointerType),
       },
       {
         title: 'Label',
@@ -114,10 +93,9 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
         title: 'Reason',
         dataIndex: 'reason',
         key: 'reason',
-        sorter: (a, b) => a.reason - b.reason,
+        sorter: (a, b) => a.reason.localeCompare(b.reason),
       }
-    ];
-  }
+  );
 
   if (hasCanvas) {
     const content = (trace) => (

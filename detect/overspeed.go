@@ -33,6 +33,6 @@ func checkOverspeed(t *trace.Trace) (int, string, int, int, int) {
 	if speed > 100 {
 		return 1, "pointer speed too fast (> 100 pixels/s)", RuleOverspeed, -1, -1
 	} else {
-		return 0, "", RuleNone, -1, -1
+		return 0, ReasonNone, RuleNone, -1, -1
 	}
 }

@@ -43,5 +43,5 @@ func checkStraightLine(t *trace.Trace) (int, string, int, int, int) {
 		}
 	}
 
-	return 0, "", RuleNone, -1, -1
+	return 0, ReasonNone, RuleNone, -1, -1
 }

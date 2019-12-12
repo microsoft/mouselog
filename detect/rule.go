@@ -8,6 +8,8 @@ const (
 	RuleOverspeed
 )
 
+const ReasonNone = ""
+
 func GetRuleName(rule int) string {
 	switch rule {
 	case RuleStraightLine:
