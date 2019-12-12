@@ -3,6 +3,7 @@ import * as Setting from "./Setting";
 import * as Shared from "./Shared";
 import {Table, Row, Col, Typography, Tag} from 'antd';
 import {Link} from "react-router-dom";
+import Canvas from "./Canvas";
 
 const {Text} = Typography;
 
@@ -148,9 +149,7 @@ class DashboardPage extends React.Component {
               </Row>
             </Col>
             <Col span={12}>
-              {
-                Shared.renderCanvas(this.state.trace, Shared.getSize(this.state.trace, 2))
-              }
+              <Canvas trace={this.state.trace} size={Shared.getSize(this.state.trace, 2)} />
             </Col>
           </Row>
 

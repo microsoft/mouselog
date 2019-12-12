@@ -3,6 +3,7 @@ import * as Setting from "./Setting";
 import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
 import * as Shared from "./Shared";
+import Canvas from "./Canvas";
 
 const {Text} = Typography;
 
@@ -280,9 +281,7 @@ class TestPage extends React.Component {
               </Row>
             </Col>
             <Col span={12}>
-              {
-                Shared.renderCanvas(this.state.trace, Shared.getSizeSmall(this.state.trace), this.state.isBackground)
-              }
+              <Canvas trace={this.state.trace} size={Shared.getSizeSmall(this.state.trace)} isBackground={this.state.isBackground} />
             </Col>
             <Col span={6}>
               <Card title="Beat Me !" extra={<a href="#">More</a>}>
