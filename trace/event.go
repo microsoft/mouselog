@@ -1,6 +1,7 @@
 package trace
 
 type Event struct {
+	Id        int     `json:"id"`
 	Timestamp float64 `json:"timestamp"`
 	Type      string  `json:"type"`
 	Button    string  `json:"button"`

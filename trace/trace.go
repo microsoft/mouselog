@@ -38,6 +38,7 @@ func newTrace(id string) *Trace {
 
 func (t *Trace) addEvent(timestamp float64, typ string, button string, x int, y int) {
 	e := Event{
+		Id:        len(t.Events),
 		Timestamp: timestamp,
 		Type:      typ,
 		Button:    button,

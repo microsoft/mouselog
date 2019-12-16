@@ -1,9 +1,7 @@
 import React from "react";
-import * as Setting from "./Setting";
 import {Circle, Layer, Line, Stage} from "react-konva";
 import {getPoints} from "./Shared";
 import {Text as KonvaText} from "react-konva/";
-import * as Shared from "./Shared";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -53,18 +51,23 @@ class Canvas extends React.Component {
     return objs;
   }
 
-  renderEvents(trace, scale) {
+  renderEvents(trace, scale, focusIndex) {
     let objs = [];
 
-    trace.events.forEach(function (event) {
+    trace.events.forEach(function (event, index) {
+      let radius = 2;
+      if (focusIndex === index) {
+        radius += 10;
+      }
+
       if (event.type === 'mousemove') {
-        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="blue"/>);
+        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius} fill="blue"/>);
       } else if (event.type === 'touchmove') {
-        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={2} fill="purple"/>);
+        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius} fill="purple"/>);
       } else if (event.type === 'click') {
-        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={8} fill="red" opacity={0.5}/>);
+        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius + 6} fill="red" opacity={0.5}/>);
       } else if (event.type === 'contextmenu') {
-        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={8} fill="green" opacity={0.5}/>);
+        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius + 6} fill="green" opacity={0.5}/>);
       }
     });
 
@@ -94,7 +97,7 @@ class Canvas extends React.Component {
                 (trace !== null) ? this.renderRuler(trace.width, trace.height, scale) : null
               }
               {
-                (trace !== null) ? this.renderEvents(trace, scale) : null
+                (trace !== null) ? this.renderEvents(trace, scale, this.props.focusIndex) : null
               }
               {
                 (trace !== null && trace.ruleStart !== -1 && trace.ruleEnd !== -1) ? <Line

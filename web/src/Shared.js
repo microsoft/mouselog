@@ -125,7 +125,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
           key: 'canvas',
           width: 800,
           render: (text, record, index) => {
-            return <Canvas trace={traces[record.id]} size={getSize(traces[record.id], 4)} isBackground={false} />
+            return <Canvas trace={traces[record.id]} size={getSize(traces[record.id], 4)} isBackground={false} focusIndex={0} />
           }
         }
     );
@@ -162,7 +162,7 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
   );
 }
 
-export function renderEventTable(title, events, isLong=false) {
+export function renderEventTable(title, events, isLong=false, rowHoverHandler=null) {
   const columns = [
     {
       title: 'Timestamp',
@@ -191,18 +191,33 @@ export function renderEventTable(title, events, isLong=false) {
     }
   ];
 
+  let handleRow = record => {
+    return {
+      onMouseEnter: event => {
+        // alert(record);
+        rowHoverHandler(record.id);
+      },
+      onMouseLeave: event => {
+        rowHoverHandler(-1);
+      }
+    }
+  };
+  if (rowHoverHandler === null) {
+    handleRow = null;
+  }
+
   if (!isLong) {
     return (
         <div>
           <Table columns={columns} dataSource={events} size="small" bordered pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 450px)'}}
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>}/>
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} onRow={handleRow}/>
         </div>
     );
   } else {
     return (
         <div>
           <Table columns={columns} dataSource={events} size="small" bordered
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 700}} />
+                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 700}} onRow={handleRow} />
         </div>
     );
   }

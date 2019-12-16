@@ -16,6 +16,7 @@ class DashboardPage extends React.Component {
       sessionId: "",
       traces: [],
       trace: null,
+      hoverRowIndex: -1,
     };
   }
 
@@ -127,6 +128,12 @@ class DashboardPage extends React.Component {
     );
   }
 
+  rowHoverHandler(hoverRowIndex) {
+    this.setState({
+      hoverRowIndex: hoverRowIndex,
+    });
+  }
+
   render() {
     return (
         <div>
@@ -143,13 +150,13 @@ class DashboardPage extends React.Component {
                 </Col>
                 <Col span={12} style={{paddingLeft: '2.5px'}}>
                   {
-                    (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events) : Shared.renderEventTable('', [])
+                    (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events, false, this.rowHoverHandler.bind(this)) : Shared.renderEventTable('', [])
                   }
                 </Col>
               </Row>
             </Col>
             <Col span={12}>
-              <Canvas trace={this.state.trace} size={Shared.getSize(this.state.trace, 2)} />
+              <Canvas trace={this.state.trace} size={Shared.getSize(this.state.trace, 2)} focusIndex={this.state.hoverRowIndex} />
             </Col>
           </Row>
 
