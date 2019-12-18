@@ -9,6 +9,9 @@ class Canvas extends React.Component {
     super(props);
     this.state = {
       classes: props,
+      firstTimestamp: 0.0,
+      lastTimestamp: this.props.trace.events.slice(-1)[0].timestamp,
+      curTimestamp: 0.0,
       sliderValue: 0,
       isPaused: true,
       cursorImage: null,
@@ -19,22 +22,33 @@ class Canvas extends React.Component {
     this.initImage();
   }
 
+  toFixed(x) {
+    return Number(Number.parseFloat(x).toFixed(3));
+  }
+
+  printTimestamp(f) {
+    return f.toFixed(3);
+  }
+
+  incrementTimestamp() {
+    if (!this.state.isPaused) {
+      if (this.state.curTimestamp === this.state.lastTimestamp) {
+        this.setState({
+          curTimestamp: 0.0,
+          isPaused: true,
+        });
+      } else {
+        this.setState({
+          curTimestamp: this.state.curTimestamp + 0.01,
+        });
+      }
+    }
+  }
+
   componentDidMount() {
     this.interval = setInterval(() => {
-      if (!this.state.isPaused) {
-        if (this.state.sliderValue === this.props.trace.events.length - 1) {
-          this.setState({
-            sliderValue: 0,
-            isPaused: true,
-          });
-        } else {
-          this.setState({
-            sliderValue: this.state.sliderValue + 1,
-          });
-        }
-      }
-
-    }, 100);
+      this.incrementTimestamp();
+    }, 1);
   }
 
   componentWillUnmount() {
@@ -137,7 +151,7 @@ class Canvas extends React.Component {
                  style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
             <Layer>
               {
-                trace !== null ? <Image x={trace.events[this.state.sliderValue].x * scale} y={trace.events[this.state.sliderValue].y * scale} image={this.state.cursorImage} /> : null
+                // trace !== null ? <Image x={trace.events[this.state.sliderValue].x * scale} y={trace.events[this.state.sliderValue].y * scale} image={this.state.cursorImage} /> : null
               }
               <Line
                   points={getPoints(trace, scale)}
@@ -177,7 +191,7 @@ class Canvas extends React.Component {
 
   onSliderChange(value) {
     this.setState({
-      sliderValue: value,
+      curTimestamp: value,
     })
   }
 
@@ -188,24 +202,16 @@ class Canvas extends React.Component {
   }
 
   renderSlider() {
-    const min = 0;
-    const max = this.props.trace.events.length - 1;
+    const min = this.state.firstTimestamp;
+    const max = this.state.lastTimestamp;
 
     let marks = {};
     marks[min] = `${min}`;
     marks[max] = `${max}`;
 
     return (
-        <Slider marks={marks} value={this.state.sliderValue} onChange={this.onSliderChange.bind(this)} min={min} max={max} />
+        <Slider marks={marks} value={this.state.curTimestamp} onChange={this.onSliderChange.bind(this)} min={min} max={max} step={0.001} />
     )
-  }
-
-  getLastTimestamp() {
-    if (this.props.trace === null) {
-      return '0.000';
-    }
-
-    return this.props.trace.events.slice(-1)[0].timestamp;
   }
 
   render() {
@@ -222,7 +228,9 @@ class Canvas extends React.Component {
             <Row>
               <Col span={2}>
                 <div style={{marginTop: '9px', textAlign: 'center'}}>
-                  0.000
+                  {
+                    this.printTimestamp(this.state.curTimestamp)
+                  }
                 </div>
               </Col>
               <Col span={20}>
@@ -233,7 +241,7 @@ class Canvas extends React.Component {
               <Col span={2}>
                 <div style={{marginTop: '9px', textAlign: 'center'}}>
                   {
-                    this.getLastTimestamp()
+                    this.printTimestamp(this.state.lastTimestamp)
                   }
                 </div>
               </Col>

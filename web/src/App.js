@@ -77,7 +77,7 @@ class App extends React.Component {
               style={{lineHeight: '64px'}}
               inlineCollapsed={false}
             >
-              <Text>Mouse Tracking</Text>
+              <Text>Mouselog</Text>
 
               <Menu.Item key="1">
                 <a href="/">
