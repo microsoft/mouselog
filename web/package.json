@@ -9,7 +9,8 @@
     "react-dom": "^16.11.0",
     "react-konva": "^16.10.1-0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "tasktimer": "^3.0.0"
   },
   "scripts": {
     "start": "set PORT=4000 && react-scripts start",

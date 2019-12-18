@@ -3,6 +3,7 @@ import {Circle, Image, Layer, Line, Stage} from "react-konva";
 import {getPoints} from "./Shared";
 import {Text as KonvaText} from "react-konva/";
 import {Button, Col, Row, Slider} from "antd";
+import { TaskTimer } from 'tasktimer';
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -12,7 +13,6 @@ class Canvas extends React.Component {
       firstTimestamp: 0.0,
       lastTimestamp: this.props.trace.events.slice(-1)[0].timestamp,
       curTimestamp: 0.0,
-      sliderValue: 0,
       isPaused: true,
       cursorImage: null,
     };
@@ -32,27 +32,32 @@ class Canvas extends React.Component {
 
   incrementTimestamp() {
     if (!this.state.isPaused) {
-      if (this.state.curTimestamp === this.state.lastTimestamp) {
+      if (this.state.curTimestamp >= this.state.lastTimestamp) {
         this.setState({
           curTimestamp: 0.0,
           isPaused: true,
         });
       } else {
         this.setState({
-          curTimestamp: this.state.curTimestamp + 0.01,
+          curTimestamp: this.state.curTimestamp + 0.1,
         });
       }
     }
   }
 
   componentDidMount() {
-    this.interval = setInterval(() => {
+    const timer = new TaskTimer(100);
+
+    timer.on('tick', () => {
       this.incrementTimestamp();
-    }, 1);
+    });
+
+    timer.start();
+    this.timer = timer;
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    this.timer.stop();
   }
 
   initImage() {
@@ -136,6 +141,22 @@ class Canvas extends React.Component {
     return objs;
   }
 
+  renderPointer(trace, scale) {
+    if (trace === null) {
+      return null;
+    }
+
+    let curEventIndex = 0;
+    for (let i = 0; i < trace.events.length; i ++) {
+      if (i + 1 < trace.events.length && trace.events[i + 1].timestamp > this.state.curTimestamp) {
+        curEventIndex = i;
+        break;
+      }
+    }
+
+    return <Image x={trace.events[curEventIndex].x * scale} y={trace.events[curEventIndex].y * scale} image={this.state.cursorImage} />
+  }
+
   renderCanvas() {
     const trace = this.props.trace;
     const size = this.props.size;
@@ -150,9 +171,6 @@ class Canvas extends React.Component {
           <Stage width={width} height={height}
                  style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
             <Layer>
-              {
-                // trace !== null ? <Image x={trace.events[this.state.sliderValue].x * scale} y={trace.events[this.state.sliderValue].y * scale} image={this.state.cursorImage} /> : null
-              }
               <Line
                   points={getPoints(trace, scale)}
                   stroke="black"
@@ -171,6 +189,9 @@ class Canvas extends React.Component {
                         strokeWidth={2}
                     />
                     : null
+              }
+              {
+                this.renderPointer(trace, scale)
               }
             </Layer>
           </Stage>
@@ -206,49 +227,52 @@ class Canvas extends React.Component {
     const max = this.state.lastTimestamp;
 
     let marks = {};
-    marks[min] = `${min}`;
-    marks[max] = `${max}`;
+    this.props.trace.events.forEach(function (event) {
+      marks[event.timestamp] = '';
+    });
 
     return (
-        <Slider marks={marks} value={this.state.curTimestamp} onChange={this.onSliderChange.bind(this)} min={min} max={max} step={0.001} />
+        <Slider marks={marks} value={this.state.curTimestamp} onChange={this.onSliderChange.bind(this)} min={min}
+                max={max} step={0.001}/>
     )
   }
 
   render() {
     return (
-      <div>
-        {
-          this.renderCanvas()
-        }
-        <Row style={{marginTop: '5px'}} >
-          <Col span={1}>
-            <Button type="primary" shape="circle" icon={this.state.isPaused ? "caret-right" : "pause"} onClick={this.togglePaused.bind(this)} />
-          </Col>
-          <Col span={23}>
-            <Row>
-              <Col span={2}>
-                <div style={{marginTop: '9px', textAlign: 'center'}}>
+        <div>
+          {
+            this.renderCanvas()
+          }
+          <Row style={{marginTop: '5px'}}>
+            <Col span={1}>
+              <Button type="primary" shape="circle" icon={this.state.isPaused ? "caret-right" : "pause"}
+                      onClick={this.togglePaused.bind(this)}/>
+            </Col>
+            <Col span={23}>
+              <Row>
+                <Col span={2}>
+                  <div style={{marginTop: '9px', textAlign: 'center'}}>
+                    {
+                      this.printTimestamp(this.state.curTimestamp)
+                    }
+                  </div>
+                </Col>
+                <Col span={20}>
                   {
-                    this.printTimestamp(this.state.curTimestamp)
+                    this.props.trace !== null ? this.renderSlider() : null
                   }
-                </div>
-              </Col>
-              <Col span={20}>
-                {
-                  this.props.trace !== null ? this.renderSlider() : null
-                }
-              </Col>
-              <Col span={2}>
-                <div style={{marginTop: '9px', textAlign: 'center'}}>
-                  {
-                    this.printTimestamp(this.state.lastTimestamp)
-                  }
-                </div>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </div>
+                </Col>
+                <Col span={2}>
+                  <div style={{marginTop: '9px', textAlign: 'center'}}>
+                    {
+                      this.printTimestamp(this.state.lastTimestamp)
+                    }
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </div>
     )
   }
 }
