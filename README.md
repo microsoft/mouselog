@@ -1,5 +1,42 @@
+Mouselog
+====
 
-# Contributing
+Mouselog is a web-based tool to help website owners, researchers and security admins log, visualize and analyze the mouse trace data.
+
+## Installation
+
+- Get the code:
+
+```
+go get github.com/microsoft/mouselog
+```
+
+- Run backend (in port 9000):
+
+```
+go run main.go
+ ```
+
+- Run frontend (in the same machine's port 4000):
+
+```
+cd web
+npm i
+npm start
+```
+
+- Open browser:
+
+http://localhost:4000/
+
+## License
+
+This project is licensed under the [MIT license](LICENSE).
+
+If you have any issues or feature requests, please contact us. PR is welcomed.
+- https://github.com/microsoft/mouselog/issues
+
+## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
