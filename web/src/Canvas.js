@@ -11,7 +11,6 @@ class Canvas extends React.Component {
     this.state = {
       classes: props,
       firstTimestamp: 0.0,
-      lastTimestamp: this.props.trace.events.slice(-1)[0].timestamp,
       curTimestamp: 0.0,
       isPaused: true,
       cursorImage: null,
@@ -30,9 +29,13 @@ class Canvas extends React.Component {
     return f.toFixed(3);
   }
 
+  getLastTimestamp() {
+    return this.props.trace !== null ? this.props.trace.events[this.props.trace.events.length - 1].timestamp : 0.0;
+  }
+
   incrementTimestamp() {
     if (!this.state.isPaused) {
-      if (this.state.curTimestamp >= this.state.lastTimestamp) {
+      if (this.state.curTimestamp >= this.getLastTimestamp()) {
         this.setState({
           curTimestamp: 0.0,
           isPaused: true,
@@ -224,7 +227,7 @@ class Canvas extends React.Component {
 
   renderSlider() {
     const min = this.state.firstTimestamp;
-    const max = this.state.lastTimestamp;
+    const max = this.getLastTimestamp();
 
     let marks = {};
     this.props.trace.events.forEach(function (event) {
@@ -265,7 +268,7 @@ class Canvas extends React.Component {
                 <Col span={2}>
                   <div style={{marginTop: '9px', textAlign: 'center'}}>
                     {
-                      this.printTimestamp(this.state.lastTimestamp)
+                      this.printTimestamp(this.getLastTimestamp())
                     }
                   </div>
                 </Col>
