@@ -3,6 +3,10 @@ Mouselog
 
 Mouselog is a web-based tool to help website owners, researchers and security admins log, visualize and analyze the mouse trace data.
 
+## Demo
+
+http://mouselog.org/
+
 ## Installation
 
 - Get the code:
