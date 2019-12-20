@@ -14,6 +14,7 @@ class TestPage extends React.Component {
       classes: props,
       status: false,
       events: [],
+      pageLoadTime: new Date(),
       isBackground: false,
       eventBuckets: Array(11).fill(0),
       eventCount: 0,
@@ -71,7 +72,7 @@ class TestPage extends React.Component {
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
-    const trace = {id: window.location.pathname, width: width, height: height, label: -1, guess: -1, events: this.state.events};
+    const trace = {id: window.location.pathname, width: width, height: height, pageLoadTime: this.state.pageLoadTime, label: -1, guess: -1, events: this.state.events};
     const traceStr = JSON.stringify(trace);
 
     if (this.state.events.length === 50) {
@@ -91,6 +92,12 @@ class TestPage extends React.Component {
             trace: res.traces.length === 0 ? null : res.traces[0],
             status: true
           });
+
+          if (res.traces.length !== 0) {
+            this.setState({
+              pageLoadTime: this.parseDateString(res.traces[0].pageLoadTime),
+            });
+          }
         })
         .catch(error => {
           this.setState({
@@ -111,30 +118,12 @@ class TestPage extends React.Component {
     this.state.trace = null;
     this.setState({
       traces: this.state.traces,
-      trace: this.state.trace
+      trace: this.state.trace,
+      pageLoadTime: new Date(),
     });
   }
 
   simulateMouse() {
-    // let mouseMoveEvent = document.createEvent("MouseEvents");
-    // mouseMoveEvent.initMouseEvent(
-    //     "mousemove", //event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
-    //     true, //canBubble
-    //     false, //cancelable
-    //     window, //event's AbstractView : should be window
-    //     1, // detail : Event's mouse click count
-    //     50, // screenX
-    //     50, // screenY
-    //     50, // clientX
-    //     50, // clientY
-    //     false, // ctrlKey
-    //     false, // altKey
-    //     false, // shiftKey
-    //     false, // metaKey
-    //     0, // button : 0 = click, 1 = middle button, 2 = right button
-    //     null // relatedTarget : Only used with some event types (e.g. mouseover and mouseout). In other cases, pass null.
-    // );
-
     let e = new MouseEvent("click", {
       view: window,
       bubbles: true,
@@ -155,9 +144,23 @@ class TestPage extends React.Component {
     }
   }
 
+  parseDateString(date) {
+    return new Date(Date.parse(date));
+  }
+
+  getRelativeTimestampInSeconds() {
+    let diff = new Date() - this.state.pageLoadTime;
+    return Math.trunc(diff) / 1000;
+  }
+
   mouseHandler(type, e) {
     // PC's Chrome on Mobile mode can still receive "contextmenu" event with zero X, Y, so we ignore these events.
     if (e.type === 'contextmenu' && e.pageX === 0 && e.pageY === 0) {
+      return;
+    }
+
+    // Don't track our own buttons.
+    if (type === 'click' && (e.target.textContent === 'Clear Traces' || e.target.textContent === 'Perform Fake Click')) {
       return;
     }
 
@@ -183,7 +186,7 @@ class TestPage extends React.Component {
       y = e.changedTouches[0].pageY;
     }
 
-    let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: x, y: y, button: this.getButton(e.button)};
+    let p = {timestamp: this.getRelativeTimestampInSeconds(), type: type, x: x, y: y, button: this.getButton(e.button)};
     // let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
     this.state.events.push(p);
     if (this.state.trace === null) {

@@ -236,7 +236,7 @@ class Canvas extends React.Component {
 
     return (
         <Slider marks={marks} value={this.state.curTimestamp} onChange={this.onSliderChange.bind(this)} min={min}
-                max={max} step={0.001}/>
+                max={max} step={0.1}/>
     )
   }
 

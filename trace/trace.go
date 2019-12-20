@@ -3,9 +3,10 @@ package trace
 import "sort"
 
 type Trace struct {
-	Id     string `json:"id"`
-	Width  int    `json:"width"`
-	Height int    `json:"height"`
+	Id           string `json:"id"`
+	Width        int    `json:"width"`
+	Height       int    `json:"height"`
+	PageLoadTime string `json:"pageLoadTime"`
 
 	Label     int    `json:"label"`
 	Guess     int    `json:"guess"`
