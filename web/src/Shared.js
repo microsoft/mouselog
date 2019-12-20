@@ -124,8 +124,8 @@ export function renderTraceTable(title, traces, self, isLong=false, hasCanvas=fa
           title: 'Canvas',
           key: 'canvas',
           width: 800,
-          render: (text, record, index) => {
-            return <Canvas trace={traces[record.id]} size={getSize(traces[record.id], 4)} isBackground={false} focusIndex={0} />
+          render: (trace, index) => {
+            return <Canvas trace={trace} size={getSize(trace, 4)} isBackground={false} focusIndex={0} />
           }
         }
     );

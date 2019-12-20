@@ -2,16 +2,9 @@ package controllers
 
 import (
 	"github.com/microsoft/mouselog/detect"
-	"github.com/microsoft/mouselog/util"
-
 	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/util"
 )
-
-var ssm2 map[string]*trace.Session
-
-func init() {
-	ssm2 = map[string]*trace.Session{}
-}
 
 func getOrCreateSs2(fileId string) *trace.Session {
 	var ss *trace.Session
@@ -32,8 +25,10 @@ func getOrCreateSs2(fileId string) *trace.Session {
 func listTraceFiles(path string) []*trace.Session {
 	res := []*trace.Session{}
 
-	for _, fileId := range util.ListFileIds(path) {
-		getOrCreateSs2(fileId)
+	if util.FileExist(path) {
+		for _, fileId := range util.ListFileIds(path) {
+			getOrCreateSs2(fileId)
+		}
 	}
 
 	m := map[string]interface{}{}
@@ -43,7 +38,7 @@ func listTraceFiles(path string) []*trace.Session {
 	kv := util.SortMapsByKey(&m)
 	for _, v := range *kv {
 		res = append(res, v.Key.(*trace.Session))
-	}
+}
 
 	return res
 }
