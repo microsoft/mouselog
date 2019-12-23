@@ -4,7 +4,7 @@ import "github.com/microsoft/mouselog/trace"
 
 func checkSinglePoint(t *trace.Trace) (int, string, int, int, int) {
 	if len(t.Events) == 1 {
-		return 1, "only one point found", RuleSinglePoint, -1, -1
+		return 1, "only one point found", RuleSinglePoint, 0, len(t.Events)
 	}
 
 	x := t.Events[0].X
@@ -15,5 +15,5 @@ func checkSinglePoint(t *trace.Trace) (int, string, int, int, int) {
 		}
 	}
 
-	return 1, "only one point found", RuleSinglePoint, -1, -1
+	return 1, "only one point found", RuleSinglePoint, 0, len(t.Events)
 }
