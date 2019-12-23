@@ -9,6 +9,7 @@ import DashboardPage from "./DashboardPage";
 import {Badge, Button, Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
 import TracePage from "./TracePage";
 import * as Backend from "./Backend";
+import RulePage from "./RulePage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -34,6 +35,8 @@ class App extends React.Component {
       this.setState({ selectedMenuKey: 2 });
     } else if (uri.includes('trace')) {
       this.setState({ selectedMenuKey: 3 });
+    } else if (uri.includes('rule')) {
+      this.setState({ selectedMenuKey: 4 });
     } else {
       this.setState({ selectedMenuKey: 1 });
     }
@@ -101,6 +104,11 @@ class App extends React.Component {
                   Trace
                 </a>
               </Menu.Item>
+              <Menu.Item key="4">
+                <a href="/rule">
+                  Rule
+                </a>
+              </Menu.Item>
 
               <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: &nbsp;
                 {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
@@ -119,6 +127,7 @@ class App extends React.Component {
           <Route exact path="/" component={TestPage}/>
           <Route path="/dashboard/" component={DashboardPage}/>
           <Route path="/trace/:sessionId" component={TracePage}/>
+          <Route path="/rule/" component={RulePage}/>
         </Switch>
       </div>
     );

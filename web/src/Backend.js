@@ -27,6 +27,13 @@ export function listTrace(fileId, perPage = null, page = null) {
 export function listSessions() {
     return fetch(`${Setting.ServerUrl}/api/list-sessions`, {
        method: 'GET',
-       credentials: 'include' 
+       credentials: 'include'
+    });
+}
+
+export function listRules() {
+    return fetch(`${Setting.ServerUrl}/api/list-rules`, {
+        method: 'GET',
+        credentials: 'include'
     });
 }
