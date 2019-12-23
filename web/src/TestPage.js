@@ -5,6 +5,7 @@ import WrappedNormalLoginForm from "./Login";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
 import * as Backend from "./Backend";
+import TraceTable from "./TraceTable";
 
 
 const {Text} = Typography;
@@ -92,7 +93,7 @@ class TestPage extends React.Component {
           trace: res.traces.length === 0 ? null : res.traces[0],
           status: true
         });
-        
+
         if (res.traces.length !== 0) {
           this.setState({
             pageLoadTime: this.parseDateString(res.traces[0].pageLoadTime),
@@ -248,7 +249,7 @@ class TestPage extends React.Component {
           <Row>
             <Col span={6}>
               {
-                !this.state.isBackground ? Shared.renderTraceTable(this.state.sessionId, this.state.traces, null) : Shared.renderTraceTable('', [], null)
+                !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.state.traces} self={null} /> : <TraceTable title={''} traces={[]} self={null} />
               }
               <Row>
                 <Col span={12}>

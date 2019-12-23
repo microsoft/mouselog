@@ -5,6 +5,7 @@ import {Table, Row, Col, Typography, Tag} from 'antd';
 import {Link} from "react-router-dom";
 import Canvas from "./Canvas";
 import * as Backend from "./Backend";
+import TraceTable from "./TraceTable";
 
 const {Text} = Typography;
 
@@ -105,7 +106,7 @@ class DashboardPage extends React.Component {
       columnTitle: 'Select',
       onSelect: (selectedRowKeys, selectedRows) => {
         // console.log(selectedRowKeys, selectedRows);
-        
+
         Backend.listTrace(selectedRowKeys.sessionId)
         .then(res => res.json())
         .then(res => {
@@ -142,7 +143,7 @@ class DashboardPage extends React.Component {
               <Row>
                 <Col span={12} style={{paddingRight: '2.5px'}}>
                   {
-                    Shared.renderTraceTable(this.state.fileId, this.state.traces, this)
+                    <TraceTable title={this.state.fileId} traces={this.state.traces} self={this} />
                   }
                 </Col>
                 <Col span={12} style={{paddingLeft: '2.5px'}}>

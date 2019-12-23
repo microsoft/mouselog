@@ -3,6 +3,7 @@ import * as Setting from "./Setting";
 import * as Shared from "./Shared";
 import {Row, Col, BackTop} from 'antd';
 import * as Backend from './Backend';
+import TraceTable from "./TraceTable";
 
 class TracePage extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class TracePage extends React.Component {
           <Row>
             <Col span={24} style={{paddingRight: '2.5px'}}>
               {
-                Shared.renderTraceTable(this.state.sessionId, this.state.traces, this, true, true)
+                <TraceTable title={this.state.sessionId} traces={this.state.traces} self={this} isLong={true} hasCanvas={true} />
               }
             </Col>
           </Row>
