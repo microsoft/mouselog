@@ -1,7 +1,8 @@
 import React from "react";
 import * as Setting from "./Setting";
 import * as Shared from "./Shared";
-import {Row, Col} from 'antd';
+import {Row, Col, BackTop} from 'antd';
+import * as Backend from './Backend';
 
 class TracePage extends React.Component {
   constructor(props) {
@@ -15,15 +16,13 @@ class TracePage extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${Setting.ServerUrl}/api/list-traces?fileId=${this.state.sessionId}&perPage=${10000000}&page=${0}`, {
-      method: "GET",
-      credentials: "include"
-    }).then(res => res.json())
-        .then(res => {
-          this.setState({
-            traces: res.traces,
-          });
-        });
+    Backend.listTrace(this.state.sessionId)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        traces: res.traces,
+      });
+    });
   }
 
   render() {

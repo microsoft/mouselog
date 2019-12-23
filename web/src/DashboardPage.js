@@ -4,6 +4,7 @@ import * as Shared from "./Shared";
 import {Table, Row, Col, Typography, Tag} from 'antd';
 import {Link} from "react-router-dom";
 import Canvas from "./Canvas";
+import * as Backend from "./Backend";
 
 const {Text} = Typography;
 
@@ -21,15 +22,13 @@ class DashboardPage extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${Setting.ServerUrl}/api/list-sessions`, {
-      method: "GET",
-      credentials: "include"
-    }).then(res => res.json())
-        .then(res => {
-          this.setState({
-            sessions: res
-          });
-        });
+    Backend.listSessions()
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        sessions: res
+      });
+    });
   }
 
   getCMTable(tn, fp, fn, tp) {
@@ -106,17 +105,15 @@ class DashboardPage extends React.Component {
       columnTitle: 'Select',
       onSelect: (selectedRowKeys, selectedRows) => {
         // console.log(selectedRowKeys, selectedRows);
-
-        fetch(`${Setting.ServerUrl}/api/list-traces?fileId=${selectedRowKeys.sessionId}&perPage=${10000000}&page=${0}`, {
-          method: "GET",
-          credentials: "include"
-        }).then(res => res.json())
-            .then(res => {
-              this.setState({
-                traces: res.traces,
-                fileId: selectedRowKeys.sessionId
-              });
-            });
+        
+        Backend.listTrace(selectedRowKeys.sessionId)
+        .then(res => res.json())
+        .then(res => {
+          this.setState({
+            traces: res.traces,
+            fileId: selectedRowKeys.sessionId
+          });
+        });
       },
     };
 

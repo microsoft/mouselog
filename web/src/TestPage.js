@@ -4,6 +4,8 @@ import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography}
 import WrappedNormalLoginForm from "./Login";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
+import * as Backend from "./Backend";
+
 
 const {Text} = Typography;
 
@@ -40,23 +42,21 @@ class TestPage extends React.Component {
       })
     }, 100);
 
-    fetch(`${Setting.ServerUrl}/api/get-session-id`, {
-      method: "GET",
-      credentials: "include"
-    }).then(res => res.json())
-        .then(res => {
-          this.setState({
-            sessionId: res,
-            status: true
-          });
+    Backend.getSessionId()
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        sessionId: res,
+        status: true
+      });
 
-          this.uploadTrace();
-        })
-        .catch(error => {
-          this.setState({
-            status: false
-          });
-        });
+      this.uploadTrace();
+    })
+    .catch(error => {
+      this.setState({
+        status: false
+      });
+    });
   }
 
   getByteCount(s) {
@@ -81,29 +81,29 @@ class TestPage extends React.Component {
       });
     }
 
-    fetch(`${Setting.ServerUrl}/api/${action}-trace?sessionId=${this.state.sessionId}`, {
-      method: "POST",
-      credentials: "include",
-      body: traceStr
-    }).then(response => response.json())
-        .then(res => {
-          this.setState({
-            traces: res.traces,
-            trace: res.traces.length === 0 ? null : res.traces[0],
-            status: true
-          });
 
-          if (res.traces.length !== 0) {
-            this.setState({
-              pageLoadTime: this.parseDateString(res.traces[0].pageLoadTime),
-            });
-          }
-        })
-        .catch(error => {
-          this.setState({
-            status: false
-          });
+    Backend.trace(action, this.state.sessionId, traceStr)
+    .then(
+      response => response.json()
+    ).then(
+      res => {
+        this.setState({
+          traces: res.traces,
+          trace: res.traces.length === 0 ? null : res.traces[0],
+          status: true
         });
+        
+        if (res.traces.length !== 0) {
+          this.setState({
+            pageLoadTime: this.parseDateString(res.traces[0].pageLoadTime),
+          });
+        }
+      }
+    ).catch(error => {
+      this.setState({
+        status: false
+      })
+    });
   }
 
   clearTrace() {

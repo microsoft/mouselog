@@ -8,6 +8,7 @@ import TestPage from "./TestPage";
 import DashboardPage from "./DashboardPage";
 import {Badge, Button, Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
 import TracePage from "./TracePage";
+import * as Backend from "./Backend";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -37,21 +38,19 @@ class App extends React.Component {
       this.setState({ selectedMenuKey: 1 });
     }
 
-    fetch(`${Setting.ServerUrl}/api/get-session-id`, {
-      method: "GET",
-      credentials: "include"
-    }).then(res => res.json())
-        .then(res => {
-          this.setState({
-            sessionId: res,
-            status: true
-          });
-        })
-        .catch(error => {
-          this.setState({
-            status: false
-          });
-        });
+    Backend.getSessionId()
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        sessionId: res,
+        status: true
+      });
+    })
+    .catch(error => {
+      this.setState({
+        status: false
+      });
+    });
   }
 
   onSwitchChange(checked, e) {
