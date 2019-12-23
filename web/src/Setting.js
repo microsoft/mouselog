@@ -19,3 +19,13 @@ export function mouseHandler(type, e) {
 export function setMouseHandler(comp) {
   component = comp;
 }
+
+export let localEnablePlayerFastForward = true;
+
+export function getEnablePlayerFastForward() {
+  return localEnablePlayerFastForward;
+}
+
+export function setEnablePlayerFastForward(enablePlayerFastForward) {
+  localEnablePlayerFastForward = enablePlayerFastForward;
+}

@@ -6,7 +6,7 @@ import * as Setting from "./Setting";
 import {Switch, Route} from 'react-router-dom'
 import TestPage from "./TestPage";
 import DashboardPage from "./DashboardPage";
-import {Badge, Button, Layout, Menu, Tag, Typography} from "antd";
+import {Badge, Button, Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
 import TracePage from "./TracePage";
 
 const {Title, Paragraph, Text} = Typography;
@@ -20,6 +20,7 @@ class App extends React.Component {
       status: true,
       sessionId: "",
       selectedMenuKey: 1,
+      enablePlayerFastForward: true,
     };
 
     Setting.initServerUrl();
@@ -51,6 +52,13 @@ class App extends React.Component {
             status: false
           });
         });
+  }
+
+  onSwitchChange(checked, e) {
+    this.setState({
+      enablePlayerFastForward: checked,
+    });
+    Setting.setEnablePlayerFastForward(checked);
   }
 
   render() {
@@ -100,6 +108,9 @@ class App extends React.Component {
               </Text>
               <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server Status: &nbsp;
                 {this.state.status ? <Tag color="#87d068">On</Tag> : <Tag color="#f50">Off</Tag>}
+              </Text>
+              <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Player Fast Forward: &nbsp;
+                <AntdSwitch checked={this.state.enablePlayerFastForward} onChange={this.onSwitchChange.bind(this)} />
               </Text>
             </Menu>
           </Header>

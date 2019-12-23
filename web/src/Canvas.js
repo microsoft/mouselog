@@ -4,6 +4,7 @@ import {getPoints} from "./Shared";
 import {Text as KonvaText} from "react-konva/";
 import {Button, Col, Row, Slider} from "antd";
 import { TaskTimer } from 'tasktimer';
+import * as Setting from "./Setting";
 
 class Canvas extends React.Component {
   constructor(props) {
@@ -35,16 +36,27 @@ class Canvas extends React.Component {
 
   incrementTimestamp() {
     if (!this.state.isPaused) {
+      let curTimestamp;
       if (this.state.curTimestamp >= this.getLastTimestamp()) {
+        curTimestamp = 0.0;
         this.setState({
-          curTimestamp: 0.0,
           isPaused: true,
         });
       } else {
-        this.setState({
-          curTimestamp: this.state.curTimestamp + 0.1,
-        });
+        curTimestamp = this.state.curTimestamp + 0.1;
       }
+
+      if (!this.state.isPaused && Setting.getEnablePlayerFastForward()) {
+        const curEventIndex = this.getCurEvent(curTimestamp);
+        const nextTimestamp = this.props.trace.events[curEventIndex + 1].timestamp - 2.0;
+        if (curTimestamp < nextTimestamp) {
+          curTimestamp = nextTimestamp;
+        }
+      }
+
+      this.setState({
+        curTimestamp: curTimestamp,
+      });
     }
   }
 
@@ -144,10 +156,8 @@ class Canvas extends React.Component {
     return objs;
   }
 
-  renderPointer(trace, scale) {
-    if (trace === null) {
-      return null;
-    }
+  getCurEvent() {
+    const trace = this.props.trace;
 
     let curEventIndex = 0;
     for (let i = 0; i < trace.events.length; i ++) {
@@ -156,7 +166,15 @@ class Canvas extends React.Component {
         break;
       }
     }
+    return curEventIndex;
+  }
 
+  renderPointer(trace, scale) {
+    if (trace === null) {
+      return null;
+    }
+
+    const curEventIndex = this.getCurEvent();
     return <Image x={trace.events[curEventIndex].x * scale} y={trace.events[curEventIndex].y * scale} image={this.state.cursorImage} />
   }
 
