@@ -1,11 +1,11 @@
 import React from "react";
-import * as Setting from "./Setting";
 import * as Shared from "./Shared";
 import {Table, Row, Col, Typography, Tag} from 'antd';
 import {Link} from "react-router-dom";
 import Canvas from "./Canvas";
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
+import UploadFile from "./UploadFile";
 
 const {Text} = Typography;
 
@@ -122,6 +122,7 @@ class DashboardPage extends React.Component {
         <div>
           <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small"
                  bordered title={() => 'Sessions'}/>
+          <UploadFile />
         </div>
     );
   }
