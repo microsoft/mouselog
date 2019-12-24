@@ -27,4 +27,5 @@ func initAPI() {
 	beego.Router("/api/list-traces", &controllers.ApiController{}, "GET:ListTraces")
 
 	beego.Router("/api/list-rules", &controllers.ApiController{}, "GET:ListRules")
+	beego.Router("/api/upload-file", &controllers.ApiController{}, "POST:UploadFile")
 }

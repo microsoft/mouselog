@@ -1,7 +1,11 @@
 package controllers
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/microsoft/mouselog/detect"
+	"github.com/microsoft/mouselog/fileutils"
 	"github.com/microsoft/mouselog/trace"
 	"github.com/microsoft/mouselog/util"
 )
@@ -38,7 +42,7 @@ func listTraceFiles(path string) []*trace.Session {
 	kv := util.SortMapsByKey(&m)
 	for _, v := range *kv {
 		res = append(res, v.Key.(*trace.Session))
-}
+	}
 
 	return res
 }
@@ -66,10 +70,54 @@ func (c *ApiController) ListTraces() {
 	}
 	table := ss.Traces[(perPage * page):last]
 
-	c.Data["json"] = map[string]interface{} {
+	c.Data["json"] = map[string]interface{}{
 		"traces": table,
-		"page": page,
-		"total": len(ss.Traces),
+		"page":   page,
+		"total":  len(ss.Traces),
+	}
+	c.ServeJSON()
+}
+
+func (c *ApiController) UploadFile() {
+	sessionId := c.StartSession().SessionID()
+	fmt.Printf("[SessionId %s]\n", sessionId)
+
+	fileCount := 0
+	success := 0
+	message := ""
+
+	for {
+		fmt.Println("file" + strconv.Itoa(fileCount))
+		_, header, err := c.GetFile("file" + strconv.Itoa(fileCount))
+		if err != nil {
+			break
+		}
+		filename := header.Filename
+		file, err := header.Open()
+		if err != nil {
+			panic(err)
+		}
+
+		traces, errMsg := fileutils.JsonParser(file)
+		if errMsg != "" {
+			message += fmt.Sprintf("\n%s: %s", filename, errMsg)
+			success = -1
+		} else {
+			for _, trace := range traces {
+				// Use Filename as SessionId
+				ss := getOrCreateSs(header.Filename)
+				if len(trace.Events) != 0 {
+					ss.AddTrace(&trace)
+				}
+			}
+		}
+		fmt.Printf("[Filename: %s]\n", header.Filename)
+		fileCount++
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"success": success,
+		"message": message,
 	}
 	c.ServeJSON()
 }
