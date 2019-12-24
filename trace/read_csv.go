@@ -68,7 +68,7 @@ func readCsvLine(ss *Session, line string, i int) {
 	t.RequestId = row[RowRequestId]
 	t.Timestamp = row[RowTimestamp]
 	t.Url = row[RowUrl]
-	t.UserAgent = row[RowUserAgent]
+	t.UserAgent = util.UnescapeUserAgent(row[RowUserAgent])
 	t.ClientIp = row[RowClientIp]
 
 	isBot := row[RowIsBot]

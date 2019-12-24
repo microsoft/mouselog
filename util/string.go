@@ -1,6 +1,9 @@
 package util
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
 
 func ParseInt(s string) int {
 	i, err := strconv.Atoi(s)
@@ -18,4 +21,8 @@ func ParseFloat(s string) float64 {
 	}
 
 	return f
+}
+
+func UnescapeUserAgent(userAgent string) string {
+	return strings.Replace(userAgent, "#TAB#", ",", -1)
 }
