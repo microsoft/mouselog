@@ -2,6 +2,7 @@ import React from "react";
 import {Table, Popover, Button, Tag, Typography} from 'antd';
 import Canvas from "./Canvas";
 import {getSize, renderEventTable} from "./Shared";
+import * as Backend from "./Backend";
 
 const {Text} = Typography;
 
@@ -10,7 +11,18 @@ class TraceTable extends React.Component {
     super(props);
     this.state = {
       classes: props,
+      rules: [],
     };
+  }
+
+  componentDidMount() {
+    Backend.listRules()
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          rules: res
+        });
+      });
   }
 
   render() {
@@ -95,6 +107,21 @@ class TraceTable extends React.Component {
         dataIndex: 'reason',
         key: 'reason',
         sorter: (a, b) => a.reason.localeCompare(b.reason),
+        filters: (
+          this.state.rules.map((p, i) => {
+            return (
+              {
+                text: `${p.ruleId}. ${p.ruleName}`,
+                value: p.ruleId,
+              }
+            )
+          })
+        ),
+        // specify the condition of filtering result
+        // here is that finding the name started with `value`
+        onFilter: (value, record) => {
+          return record.ruleId === value;
+        },
       }
     );
 

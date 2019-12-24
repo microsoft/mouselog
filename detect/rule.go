@@ -12,6 +12,8 @@ const ReasonNone = ""
 
 func GetRuleName(rule int) string {
 	switch rule {
+	case RuleNone:
+		return "Human"
 	case RuleStraightLine:
 		return "Straight line found"
 	case RuleEquallySpacedPoints:
@@ -33,7 +35,7 @@ type RuleJson struct {
 func GetRuleListJson() []*RuleJson {
 	res := []*RuleJson{}
 
-	for ruleId := RuleNone + 1; ruleId <= RuleOverspeed; ruleId ++ {
+	for ruleId := RuleNone; ruleId <= RuleOverspeed; ruleId ++ {
 		res = append(res, &RuleJson{
 			RuleId:   ruleId,
 			RuleName: GetRuleName(ruleId),
