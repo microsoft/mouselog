@@ -10,6 +10,7 @@ import {Badge, Button, Layout, Menu, Tag, Typography, Switch as AntdSwitch} from
 import TracePage from "./TracePage";
 import * as Backend from "./Backend";
 import RulePage from "./RulePage";
+import CanvasPage from "./CanvasPage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -35,8 +36,10 @@ class App extends React.Component {
       this.setState({ selectedMenuKey: 2 });
     } else if (uri.includes('trace')) {
       this.setState({ selectedMenuKey: 3 });
-    } else if (uri.includes('rule')) {
+    } else if (uri.includes('canvas')) {
       this.setState({ selectedMenuKey: 4 });
+    }  else if (uri.includes('rule')) {
+      this.setState({ selectedMenuKey: 5 });
     } else {
       this.setState({ selectedMenuKey: 1 });
     }
@@ -105,6 +108,11 @@ class App extends React.Component {
                 </a>
               </Menu.Item>
               <Menu.Item key="4">
+                <a href="/canvas">
+                  Canvas
+                </a>
+              </Menu.Item>
+              <Menu.Item key="5">
                 <a href="/rule">
                   Rule
                 </a>
@@ -127,6 +135,7 @@ class App extends React.Component {
           <Route exact path="/" component={TestPage}/>
           <Route path="/dashboard/" component={DashboardPage}/>
           <Route path="/trace/:sessionId" component={TracePage}/>
+          <Route path="/canvas/:sessionId/:traceId" component={CanvasPage}/>
           <Route path="/rule/" component={RulePage}/>
         </Switch>
       </div>

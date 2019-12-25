@@ -78,6 +78,15 @@ func (c *ApiController) ListTraces() {
 	c.ServeJSON()
 }
 
+func (c *ApiController) GetTrace() {
+	fileId := c.Input().Get("fileId")
+	traceId := util.ParseInt(c.Input().Get("traceId"))
+	ss := getOrCreateSs2(fileId)
+
+	c.Data["json"] = ss.Traces[traceId]
+	c.ServeJSON()
+}
+
 func (c *ApiController) UploadFile() {
 	sessionId := c.StartSession().SessionID()
 	fmt.Printf("[SessionId %s]\n", sessionId)

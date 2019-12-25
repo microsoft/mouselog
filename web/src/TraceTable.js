@@ -3,6 +3,7 @@ import {Table, Popover, Button, Tag, Typography} from 'antd';
 import Canvas from "./Canvas";
 import {getSize, renderEventTable} from "./Shared";
 import * as Backend from "./Backend";
+import {Link} from "react-router-dom";
 
 const {Text} = Typography;
 
@@ -83,6 +84,9 @@ class TraceTable extends React.Component {
         dataIndex: 'events.length',
         key: 'count',
         sorter: (a, b) => a.events.length - b.events.length,
+        render: (text, trace, index) => {
+          return <Link to={`/canvas/${title}/${trace.id}`} target='_blank'>{text}</Link>
+        }
       },
       {
         title: 'PointerType',

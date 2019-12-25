@@ -24,6 +24,13 @@ export function listTrace(fileId, perPage = null, page = null) {
     });
 }
 
+export function getTrace(fileId, traceId) {
+    return fetch(`${Setting.ServerUrl}/api/get-trace?fileId=${fileId}&traceId=${traceId}`, {
+        method: 'GET',
+        credentials: 'include'
+    });
+}
+
 export function listSessions() {
     return fetch(`${Setting.ServerUrl}/api/list-sessions`, {
        method: 'GET',
