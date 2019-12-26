@@ -44,7 +44,14 @@ class Canvas extends React.Component {
 
       if (!this.state.isPaused && Setting.getEnablePlayerFastForward()) {
         const curEventIndex = this.getCurEvent(curTimestamp);
-        const nextTimestamp = this.props.trace.events[curEventIndex + 1].timestamp - 2.0;
+
+        let nextTimestamp;
+        if (this.props.trace.events.length > 1) {
+          nextTimestamp = this.props.trace.events[curEventIndex + 1].timestamp - 2.0;
+        } else {
+          nextTimestamp = this.props.trace.events[0].timestamp - 2.0;
+        }
+
         if (curTimestamp < nextTimestamp) {
           message.success(`Will skip ${this.printTimestamp(nextTimestamp - curTimestamp)} seconds ..`);
           curTimestamp = nextTimestamp;
