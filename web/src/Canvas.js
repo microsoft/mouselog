@@ -2,7 +2,7 @@ import React from "react";
 import {Circle, Image, Layer, Line, Stage} from "react-konva";
 import {getPoints} from "./Shared";
 import {Text as KonvaText} from "react-konva/";
-import {Button, Col, Row, Slider} from "antd";
+import {Button, Col, Row, Slider, message} from "antd";
 import { TaskTimer } from 'tasktimer';
 import * as Setting from "./Setting";
 
@@ -20,10 +20,6 @@ class Canvas extends React.Component {
 
   componentWillMount() {
     this.initImage();
-  }
-
-  toFixed(x) {
-    return Number(Number.parseFloat(x).toFixed(3));
   }
 
   printTimestamp(f) {
@@ -50,6 +46,7 @@ class Canvas extends React.Component {
         const curEventIndex = this.getCurEvent(curTimestamp);
         const nextTimestamp = this.props.trace.events[curEventIndex + 1].timestamp - 2.0;
         if (curTimestamp < nextTimestamp) {
+          message.success(`Will skip ${this.printTimestamp(nextTimestamp - curTimestamp)} seconds ..`);
           curTimestamp = nextTimestamp;
         }
       }
