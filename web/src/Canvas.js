@@ -156,16 +156,33 @@ class Canvas extends React.Component {
     return objs;
   }
 
-  getCurEvent() {
-    const trace = this.props.trace;
+  // Binary search bounds
+  // https://stackoverflow.com/questions/30805642/binary-search-bounds
+  binarySearch(array, el, fn) {
+    function aux(left,  right) {
+      if (left > right) {
+        return fn(array, null, left, right);
+      }
 
-    let curEventIndex = 0;
-    for (let i = 0; i < trace.events.length; i ++) {
-      if (i + 1 < trace.events.length && trace.events[i + 1].timestamp > this.state.curTimestamp) {
-        curEventIndex = i;
-        break;
+      var middle = Math.floor((left + right) / 2);
+      var value = array[middle].timestamp;
+
+      if (value > el) {
+        return aux(left, middle - 1);
+      } if (value < el) {
+        return aux(middle + 1, right);
+      } else {
+        return fn(array, middle, left, right);
       }
     }
+
+    return aux(0, array.length - 1);
+  }
+
+  getCurEvent() {
+    const trace = this.props.trace;
+    const fn = function(a, m, l, r) { return m != null ? m : l - 1 > 0 ? l - 1 : 0; };
+    const curEventIndex = this.binarySearch(trace.events, this.state.curTimestamp, fn);
     return curEventIndex;
   }
 

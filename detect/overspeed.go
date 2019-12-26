@@ -24,7 +24,7 @@ func checkOverspeed(t *trace.Trace) (int, string, int, int, int) {
 	speed := dist / time
 
 	if time > 20 && speed > SpeedLimit {
-		return 1, fmt.Sprintf("pointer speed too fast (%d > %d pixels/s) in more than 20 seconds", int(speed), int(SpeedLimit)), RuleOverspeed, 0, len(t.Events)
+		return 1, fmt.Sprintf("pointer speed too fast (%d > %d pixels/s) in more than 20 seconds", int(speed), int(SpeedLimit)), RuleOverspeed, -1, -1
 	} else {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}
