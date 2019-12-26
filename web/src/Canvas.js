@@ -1,5 +1,5 @@
 import React from "react";
-import {Circle, Image, Layer, Line, Stage} from "react-konva";
+import {Circle, Group, Image, Layer, Line, Stage} from "react-konva";
 import {getPoints} from "./Shared";
 import {Text as KonvaText} from "react-konva/";
 import {Button, Col, Row, Slider, message} from "antd";
@@ -189,7 +189,12 @@ class Canvas extends React.Component {
     }
 
     const curEventIndex = this.getCurEvent();
-    return <Image x={trace.events[curEventIndex].x * scale} y={trace.events[curEventIndex].y * scale} image={this.state.cursorImage} />
+    return (
+      <Group x={trace.events[curEventIndex].x * scale} y={trace.events[curEventIndex].y * scale} >
+        <Circle radius={15} fill="yellow" opacity={0.5} />
+        <Image image={this.state.cursorImage} />
+      </Group>
+    )
   }
 
   renderCanvas() {
