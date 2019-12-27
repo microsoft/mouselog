@@ -1,13 +1,41 @@
 import React from "react";
 import * as Setting from "./Setting";
-import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
+import {Alert, Button, Card, Checkbox, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
+import EventSelectionCheckBox from "./EventSelectionCheckBox"
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
+import CheckboxGroup from "antd/lib/checkbox/Group";
 
 const {Text} = Typography;
+
+const allTargetEvents = [
+  "mousemove",
+  "mousedown",
+  "mouseup",
+  "mouseclick",
+  "dblclick",
+  "contextmenu",
+  "wheel",
+  "torchstart",
+  "touchmove",
+  "touchend"
+];
+
+const defaultTargetEvents = [
+  "mousemove",
+  "mousedown",
+  "mouseup",
+  "mouseclick",
+  "dblclick",
+  "contextmenu",
+  "wheel",
+  "torchstart",
+  "touchmove",
+  "touchend"
+];
 
 class TestPage extends React.Component {
   constructor(props) {
@@ -17,6 +45,7 @@ class TestPage extends React.Component {
       status: false,
       pageLoadTime: new Date(),
       isBackground: false,
+      events: [],
       eventBuckets: Array(11).fill(0),
       speed: 0,
       payloadSize: 0,
@@ -26,6 +55,7 @@ class TestPage extends React.Component {
     this.events = [];
     this.trace = null;
     this.traces = [];
+    this.targetEvents = defaultTargetEvents;
   }
 
   componentDidMount() {
@@ -179,6 +209,12 @@ class TestPage extends React.Component {
     if (type === 'click' && (e.target.textContent === 'Clear Traces' || e.target.textContent === 'Perform Fake Click')) {
       return;
     }
+
+    // Don't capture the untracked events.
+    if (this.targetEvents.indexOf(type) == -1) {
+      return;
+    }
+
     let x = e.pageX;
     let y = e.pageY;
     if (x === undefined) {
@@ -248,6 +284,10 @@ class TestPage extends React.Component {
     });
   }
 
+  onTargetEventsChange(checkedList) {
+    this.targetEvents = checkedList;
+  }
+
   renderProgress() {
     if (!this.state.isBackground) {
       return <Progress percent={this.events.length * 2} status="active"/>
@@ -306,9 +346,18 @@ class TestPage extends React.Component {
               <Canvas trace={this.trace} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground} />
             </Col>
             <Col span={6}>
-              <Card title="Beat Me !" extra={<a href="#">More</a>}>
-                <WrappedNormalLoginForm/>
-              </Card>
+              <Row>
+                <Card title="Beat Me !" extra={<a href="#">More</a>}>
+                  <WrappedNormalLoginForm/>
+                </Card>
+              </Row>
+              <Row>
+                <EventSelectionCheckBox 
+                  allCheckedList={allTargetEvents}
+                  defaultCheckedList={defaultTargetEvents}
+                  onCheckedListChange={this.onTargetEventsChange.bind(this)}
+                />
+              </Row>
             </Col>
           </Row>
         </div>
