@@ -12,7 +12,6 @@ export function mouseHandler(type, e) {
   if (component === null) {
     return
   }
-
   component.mouseHandler(type, e);
 }
 

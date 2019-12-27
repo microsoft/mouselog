@@ -1,13 +1,41 @@
 import React from "react";
 import * as Setting from "./Setting";
-import {Alert, Button, Card, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
+import {Alert, Button, Card, Checkbox, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
 import WrappedNormalLoginForm from "./Login";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
+import EventSelectionCheckBox from "./EventSelectionCheckBox"
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
+import CheckboxGroup from "antd/lib/checkbox/Group";
 
 const {Text} = Typography;
+
+const allTargetEvents = [
+  "mousemove",
+  "mousedown",
+  "mouseup",
+  "mouseclick",
+  "dblclick",
+  "contextmenu",
+  "wheel",
+  "torchstart",
+  "touchmove",
+  "touchend"
+];
+
+const defaultTargetEvents = [
+  "mousemove",
+  "mousedown",
+  "mouseup",
+  "mouseclick",
+  "dblclick",
+  "contextmenu",
+  "wheel",
+  "torchstart",
+  "touchmove",
+  "touchend"
+];
 
 class TestPage extends React.Component {
   constructor(props) {
@@ -17,14 +45,17 @@ class TestPage extends React.Component {
       status: false,
       pageLoadTime: new Date(),
       isBackground: false,
+      events: [],
       eventBuckets: Array(11).fill(0),
       speed: 0,
       payloadSize: 0,
       sessionId: "",
+      onLoading: true,
     };
     this.events = [];
     this.trace = null;
     this.traces = [];
+    this.targetEvents = defaultTargetEvents;
   }
 
   componentDidMount() {
@@ -96,6 +127,15 @@ class TestPage extends React.Component {
           this.traces = res.traces;
           this.trace = res.traces[0];
         }
+        if (this.state.onLoading){
+          if (res.traces.length > 0) {
+            this.traces = res.traces;
+            this.trace = res.traces[0];
+          }
+          this.setState({
+            onLoading: false,
+          });
+        }
         else {
           // Only update the `guess` and `reason` of the trace
           this.trace.guess = (res.traces.length === 0 ? -1 : res.traces[0].guess);
@@ -155,6 +195,11 @@ class TestPage extends React.Component {
   }
 
   mouseHandler(type, e) {
+    // Listen to mouse events after loading the data
+    if (this.state.onLoading) {
+      return;
+    }
+
     // PC's Chrome on Mobile mode can still receive "contextmenu" event with zero X, Y, so we ignore these events.
     if (e.type === 'contextmenu' && e.pageX === 0 && e.pageY === 0) {
       return;
@@ -164,6 +209,12 @@ class TestPage extends React.Component {
     if (type === 'click' && (e.target.textContent === 'Clear Traces' || e.target.textContent === 'Perform Fake Click')) {
       return;
     }
+
+    // Don't capture the untracked events.
+    if (this.targetEvents.indexOf(type) == -1) {
+      return;
+    }
+
     let x = e.pageX;
     let y = e.pageY;
     if (x === undefined) {
@@ -233,6 +284,10 @@ class TestPage extends React.Component {
     });
   }
 
+  onTargetEventsChange(checkedList) {
+    this.targetEvents = checkedList;
+  }
+
   renderProgress() {
     if (!this.state.isBackground) {
       return <Progress percent={this.events.length * 2} status="active"/>
@@ -242,6 +297,9 @@ class TestPage extends React.Component {
   }
 
   render() {
+    if (this.state.onLoading){
+      return (<div>Loading Data...</div>)
+    }
     return (
         <div>
           {this.renderProgress()}
@@ -288,9 +346,18 @@ class TestPage extends React.Component {
               <Canvas trace={this.trace} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground} />
             </Col>
             <Col span={6}>
-              <Card title="Beat Me !" extra={<a href="#">More</a>}>
-                <WrappedNormalLoginForm/>
-              </Card>
+              <Row>
+                <Card title="Beat Me !" extra={<a href="#">More</a>}>
+                  <WrappedNormalLoginForm/>
+                </Card>
+              </Row>
+              <Row>
+                <EventSelectionCheckBox 
+                  allCheckedList={allTargetEvents}
+                  defaultCheckedList={defaultTargetEvents}
+                  onCheckedListChange={this.onTargetEventsChange.bind(this)}
+                />
+              </Row>
             </Col>
           </Row>
         </div>

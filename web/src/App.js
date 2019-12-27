@@ -23,7 +23,7 @@ class App extends React.Component {
       status: true,
       sessionId: "",
       selectedMenuKey: 1,
-      enablePlayerFastForward: true,
+      enablePlayerFastForward: true
     };
 
     Setting.initServerUrl();
@@ -72,12 +72,15 @@ class App extends React.Component {
            // React: https://reactjs.org/docs/events.html#mouse-events
            // MDN: https://developer.mozilla.org/en-US/docs/Web/Events
            onMouseMove={(e) => Setting.mouseHandler('mousemove', e)}
+           onMouseDown={(e) => Setting.mouseHandler('mousedown', e)}
+           onMouseUp={(e)=> Setting.mouseHandler('mouseup', e)}
            onClick={(e) => Setting.mouseHandler('click', e)}
+           onDoubleClick={(e) => Setting.mouseHandler('dblclick', e)}
            onContextMenu={(e) => Setting.mouseHandler('contextmenu', e)}
            onWheel={(e) => Setting.mouseHandler('wheel', e)}
            onTouchStart={(e) => Setting.mouseHandler('touchstart', e)}
            onTouchMove={(e) => Setting.mouseHandler('touchmove', e)}
-           onTouchEnd={(e) => Setting.mouseHandler('touchend', e)}
+           onTouchEnd={(e) => Setting.mouseHandler('touchend', e)}    
       >
         <Layout className="layout">
           <Header style={{padding: '0', marginBottom: '3px'}}>
