@@ -7,7 +7,6 @@ import Canvas from "./Canvas";
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
 
-
 const {Text} = Typography;
 
 class TestPage extends React.Component {
@@ -16,17 +15,16 @@ class TestPage extends React.Component {
     this.state = {
       classes: props,
       status: false,
-      events: [],
       pageLoadTime: new Date(),
       isBackground: false,
       eventBuckets: Array(11).fill(0),
-      eventCount: 0,
       speed: 0,
       payloadSize: 0,
       sessionId: "",
-      traces: [],
-      trace: null,
     };
+    this.events = [];
+    this.trace = null;
+    this.traces = [];
   }
 
   componentDidMount() {
@@ -35,7 +33,7 @@ class TestPage extends React.Component {
     setInterval(() => {
       let eventBuckets = this.state.eventBuckets;
       eventBuckets = eventBuckets.slice(1);
-      eventBuckets.push(this.state.eventCount);
+      eventBuckets.push(this.events.length);
 
       this.setState({
         eventBuckets: eventBuckets,
@@ -50,7 +48,6 @@ class TestPage extends React.Component {
         sessionId: res,
         status: true
       });
-
       this.uploadTrace();
     })
     .catch(error => {
@@ -73,34 +70,41 @@ class TestPage extends React.Component {
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
-    const trace = {id: window.location.pathname, width: width, height: height, pageLoadTime: this.state.pageLoadTime, label: -1, guess: -1, events: this.state.events};
+    const trace = {
+      id: window.location.pathname, 
+      width: width, 
+      height: height, 
+      pageLoadTime: this.state.pageLoadTime, 
+      label: -1, guess: -1, 
+      events: this.events
+    };
     const traceStr = JSON.stringify(trace);
 
-    if (this.state.events.length === 50) {
+    if (this.events.length === 50) {
       this.setState({
         payloadSize: this.getByteCount(traceStr)
       });
     }
-
 
     Backend.trace(action, this.state.sessionId, traceStr)
     .then(
       response => response.json()
     ).then(
       res => {
-        this.setState({
-          traces: res.traces,
-          trace: res.traces.length === 0 ? null : res.traces[0],
-          status: true
-        });
-
-        if (res.traces.length !== 0) {
-          this.setState({
-            pageLoadTime: this.parseDateString(res.traces[0].pageLoadTime),
-          });
+        this.events = []; 
+        if (!this.trace && res.traces.length > 0) {
+          this.traces = res.traces;
+          this.trace = res.traces[0];
         }
+        else {
+          // Only update the `guess` and `reason` of the trace
+          this.trace.guess = (res.traces.length === 0 ? -1 : res.traces[0].guess);
+          this.trace.reason = (res.traces.length === 0 ? null : res.traces[0].reason);
+        }
+
       }
     ).catch(error => {
+      console.log("BACKEND ERROR");
       this.setState({
         status: false
       })
@@ -110,16 +114,12 @@ class TestPage extends React.Component {
   clearTrace() {
     this.uploadTrace('clear');
 
-    this.state.events = [];
+    this.events = [];
+    this.traces = []
+    this.trace = null;
+  
     this.setState({
-      events: this.state.events
-    });
-
-    this.state.traces = [];
-    this.state.trace = null;
-    this.setState({
-      traces: this.state.traces,
-      trace: this.state.trace,
+      status: false, 
       pageLoadTime: new Date(),
     });
   }
@@ -164,22 +164,6 @@ class TestPage extends React.Component {
     if (type === 'click' && (e.target.textContent === 'Clear Traces' || e.target.textContent === 'Perform Fake Click')) {
       return;
     }
-
-    let eventCount = this.state.eventCount;
-    eventCount += 1;
-    this.setState({
-      eventCount: eventCount
-    });
-
-    if (this.state.events.length === 50) {
-      this.uploadTrace();
-
-      this.state.events = [];
-      this.setState({
-        events: this.state.events
-      });
-    }
-
     let x = e.pageX;
     let y = e.pageY;
     if (x === undefined) {
@@ -187,21 +171,37 @@ class TestPage extends React.Component {
       y = e.changedTouches[0].pageY;
     }
 
-    let p = {timestamp: this.getRelativeTimestampInSeconds(), type: type, x: x, y: y, button: this.getButton(e.button)};
-    // let p = {timestamp: Math.trunc(e.timeStamp), type: type, x: e.pageX, y: e.pageY, isTrusted: e.isTrusted};
-    this.state.events.push(p);
-    if (this.state.trace === null) {
-      const width = document.body.scrollWidth;
-      const height = document.body.scrollHeight;
-      this.state.trace = {id: window.location.pathname, width: width, height: height, label: -1, guess: -1, events: []};
-      this.setState({
-        trace: this.state.trace
-      });
+    let p = {
+      timestamp: this.getRelativeTimestampInSeconds(), 
+      type: type, 
+      x: x, 
+      y: y, 
+      button: this.getButton(e.button)
+    };
+    
+    this.events.push(p);
+
+    if (this.events.length === 50) {
+      this.uploadTrace();
     }
-    this.state.trace.events.push(p);
+
+    if (this.trace === null) {
+      const width = document.body.scrollWidth;
+      const height = document.body.scrollHeight; 
+      this.trace = {
+        id: window.location.pathname,
+        width: width,
+        height: height,
+        label: -1,
+        guess: -1,
+        events: []
+      }
+    }
+    this.trace.events.push(p);
+    this.traces = [this.trace];
 
     this.setState({
-      events: this.state.events
+      status: true
     });
   };
 
@@ -211,15 +211,15 @@ class TestPage extends React.Component {
           <Alert message="Server Offline" description="Server Offline" type="Informational" showIcon banner/>
       )
     } else {
-      if (this.state.trace === null || this.state.trace.guess === -1) {
+      if (this.trace === null || this.trace.guess === -1) {
         return (
             <Alert message="No Mouse Trace" description="No Mouse Trace" type="warning" showIcon banner/>
         )
-      } else if (this.state.trace.guess === 1) {
+      } else if (this.trace.guess === 1) {
         return (
-            <Alert message="You Are Bot" description={this.state.trace.reason} type="error" showIcon banner/>
+            <Alert message="You Are Bot" description={this.trace.reason} type="error" showIcon banner/>
         )
-      } else if (this.state.trace.guess === 0) {
+      } else if (this.trace.guess === 0) {
         return (
             <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner/>
         )
@@ -235,7 +235,7 @@ class TestPage extends React.Component {
 
   renderProgress() {
     if (!this.state.isBackground) {
-      return <Progress percent={this.state.events.length * 2} status="active"/>
+      return <Progress percent={this.events.length * 2} status="active"/>
     } else {
       return <Progress percent={0} status="exception"/>
     }
@@ -249,7 +249,7 @@ class TestPage extends React.Component {
           <Row>
             <Col span={6}>
               {
-                !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.state.traces} self={null} /> : <TraceTable title={''} traces={[]} self={null} />
+                !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.traces} self={null} /> : <TraceTable title={''} traces={[]} self={null} />
               }
               <Row>
                 <Col span={12}>
@@ -280,12 +280,12 @@ class TestPage extends React.Component {
               </Row>
               <Row>
                 {
-                  !this.state.isBackground ? Shared.renderEventTable(window.location.pathname, this.state.events.slice(-6)) : Shared.renderEventTable('', [])
+                  !this.state.isBackground ? Shared.renderEventTable(window.location.pathname, this.events.slice(-6)) : Shared.renderEventTable('', [])
                 }
               </Row>
             </Col>
             <Col span={12}>
-              <Canvas trace={this.state.trace} size={Shared.getSizeSmall(this.state.trace)} isBackground={this.state.isBackground} />
+              <Canvas trace={this.trace} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground} />
             </Col>
             <Col span={6}>
               <Card title="Beat Me !" extra={<a href="#">More</a>}>
