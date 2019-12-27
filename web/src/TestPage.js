@@ -21,6 +21,7 @@ class TestPage extends React.Component {
       speed: 0,
       payloadSize: 0,
       sessionId: "",
+      onLoading: true,
     };
     this.events = [];
     this.trace = null;
@@ -96,6 +97,15 @@ class TestPage extends React.Component {
           this.traces = res.traces;
           this.trace = res.traces[0];
         }
+        if (this.state.onLoading){
+          if (res.traces.length > 0) {
+            this.traces = res.traces;
+            this.trace = res.traces[0];
+          }
+          this.setState({
+            onLoading: false,
+          });
+        }
         else {
           // Only update the `guess` and `reason` of the trace
           this.trace.guess = (res.traces.length === 0 ? -1 : res.traces[0].guess);
@@ -155,6 +165,11 @@ class TestPage extends React.Component {
   }
 
   mouseHandler(type, e) {
+    // Listen to mouse events after loading the data
+    if (this.state.onLoading) {
+      return;
+    }
+
     // PC's Chrome on Mobile mode can still receive "contextmenu" event with zero X, Y, so we ignore these events.
     if (e.type === 'contextmenu' && e.pageX === 0 && e.pageY === 0) {
       return;
@@ -242,6 +257,9 @@ class TestPage extends React.Component {
   }
 
   render() {
+    if (this.state.onLoading){
+      return (<div>Loading Data...</div>)
+    }
     return (
         <div>
           {this.renderProgress()}
