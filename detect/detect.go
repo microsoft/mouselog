@@ -18,6 +18,11 @@ func checkBot(t *trace.Trace) (int, string, int, int, int) {
 		return isBot, reason, rule, start, end
 	}
 
+	isBot, reason, rule, start, end = checkRootlessClick(t)
+	if isBot != 0 {
+		return isBot, reason, rule, start, end
+	}
+
 	return 0, ReasonNone, RuleNone, -1, -1
 }
 

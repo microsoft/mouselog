@@ -6,6 +6,8 @@ const (
 	RuleEquallySpacedPoints
 	RuleSinglePoint
 	RuleOverspeed
+	RuleRootlessClick
+	RuleUpperLimit
 )
 
 const ReasonNone = ""
@@ -22,6 +24,8 @@ func GetRuleName(rule int) string {
 		return "Only one point found"
 	case RuleOverspeed:
 		return "Pointer speed too fast"
+	case RuleRootlessClick:
+		return "Rootless click found"
 	default:
 		return ""
 	}
@@ -35,7 +39,7 @@ type RuleJson struct {
 func GetRuleListJson() []*RuleJson {
 	res := []*RuleJson{}
 
-	for ruleId := RuleNone; ruleId <= RuleOverspeed; ruleId ++ {
+	for ruleId := RuleNone; ruleId < RuleUpperLimit; ruleId ++ {
 		res = append(res, &RuleJson{
 			RuleId:   ruleId,
 			RuleName: GetRuleName(ruleId),
