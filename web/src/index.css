@@ -38,3 +38,7 @@ html, body {
 .bot-row {
   background: rgb(249,198,205);
 }
+
+.hovered-row {
+  background: rgb(232,247,255);
+}

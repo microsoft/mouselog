@@ -13,9 +13,15 @@ class Canvas extends React.Component {
       classes: props,
       firstTimestamp: 0.0,
       curTimestamp: 0.0,
+      curEventIndex: this.getCurEvent(0.0),
       isPaused: true,
       cursorImage: null,
     };
+
+    const curEventIndex = this.getCurEvent(0.0);
+    if (this.props.clickHandler !== undefined) {
+      this.props.clickHandler(curEventIndex);
+    }
   }
 
   componentWillMount() {
@@ -42,24 +48,25 @@ class Canvas extends React.Component {
         curTimestamp = this.state.curTimestamp + 0.1;
       }
 
+      const curEventIndex = this.getCurEvent(curTimestamp);
       if (!this.state.isPaused && Setting.getEnablePlayerFastForward()) {
-        const curEventIndex = this.getCurEvent(curTimestamp);
-
-        let nextTimestamp;
-        if (this.props.trace.events.length > 1) {
-          nextTimestamp = this.props.trace.events[curEventIndex + 1].timestamp - 2.0;
-        } else {
-          nextTimestamp = this.props.trace.events[0].timestamp - 2.0;
-        }
-
-        if (curTimestamp < nextTimestamp) {
-          message.success(`Will skip ${this.printTimestamp(nextTimestamp - curTimestamp)} seconds ..`);
-          curTimestamp = nextTimestamp;
+        if (curEventIndex + 1 < this.props.trace.events.length) {
+          const nextTimestamp = this.props.trace.events[curEventIndex + 1].timestamp - 2.0;
+          if (curTimestamp < nextTimestamp) {
+            message.success(`Will skip ${this.printTimestamp(nextTimestamp - curTimestamp)} seconds ..`);
+            curTimestamp = nextTimestamp;
+          }
         }
       }
 
+      if (curEventIndex !== this.state.curEventIndex) {
+        if (this.props.clickHandler !== undefined) {
+          this.props.clickHandler(curEventIndex);
+        }
+      }
       this.setState({
         curTimestamp: curTimestamp,
+        curEventIndex: curEventIndex,
       });
     }
   }
@@ -69,6 +76,14 @@ class Canvas extends React.Component {
 
     timer.on('tick', () => {
       this.incrementTimestamp();
+
+      if (this.props.clickIndex !== -1 && this.props.clickIndex !== this.state.curEventIndex && this.props.trace !== null) {
+        console.log(11);
+        this.setState({
+          curTimestamp: this.props.trace.events[this.props.clickIndex].timestamp,
+          curEventIndex: this.props.clickIndex,
+        });
+      }
     });
 
     timer.start();
@@ -135,7 +150,7 @@ class Canvas extends React.Component {
     return objs;
   }
 
-  renderEvents(trace, scale, focusIndex) {
+  renderEvents(trace, scale, hoverIndex) {
     let objs = [];
     let radius = 2;
 
@@ -153,8 +168,8 @@ class Canvas extends React.Component {
       }
     });
 
-    if (0 <= focusIndex && focusIndex < trace.events.length) {
-      objs.push(<Circle x={trace.events[focusIndex].x * scale} y={trace.events[focusIndex].y * scale} radius={radius + 6} fill="black" opacity={0.5}/>);
+    if (0 <= hoverIndex && hoverIndex < trace.events.length) {
+      objs.push(<Circle x={trace.events[hoverIndex].x * scale} y={trace.events[hoverIndex].y * scale} radius={radius + 6} fill="black" opacity={0.5}/>);
     }
 
     return objs;
@@ -183,10 +198,13 @@ class Canvas extends React.Component {
     return aux(0, array.length - 1);
   }
 
-  getCurEvent() {
-    const trace = this.props.trace;
+  getCurEvent(curTimestamp) {
+    if (this.props.trace === null) {
+      return 0;
+    }
+
     const fn = function(a, m, l, r) { return m != null ? m : l - 1 > 0 ? l - 1 : 0; };
-    const curEventIndex = this.binarySearch(trace.events, this.state.curTimestamp, fn);
+    const curEventIndex = this.binarySearch(this.props.trace.events, curTimestamp, fn);
     return curEventIndex;
   }
 
@@ -195,9 +213,8 @@ class Canvas extends React.Component {
       return null;
     }
 
-    const curEventIndex = this.getCurEvent();
     return (
-      <Group x={trace.events[curEventIndex].x * scale} y={trace.events[curEventIndex].y * scale} >
+      <Group x={trace.events[this.state.curEventIndex].x * scale} y={trace.events[this.state.curEventIndex].y * scale} >
         <Circle radius={15} fill="yellow" opacity={0.5} />
         <Image image={this.state.cursorImage} />
       </Group>
@@ -227,7 +244,7 @@ class Canvas extends React.Component {
                 (trace !== null) ? this.renderRuler(trace.width, trace.height, scale) : null
               }
               {
-                (trace !== null) ? this.renderEvents(trace, scale, this.props.focusIndex) : null
+                (trace !== null) ? this.renderEvents(trace, scale, this.props.hoverIndex) : null
               }
               {
                 (trace !== null && trace.ruleStart !== -1 && trace.ruleEnd !== -1) ? <Line
@@ -258,8 +275,14 @@ class Canvas extends React.Component {
   }
 
   onSliderChange(value) {
+    const curEventIndex = this.getCurEvent(value);
+    if (this.props.clickHandler !== undefined) {
+      this.props.clickHandler(curEventIndex);
+    }
+
     this.setState({
       curTimestamp: value,
+      curEventIndex: curEventIndex,
     })
   }
 
@@ -300,7 +323,7 @@ class Canvas extends React.Component {
                 <Col span={2}>
                   <div style={{marginTop: '9px', textAlign: 'center'}}>
                     {
-                      this.printTimestamp(this.state.curTimestamp)
+                      `${this.printTimestamp(this.state.curTimestamp)} (${this.state.curEventIndex})`
                     }
                   </div>
                 </Col>

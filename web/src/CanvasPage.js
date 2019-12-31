@@ -14,6 +14,7 @@ class CanvasPage extends React.Component {
       traceId: props.match.params.traceId,
       trace: null,
       hoverRowIndex: -1,
+      clickRowIndex: -1,
     };
   }
 
@@ -49,6 +50,20 @@ class CanvasPage extends React.Component {
     });
   }
 
+  rowClickHandler(clickRowIndex) {
+    this.setState({
+      clickRowIndex: clickRowIndex,
+    });
+  }
+
+  renderEventTable() {
+    if (this.state.trace !== null) {
+      return Shared.renderEventTable(this.state.trace.id, this.state.trace.events, true, this.rowClickHandler.bind(this), this.rowHoverHandler.bind(this), this.state.clickRowIndex)
+    } else {
+      return Shared.renderEventTable('', []);
+    }
+  }
+
   render() {
     let size = Shared.getSize(this.state.trace, 1);
     size.height -= 40;
@@ -80,22 +95,36 @@ class CanvasPage extends React.Component {
       <div>
         <Col span={6} style={{paddingLeft: '2.5px'}}>
           <Row>
-            <Col span={12}>
+            <Col span={6}>
               <Popover placement="topRight" content={content()} title="" trigger="click">
-                <Button style={{margin: '5px'}} type="primary" block >Request Details</Button>
+                <Button style={{margin: '5px'}} type="primary" >Request Details</Button>
               </Popover>
             </Col>
+            <Col span={6}>
+            </Col>
             <Col span={12}>
+              <div>
+                {
+                  `hoverRowIndex: ${this.state.hoverRowIndex}`
+                }
+              </div>
+              <div>
+                {
+                  `clickRowIndex: ${this.state.clickRowIndex}`
+                }
+              </div>
             </Col>
           </Row>
           <Row>
+          </Row>
+          <Row>
             {
-              (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events, true, this.rowHoverHandler.bind(this)) : Shared.renderEventTable('', [])
+              this.renderEventTable()
             }
           </Row>
         </Col>
         <Col span={18}>
-          <Canvas trace={this.state.trace} size={size} focusIndex={this.state.hoverRowIndex} />
+          <Canvas trace={this.state.trace} size={size} clickHandler={this.rowClickHandler.bind(this)} clickIndex={this.state.clickRowIndex} hoverIndex={this.state.hoverRowIndex} />
         </Col>
       </div>
     )
