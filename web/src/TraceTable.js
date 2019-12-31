@@ -13,6 +13,7 @@ class TraceTable extends React.Component {
     this.state = {
       classes: props,
       rules: [],
+      hoverRowIndex: -1,
     };
   }
 
@@ -24,6 +25,12 @@ class TraceTable extends React.Component {
           rules: res
         });
       });
+  }
+
+  rowHoverHandler(hoverRowIndex) {
+    this.setState({
+      hoverRowIndex: hoverRowIndex,
+    });
   }
 
   render() {
@@ -84,9 +91,6 @@ class TraceTable extends React.Component {
         dataIndex: 'events.length',
         key: 'count',
         sorter: (a, b) => a.events.length - b.events.length,
-        render: (text, trace, index) => {
-          return <Link to={`/canvas/${title}/${trace.id}`} target='_blank'>{text}</Link>
-        }
       },
       {
         title: 'PointerType',
@@ -133,20 +137,29 @@ class TraceTable extends React.Component {
       const content = (trace) => (
         <div style={{ width: '500px' }}>
           {
-            renderEventTable(trace.id, trace.events)
+            renderEventTable(trace.id, trace.events, false, this.rowHoverHandler.bind(this))
           }
         </div>
       );
 
+      const onClick = (link) => {
+        // this.props.history.push(link);
+        const w = window.open('about:blank');
+        w.location.href = link;
+      };
+
       columns.push(
         {
-          title: 'Events',
-          key: 'events',
+          title: 'Actions',
+          key: 'actions',
           render: (text, trace, index) => {
             return (
-              <Popover placement="topRight" content={content(trace)} title="" trigger="click">
-                <Button>View</Button>
-              </Popover>
+              <div>
+                <Popover placement="topRight" content={content(trace)} title="" trigger="click">
+                  <Button>Events</Button>
+                </Popover>
+                <Button style={{marginTop: '10px'}} type="primary" onClick={() => onClick(`/canvas/${title}/${trace.id}`)}>Details</Button>
+              </div>
             )
           }
         }
@@ -158,7 +171,7 @@ class TraceTable extends React.Component {
           key: 'canvas',
           width: 800,
           render: (trace, index) => {
-            return <Canvas trace={trace} size={getSize(trace, 4)} isBackground={false} focusIndex={0} />
+            return <Canvas trace={trace} size={getSize(trace, 4)} isBackground={false} focusIndex={this.state.hoverRowIndex} />
           }
         }
       );

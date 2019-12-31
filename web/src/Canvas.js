@@ -137,13 +137,9 @@ class Canvas extends React.Component {
 
   renderEvents(trace, scale, focusIndex) {
     let objs = [];
+    let radius = 2;
 
     trace.events.forEach(function (event, index) {
-      let radius = 2;
-      if (focusIndex === index) {
-        radius += 5;
-      }
-
       if (event.type === 'mousemove') {
         objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius} fill="blue"/>);
       } else if (event.type === 'touchmove') {
@@ -156,6 +152,10 @@ class Canvas extends React.Component {
         objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius + 6} fill="yellow" opacity={0.5}/>);
       }
     });
+
+    if (0 <= focusIndex && focusIndex < trace.events.length) {
+      objs.push(<Circle x={trace.events[focusIndex].x * scale} y={trace.events[focusIndex].y * scale} radius={radius + 6} fill="black" opacity={0.5}/>);
+    }
 
     return objs;
   }
