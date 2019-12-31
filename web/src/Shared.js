@@ -26,6 +26,7 @@ export function renderEventTable(title, events, isLong=false, rowHoverHandler=nu
       title: 'Event Type',
       dataIndex: 'type',
       key: 'type',
+      width: 110,
     },
     {
       title: 'Button',
@@ -59,21 +60,17 @@ export function renderEventTable(title, events, isLong=false, rowHoverHandler=nu
     handleRow = null;
   }
 
-  if (!isLong) {
-    return (
-        <div>
-          <Table columns={columns} dataSource={events} size="small" bordered pagination={{pageSize: 100}} scroll={{y: 'calc(95vh - 450px)'}}
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} onRow={handleRow}/>
-        </div>
-    );
-  } else {
-    return (
-        <div>
-          <Table columns={columns} dataSource={events} size="small" bordered
-                 title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: 700}} onRow={handleRow} />
-        </div>
-    );
+  let scrollY = 'calc(95vh - 450px)';
+  if (isLong) {
+    scrollY = document.body.scrollHeight - 280;
   }
+
+  return (
+    <div>
+      <Table columns={columns} dataSource={events} size="small" bordered pagination={{pageSize: 100}} scroll={{y: scrollY}}
+             title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} onRow={handleRow} />
+    </div>
+  );
 }
 
 export function getSizeSmall() {
