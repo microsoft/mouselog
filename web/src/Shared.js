@@ -18,6 +18,11 @@ export function getPoints(trace, scale) {
 export function renderEventTable(title, events, isLong=false, rowClickHandler=null, rowHoverHandler=null, clickRowIndex=-1) {
   const columns = [
     {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
       title: 'Timestamp',
       dataIndex: 'timestamp',
       key: 'timestamp',
@@ -72,7 +77,7 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
     <div>
       <Table columns={columns} dataSource={events} size="small" bordered pagination={{pageSize: 100}} scroll={{y: scrollY}}
              title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} onRow={handleRow}
-             rowClassName={(record, index) => { return (index === clickRowIndex) ? 'bot-row' : '' }} />
+             rowClassName={(record, index) => { return (record.id === clickRowIndex) ? 'bot-row' : '' }} />
     </div>
   );
 }

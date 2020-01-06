@@ -54,4 +54,8 @@ func (t *Trace) sortEvents() {
 	sort.Slice(t.Events, func(i, j int) bool {
 		return t.Events[i].Timestamp < t.Events[j].Timestamp
 	})
+
+	for i := 0; i < len(t.Events); i++ {
+		t.Events[i].Id = i
+	}
 }
