@@ -134,6 +134,21 @@ class DashboardPage extends React.Component {
   }
 
   render() {
+    if (this.state.trace === null) {
+      return (
+        <div>
+          <Row>
+            {
+              this.renderSessionTable()
+            }
+          </Row>
+          <Row>
+            <TraceTable title={this.state.fileId} traces={this.state.traces} self={this} />
+          </Row>
+        </div>
+      )
+    }
+
     return (
         <div>
           <Row>
@@ -158,7 +173,6 @@ class DashboardPage extends React.Component {
               <Canvas trace={this.state.trace} size={Shared.getSize(this.state.trace, 2)} focusIndex={this.state.hoverRowIndex} />
             </Col>
           </Row>
-
         </div>
     );
   }
