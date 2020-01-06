@@ -74,7 +74,7 @@ class CanvasPage extends React.Component {
   }
 
   render() {
-    let size = Shared.getSize(this.state.trace, 1);
+    let size = Shared.getSize(this.state.trace, 4 / 3);
     size.height -= 40;
 
     // <div>
