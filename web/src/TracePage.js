@@ -18,25 +18,25 @@ class TracePage extends React.Component {
 
   componentDidMount() {
     Backend.listTrace(this.state.sessionId)
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        traces: res.traces,
+      .then(res => {
+        this.setState({
+          traces: res.traces,
+        });
       });
-    });
   }
 
   render() {
     return (
-        <div>
-          <Row>
-            <Col span={24} style={{paddingRight: '2.5px'}}>
-              {
-                <TraceTable title={this.state.sessionId} traces={this.state.traces} self={this} isLong={true} hasCanvas={true} />
-              }
-            </Col>
-          </Row>
-        </div>
+      <div>
+        <Row>
+          <Col span={24} style={{paddingRight: '2.5px'}}>
+            {
+              <TraceTable title={this.state.sessionId} traces={this.state.traces} self={this} isLong={true}
+                          hasCanvas={true}/>
+            }
+          </Col>
+        </Row>
+      </div>
     );
   }
 

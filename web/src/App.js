@@ -33,30 +33,29 @@ class App extends React.Component {
     // eslint-disable-next-line no-restricted-globals
     const uri = location.pathname;
     if (uri.includes('dashboard')) {
-      this.setState({ selectedMenuKey: 2 });
+      this.setState({selectedMenuKey: 2});
     } else if (uri.includes('trace')) {
-      this.setState({ selectedMenuKey: 3 });
+      this.setState({selectedMenuKey: 3});
     } else if (uri.includes('canvas')) {
-      this.setState({ selectedMenuKey: 4 });
-    }  else if (uri.includes('rule')) {
-      this.setState({ selectedMenuKey: 5 });
+      this.setState({selectedMenuKey: 4});
+    } else if (uri.includes('rule')) {
+      this.setState({selectedMenuKey: 5});
     } else {
-      this.setState({ selectedMenuKey: 1 });
+      this.setState({selectedMenuKey: 1});
     }
 
     Backend.getSessionId()
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        sessionId: res,
-        status: true
+      .then(res => {
+        this.setState({
+          sessionId: res,
+          status: true
+        });
+      })
+      .catch(error => {
+        this.setState({
+          status: false
+        });
       });
-    })
-    .catch(error => {
-      this.setState({
-        status: false
-      });
-    });
   }
 
   onSwitchChange(checked, e) {
@@ -69,18 +68,18 @@ class App extends React.Component {
   render() {
     return (
       <div id="mouseArea" className="fill-window"
-           // React: https://reactjs.org/docs/events.html#mouse-events
-           // MDN: https://developer.mozilla.org/en-US/docs/Web/Events
+        // React: https://reactjs.org/docs/events.html#mouse-events
+        // MDN: https://developer.mozilla.org/en-US/docs/Web/Events
            onMouseMove={(e) => Setting.mouseHandler('mousemove', e)}
            onMouseDown={(e) => Setting.mouseHandler('mousedown', e)}
-           onMouseUp={(e)=> Setting.mouseHandler('mouseup', e)}
+           onMouseUp={(e) => Setting.mouseHandler('mouseup', e)}
            onClick={(e) => Setting.mouseHandler('click', e)}
            onDoubleClick={(e) => Setting.mouseHandler('dblclick', e)}
            onContextMenu={(e) => Setting.mouseHandler('contextmenu', e)}
            onWheel={(e) => Setting.mouseHandler('wheel', e)}
            onTouchStart={(e) => Setting.mouseHandler('touchstart', e)}
            onTouchMove={(e) => Setting.mouseHandler('touchmove', e)}
-           onTouchEnd={(e) => Setting.mouseHandler('touchend', e)}    
+           onTouchEnd={(e) => Setting.mouseHandler('touchend', e)}
       >
         <Layout className="layout">
           <Header style={{padding: '0', marginBottom: '3px'}}>
@@ -128,7 +127,7 @@ class App extends React.Component {
                 {this.state.status ? <Tag color="#87d068">On</Tag> : <Tag color="#f50">Off</Tag>}
               </Text>
               <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Player Fast Forward: &nbsp;
-                <AntdSwitch checked={this.state.enablePlayerFastForward} onChange={this.onSwitchChange.bind(this)} />
+                <AntdSwitch checked={this.state.enablePlayerFastForward} onChange={this.onSwitchChange.bind(this)}/>
               </Text>
             </Menu>
           </Header>

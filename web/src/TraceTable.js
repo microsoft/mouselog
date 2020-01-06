@@ -19,7 +19,6 @@ class TraceTable extends React.Component {
 
   componentDidMount() {
     Backend.listRules()
-      .then(res => res.json())
       .then(res => {
         this.setState({
           rules: res
@@ -135,7 +134,7 @@ class TraceTable extends React.Component {
 
     if (hasCanvas) {
       const content = (trace) => (
-        <div style={{ width: '500px' }}>
+        <div style={{width: '500px'}}>
           {
             renderEventTable(trace.id, trace.events, false, this.rowHoverHandler.bind(this))
           }
@@ -158,7 +157,8 @@ class TraceTable extends React.Component {
                 <Popover placement="topRight" content={content(trace)} title="" trigger="click">
                   <Button>Events</Button>
                 </Popover>
-                <Button style={{marginTop: '10px'}} type="primary" onClick={() => onClick(`/canvas/${title}/${trace.id}`)}>Details</Button>
+                <Button style={{marginTop: '10px'}} type="primary"
+                        onClick={() => onClick(`/canvas/${title}/${trace.id}`)}>Details</Button>
               </div>
             )
           }
@@ -171,7 +171,8 @@ class TraceTable extends React.Component {
           key: 'canvas',
           width: 800,
           render: (trace, index) => {
-            return <Canvas trace={trace} size={getSize(trace, 4)} isBackground={false} focusIndex={this.state.hoverRowIndex} />
+            return <Canvas trace={trace} size={getSize(trace, 4)} isBackground={false}
+                           focusIndex={this.state.hoverRowIndex}/>
           }
         }
       );
@@ -202,8 +203,11 @@ class TraceTable extends React.Component {
     return (
       <div>
         <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
-               title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>} pagination={{pageSize: 100}} scroll={{y: scrollY}}
-               rowClassName={(record, index) => { return (record.label === 1 || record.guess === 1) ? 'bot-row' : '' }} />
+               title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}
+               pagination={{pageSize: 100}} scroll={{y: scrollY}}
+               rowClassName={(record, index) => {
+                 return (record.label === 1 || record.guess === 1) ? 'bot-row' : ''
+               }}/>
       </div>
     );
   }

@@ -24,12 +24,11 @@ class DashboardPage extends React.Component {
 
   componentDidMount() {
     Backend.listSessions()
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        sessions: res
+      .then(res => {
+        this.setState({
+          sessions: res
+        });
       });
-    });
   }
 
   getCMTable(tn, fp, fn, tp) {
@@ -47,14 +46,14 @@ class DashboardPage extends React.Component {
     // )
 
     return (
-        <table>
-          <tr>
-            <td>TN: <Tag color="rgb(68,1,84)">{`${tn}`}</Tag></td>
-            <td>FP: <Tag color="rgb(253,231,36)">{`${fp}`}</Tag></td>
-            <td>FN: <Tag color="rgb(253,231,36)">{`${fn}`}</Tag></td>
-            <td>TP: <Tag color="rgb(68,1,84)">{`${tp}`}</Tag></td>
-          </tr>
-        </table>
+      <table>
+        <tr>
+          <td>TN: <Tag color="rgb(68,1,84)">{`${tn}`}</Tag></td>
+          <td>FP: <Tag color="rgb(253,231,36)">{`${fp}`}</Tag></td>
+          <td>FN: <Tag color="rgb(253,231,36)">{`${fn}`}</Tag></td>
+          <td>TP: <Tag color="rgb(68,1,84)">{`${tp}`}</Tag></td>
+        </tr>
+      </table>
     )
   }
 
@@ -108,22 +107,21 @@ class DashboardPage extends React.Component {
         // console.log(selectedRowKeys, selectedRows);
 
         Backend.listTrace(selectedRowKeys.sessionId)
-        .then(res => res.json())
-        .then(res => {
-          this.setState({
-            traces: res.traces,
-            fileId: selectedRowKeys.sessionId
+          .then(res => {
+            this.setState({
+              traces: res.traces,
+              fileId: selectedRowKeys.sessionId
+            });
           });
-        });
       },
     };
 
     return (
-        <div>
-          <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small"
-                 bordered title={() => 'Sessions'}/>
-          <UploadFile />
-        </div>
+      <div>
+        <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small"
+               bordered title={() => 'Sessions'}/>
+        <UploadFile/>
+      </div>
     );
   }
 
@@ -143,37 +141,38 @@ class DashboardPage extends React.Component {
             }
           </Row>
           <Row>
-            <TraceTable title={this.state.fileId} traces={this.state.traces} self={this} />
+            <TraceTable title={this.state.fileId} traces={this.state.traces} self={this}/>
           </Row>
         </div>
       )
     }
 
     return (
-        <div>
-          <Row>
-            <Col span={12}>
-              {
-                this.renderSessionTable()
-              }
-              <Row>
-                <Col span={12} style={{paddingRight: '2.5px'}}>
-                  {
-                    <TraceTable title={this.state.fileId} traces={this.state.traces} self={this} />
-                  }
-                </Col>
-                <Col span={12} style={{paddingLeft: '2.5px'}}>
-                  {
-                    (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events, false, this.rowHoverHandler.bind(this)) : Shared.renderEventTable('', [])
-                  }
-                </Col>
-              </Row>
-            </Col>
-            <Col span={12}>
-              <Canvas trace={this.state.trace} size={Shared.getSize(this.state.trace, 2)} focusIndex={this.state.hoverRowIndex} />
-            </Col>
-          </Row>
-        </div>
+      <div>
+        <Row>
+          <Col span={12}>
+            {
+              this.renderSessionTable()
+            }
+            <Row>
+              <Col span={12} style={{paddingRight: '2.5px'}}>
+                {
+                  <TraceTable title={this.state.fileId} traces={this.state.traces} self={this}/>
+                }
+              </Col>
+              <Col span={12} style={{paddingLeft: '2.5px'}}>
+                {
+                  (this.state.trace !== null) ? Shared.renderEventTable(this.state.trace.id, this.state.trace.events, false, this.rowHoverHandler.bind(this)) : Shared.renderEventTable('', [])
+                }
+              </Col>
+            </Row>
+          </Col>
+          <Col span={12}>
+            <Canvas trace={this.state.trace} size={Shared.getSize(this.state.trace, 2)}
+                    focusIndex={this.state.hoverRowIndex}/>
+          </Col>
+        </Row>
+      </div>
     );
   }
 

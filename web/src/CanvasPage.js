@@ -21,7 +21,6 @@ class CanvasPage extends React.Component {
 
   componentDidMount() {
     Backend.getTrace(this.state.sessionId, this.state.traceId)
-      .then(res => res.json())
       .then(res => {
         this.setState({
           trace: res,
@@ -85,7 +84,7 @@ class CanvasPage extends React.Component {
     // </div>
 
     const content = () => (
-      <div style={{ width: '1500px' }}>
+      <div style={{width: '1500px'}}>
         <Descriptions bordered title="Properties" size='small'>
           <Descriptions.Item label="Id">{this.getProperty('id')}</Descriptions.Item>
           <Descriptions.Item label="Url">{this.getProperty('url')}</Descriptions.Item>
@@ -106,7 +105,7 @@ class CanvasPage extends React.Component {
           <Row>
             <Col span={6}>
               <Popover placement="topRight" content={content()} title="" trigger="click">
-                <Button style={{margin: '5px'}} type="primary" >Request Details</Button>
+                <Button style={{margin: '5px'}} type="primary">Request Details</Button>
               </Popover>
             </Col>
             <Col span={6}>
@@ -133,7 +132,8 @@ class CanvasPage extends React.Component {
           </Row>
         </Col>
         <Col span={18}>
-          <Canvas ref={this.canvas} trace={this.state.trace} size={size} clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex} />
+          <Canvas ref={this.canvas} trace={this.state.trace} size={size}
+                  clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex}/>
         </Col>
       </div>
     )

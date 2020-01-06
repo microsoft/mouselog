@@ -13,7 +13,6 @@ class RulePage extends React.Component {
 
   componentDidMount() {
     Backend.listRules()
-      .then(res => res.json())
       .then(res => {
         this.setState({
           rules: res
