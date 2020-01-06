@@ -1,9 +1,8 @@
 import React from "react";
-import {Button, Col, Descriptions, Popover, Row, Slider} from "antd";
+import {Button, Col, Descriptions, Popover, Row} from "antd";
 import * as Backend from "./Backend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
-import {renderEventTable} from "./Shared";
 
 class CanvasPage extends React.Component {
   constructor(props) {
@@ -16,6 +15,8 @@ class CanvasPage extends React.Component {
       hoverRowIndex: -1,
       clickRowIndex: -1,
     };
+
+    this.canvas = React.createRef();
   }
 
   componentDidMount() {
@@ -51,6 +52,14 @@ class CanvasPage extends React.Component {
   }
 
   rowClickHandler(clickRowIndex) {
+    this.setState({
+      clickRowIndex: clickRowIndex,
+    });
+
+    this.canvas.current.updateFromTableToCanvas(clickRowIndex);
+  }
+
+  canvasClickHandler(clickRowIndex) {
     this.setState({
       clickRowIndex: clickRowIndex,
     });
@@ -124,7 +133,7 @@ class CanvasPage extends React.Component {
           </Row>
         </Col>
         <Col span={18}>
-          <Canvas trace={this.state.trace} size={size} clickHandler={this.rowClickHandler.bind(this)} clickIndex={this.state.clickRowIndex} hoverIndex={this.state.hoverRowIndex} />
+          <Canvas ref={this.canvas} trace={this.state.trace} size={size} clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex} />
         </Col>
       </div>
     )

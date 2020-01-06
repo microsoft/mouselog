@@ -9,19 +9,20 @@ import * as Setting from "./Setting";
 class Canvas extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      classes: props,
-      firstTimestamp: 0.0,
-      curTimestamp: 0.0,
-      curEventIndex: this.getCurEvent(0.0),
-      isPaused: true,
-      cursorImage: null,
-    };
 
     const curEventIndex = this.getCurEvent(0.0);
     if (this.props.clickHandler !== undefined) {
       this.props.clickHandler(curEventIndex);
     }
+
+    this.state = {
+      classes: props,
+      firstTimestamp: 0.0,
+      curTimestamp: 0.0,
+      curEventIndex: curEventIndex,
+      isPaused: true,
+      cursorImage: null,
+    };
   }
 
   componentWillMount() {
@@ -59,11 +60,12 @@ class Canvas extends React.Component {
         }
       }
 
-      if (curEventIndex !== this.state.curEventIndex) {
-        if (this.props.clickHandler !== undefined) {
-          this.props.clickHandler(curEventIndex);
-        }
-      }
+      // if (curEventIndex !== this.state.curEventIndex) {
+      //   if (this.props.clickHandler !== undefined) {
+      //     this.props.clickHandler(curEventIndex);
+      //   }
+      // }
+
       this.setState({
         curTimestamp: curTimestamp,
         curEventIndex: curEventIndex,
@@ -76,18 +78,19 @@ class Canvas extends React.Component {
 
     timer.on('tick', () => {
       this.incrementTimestamp();
-
-      if (this.props.clickIndex !== -1 && this.props.clickIndex !== this.state.curEventIndex && this.props.trace !== null) {
-        console.log(11);
-        this.setState({
-          curTimestamp: this.props.trace.events[this.props.clickIndex].timestamp,
-          curEventIndex: this.props.clickIndex,
-        });
-      }
     });
 
     timer.start();
     this.timer = timer;
+  }
+
+  updateFromTableToCanvas(curEventIndex) {
+    if (this.props.trace !== null) {
+      this.setState({
+        curTimestamp: this.props.trace.events[curEventIndex].timestamp,
+        curEventIndex: curEventIndex,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -161,6 +164,10 @@ class Canvas extends React.Component {
         objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius} fill="purple"/>);
       } else if (event.type === 'click') {
         objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius + 6} fill="red" opacity={0.5}/>);
+      } else if (event.type === 'mousedown') {
+        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius + 6} fill="orange" opacity={0.5}/>);
+      } else if (event.type === 'mouseup') {
+        objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius + 6} stroke={"red"} strokeWidth={3} opacity={0.5}/>);
       } else if (event.type === 'contextmenu') {
         objs.push(<Circle x={event.x * scale} y={event.y * scale} radius={radius + 6} fill="green" opacity={0.5}/>);
       } else if (event.button === 'X1' || event.button === 'X2') {
@@ -168,8 +175,10 @@ class Canvas extends React.Component {
       }
     });
 
-    if (0 <= hoverIndex && hoverIndex < trace.events.length) {
-      objs.push(<Circle x={trace.events[hoverIndex].x * scale} y={trace.events[hoverIndex].y * scale} radius={radius + 6} fill="black" opacity={0.5}/>);
+    if (hoverIndex !== undefined) {
+      if (0 <= hoverIndex && hoverIndex < trace.events.length) {
+        objs.push(<Circle x={trace.events[hoverIndex].x * scale} y={trace.events[hoverIndex].y * scale} radius={radius + 6} fill="black" opacity={0.5}/>);
+      }
     }
 
     return objs;
