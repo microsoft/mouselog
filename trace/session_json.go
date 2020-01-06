@@ -10,4 +10,6 @@ type SessionJson struct {
 	FN int `json:"fn"`
 	TP int `json:"tp"`
 	UN int `json:"un"`
+
+	RuleCounts []int `json:"ruleCounts"`
 }

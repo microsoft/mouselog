@@ -19,6 +19,7 @@ class DashboardPage extends React.Component {
       traces: [],
       trace: null,
       hoverRowIndex: -1,
+      rules: [],
     };
   }
 
@@ -27,6 +28,13 @@ class DashboardPage extends React.Component {
       .then(res => {
         this.setState({
           sessions: res
+        });
+      });
+
+    Backend.listRules()
+      .then(res => {
+        this.setState({
+          rules: res
         });
       });
   }
@@ -99,6 +107,18 @@ class DashboardPage extends React.Component {
       //   key: 'un',
       // },
     ];
+
+    this.state.rules.forEach((p, i) => {
+      columns.push(
+        {
+          title: `${p.ruleId}. ${p.ruleName}`,
+          key: `${p.ruleId}. ${p.ruleName}`,
+          render: (text, session, index) => {
+            return session.ruleCounts[i];
+          }
+        }
+      );
+    });
 
     const rowRadioSelection = {
       type: 'radio',

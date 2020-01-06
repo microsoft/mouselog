@@ -33,14 +33,23 @@ func (ss *Session) AddTrace(t *Trace) {
 }
 
 func (ss *Session) ToJson() *SessionJson {
+	ruleCounts := []int{}
+	for i := 0; i < 7; i ++ {
+		ruleCounts = append(ruleCounts, 0)
+	}
+	for _, t := range ss.Traces {
+		ruleCounts[t.RuleId] += 1
+	}
+
 	sj := SessionJson{
-		Id:        ss.Id,
-		TraceSize: len(ss.Traces),
-		TN:        ss.TN,
-		FP:        ss.FP,
-		FN:        ss.FN,
-		TP:        ss.TP,
-		UN:        ss.UN,
+		Id:         ss.Id,
+		TraceSize:  len(ss.Traces),
+		TN:         ss.TN,
+		FP:         ss.FP,
+		FN:         ss.FN,
+		TP:         ss.TP,
+		UN:         ss.UN,
+		RuleCounts: ruleCounts,
 	}
 	return &sj
 }
