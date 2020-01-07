@@ -230,6 +230,27 @@ class Canvas extends React.Component {
     )
   }
 
+  renderReason(trace, scale) {
+    if (trace.ruleStart === -1) {
+      return null;
+    }
+
+    if (trace.ruleEnd !== -1) {
+      return (
+        <Line
+          points={getPoints(trace, scale).slice(trace.ruleStart * 2, trace.ruleEnd * 2)}
+          stroke="red"
+          strokeWidth={2}
+        />
+      )
+    } else {
+      const event = trace.events[trace.ruleStart];
+      return (
+        <Circle x={event.x * scale} y={event.y * scale} radius={20} stroke="red" strokeWidth={2} dash={[10, 5]} />
+      )
+    }
+  }
+
   renderCanvas() {
     const trace = this.props.trace;
     const size = this.props.size;
@@ -256,12 +277,7 @@ class Canvas extends React.Component {
                 (trace !== null) ? this.renderEvents(trace, scale, this.props.hoverIndex) : null
               }
               {
-                (trace !== null && trace.ruleStart !== -1 && trace.ruleEnd !== -1) ? <Line
-                        points={getPoints(trace, scale).slice(trace.ruleStart * 2, trace.ruleEnd * 2)}
-                        stroke="red"
-                        strokeWidth={2}
-                    />
-                    : null
+                (trace !== null) ? this.renderReason(trace, scale) : null
               }
               {
                 this.renderPointer(trace, scale)
