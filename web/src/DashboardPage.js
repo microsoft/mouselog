@@ -1,13 +1,13 @@
 import React from "react";
 import * as Shared from "./Shared";
-import {Table, Row, Col, Typography, Tag} from 'antd';
+import {Table, Row, Col} from 'antd';
 import {Link} from "react-router-dom";
 import Canvas from "./Canvas";
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
 import UploadFile from "./UploadFile";
-
-const {Text} = Typography;
+import {Circle, Group, Image, Layer, Rect, Stage, Text} from "react-konva";
+import * as Setting from "./Setting";
 
 class DashboardPage extends React.Component {
   constructor(props) {
@@ -39,29 +39,59 @@ class DashboardPage extends React.Component {
       });
   }
 
-  getCMTable(tn, fp, fn, tp) {
+  renderRect(x, y, value, sum) {
+    const ratio = value / sum;
+    let color;
+    let fontColor;
+    if (sum === 0) {
+      color = "white";
+      fontColor = "black";
+    } else {
+      color = Setting.mixColor([253, 231, 36], [68, 1, 84], ratio);
+      fontColor = "white";
+    }
+
+    return (
+      <Group x={x} y={y}>
+        <Rect width={50} height={50} fill={color}/>
+        <Text width={50} height={50} strokeWidth={1} fill={fontColor} text={`${value}`} fontSize={20} align={"center"} verticalAlign={"middle"}/>
+      </Group>
+    )
+
+    return
+  }
+
+  renderCM(tn, fp, fn, tp) {
     // return (
-    //     <table>
-    //       <tr>
-    //         <td>TN: <Tag color="rgb(68,1,84)">{`${tn}`}</Tag></td>
-    //         <td>FP: <Tag color="rgb(253,231,36)">{`${fp}`}</Tag></td>
-    //       </tr>
-    //       <tr>
-    //         <td>FN: <Tag color="rgb(253,231,36)">{`${fn}`}</Tag></td>
-    //         <td>TP: <Tag color="rgb(68,1,84)">{`${tp}`}</Tag></td>
-    //       </tr>
-    //     </table>
+    //   <table>
+    //     <tr>
+    //       <td>TN: <Tag color="rgb(68,1,84)">{`${tn}`}</Tag></td>
+    //       <td>FP: <Tag color="rgb(253,231,36)">{`${fp}`}</Tag></td>
+    //       <td>FN: <Tag color="rgb(253,231,36)">{`${fn}`}</Tag></td>
+    //       <td>TP: <Tag color="rgb(68,1,84)">{`${tp}`}</Tag></td>
+    //     </tr>
+    //   </table>
     // )
 
     return (
-      <table>
-        <tr>
-          <td>TN: <Tag color="rgb(68,1,84)">{`${tn}`}</Tag></td>
-          <td>FP: <Tag color="rgb(253,231,36)">{`${fp}`}</Tag></td>
-          <td>FN: <Tag color="rgb(253,231,36)">{`${fn}`}</Tag></td>
-          <td>TP: <Tag color="rgb(68,1,84)">{`${tp}`}</Tag></td>
-        </tr>
-      </table>
+      <Stage width={101} height={101}
+             style={{marginLeft: '5px', marginRight: '5px'}}>
+        <Layer>
+          {
+            this.renderRect(0, 0, tn, tn + fp)
+          }
+          {
+            this.renderRect(50, 0, fp, tn + fp)
+          }
+          {
+            this.renderRect(0, 50, fn, fn + tp)
+          }
+          {
+            this.renderRect(50, 50, tp, fn + tp)
+          }
+          <Rect width={100} height={100} strokeWidth={1} stroke={"black"}/>
+        </Layer>
+      </Stage>
     )
   }
 
@@ -84,7 +114,7 @@ class DashboardPage extends React.Component {
         title: 'Confusing Matrix',
         key: 'cm',
         render: (text, session, index) => {
-          return this.getCMTable(session.tn, session.fp, session.fn, session.tp);
+          return this.renderCM(session.tn, session.fp, session.fn, session.tp);
         }
       },
       {
@@ -139,7 +169,7 @@ class DashboardPage extends React.Component {
     return (
       <div>
         <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small"
-               bordered title={() => 'Sessions'}/>
+               bordered title={() => 'Sessions'} pagination={{pageSize: 100}} scroll={{y: 'calc(90vh - 150px)'}}/>
         <UploadFile/>
       </div>
     );

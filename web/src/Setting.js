@@ -41,3 +41,20 @@ export function wrapUserAgent(s) {
 export function wrapUrl(s) {
   return <a target="_blank" href={`${s}`}>{s}</a>
 }
+
+// https://stackoverflow.com/questions/14819058/mixing-two-colors-naturally-in-javascript
+//colorChannelA and colorChannelB are ints ranging from 0 to 255
+function mixChannel(colorChannelA, colorChannelB, amountToMix) {
+  var channelA = colorChannelA * amountToMix;
+  var channelB = colorChannelB * (1 - amountToMix);
+  return parseInt(channelA + channelB);
+}
+
+//rgbA and rgbB are arrays, amountToMix ranges from 0.0 to 1.0
+//example (red): rgbA = [255,0,0]
+export function mixColor(rgbA, rgbB, amountToMix) {
+  var r = mixChannel(rgbA[0], rgbB[0], amountToMix);
+  var g = mixChannel(rgbA[1], rgbB[1], amountToMix);
+  var b = mixChannel(rgbA[2], rgbB[2], amountToMix);
+  return "rgb(" + r + "," + g + "," + b + ")";
+}
