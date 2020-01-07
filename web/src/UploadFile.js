@@ -1,6 +1,6 @@
 import React from "react"
 import * as Setting from "./Setting";
-import {Icon, Button, Upload, message} from 'antd'
+import {Icon, Button, Upload, message, Col} from 'antd'
 
 class UploadFile extends React.Component {
   state = {
@@ -72,20 +72,24 @@ class UploadFile extends React.Component {
 
     return (
       <div>
-        <Upload {...props}>
-          <Button>
-            <Icon type="upload"/> Select File
+        <Col span={2} style={{marginLeft: '10px'}}>
+          <Upload {...props}>
+            <Button>
+              <Icon type="upload"/> Select File
+            </Button>
+          </Upload>
+        </Col>
+        <Col span={2} style={{marginBottom: '10px'}}>
+          <Button
+            type="primary"
+            onClick={this.handleUpload}
+            disabled={fileList.length === 0}
+            loading={uploading}
+            style={{marginLeft: 16}}
+          >
+            {uploading ? 'Uploading' : 'Start Upload'}
           </Button>
-        </Upload>
-        <Button
-          type="primary"
-          onClick={this.handleUpload}
-          disabled={fileList.length === 0}
-          loading={uploading}
-          style={{marginTop: 16}}
-        >
-          {uploading ? 'Uploading' : 'Start Upload'}
-        </Button>
+        </Col>
       </div>
     );
   }
