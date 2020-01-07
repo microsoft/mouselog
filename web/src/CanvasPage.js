@@ -3,6 +3,7 @@ import {Button, Col, Descriptions, Popover, Row} from "antd";
 import * as Backend from "./Backend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
+import * as Setting from "./Setting";
 
 class CanvasPage extends React.Component {
   constructor(props) {
@@ -87,9 +88,9 @@ class CanvasPage extends React.Component {
       <div style={{width: '1500px'}}>
         <Descriptions bordered title="Properties" size='small'>
           <Descriptions.Item label="Id">{this.getProperty('id')}</Descriptions.Item>
-          <Descriptions.Item label="Url">{this.getProperty('url')}</Descriptions.Item>
-          <Descriptions.Item label="UserAgent">{this.getProperty('userAgent')}</Descriptions.Item>
-          <Descriptions.Item label="ClientIp">{this.getProperty('clientIp')}</Descriptions.Item>
+          <Descriptions.Item label="Url">{Setting.wrapUrl(this.getProperty('url'))}</Descriptions.Item>
+          <Descriptions.Item label="UserAgent">{Setting.wrapUserAgent(this.getProperty('userAgent'))}</Descriptions.Item>
+          <Descriptions.Item label="ClientIp">{Setting.wrapClientIp(this.getProperty('clientIp'))}</Descriptions.Item>
           <Descriptions.Item label="EventCount">{this.getEventCount()}</Descriptions.Item>
           <Descriptions.Item label="PointerType">{this.getProperty('pointerType')}</Descriptions.Item>
           <Descriptions.Item label="Label">{this.getProperty('label')}</Descriptions.Item>

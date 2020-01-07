@@ -4,6 +4,7 @@ import Canvas from "./Canvas";
 import {getSize, renderEventTable} from "./Shared";
 import * as Backend from "./Backend";
 import {Link} from "react-router-dom";
+import * as Setting from "./Setting";
 
 const {Text} = Typography;
 
@@ -68,18 +69,27 @@ class TraceTable extends React.Component {
           dataIndex: 'url',
           key: 'url',
           sorter: (a, b) => a.url.localeCompare(b.url),
+          render: (text, trace, index) => {
+            return Setting.wrapUrl(text);
+          }
         },
         {
           title: 'UserAgent',
           dataIndex: 'userAgent',
           key: 'userAgent',
           sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
+          render: (text, trace, index) => {
+            return Setting.wrapUserAgent(text);
+          }
         },
         {
           title: 'ClientIp',
           dataIndex: 'clientIp',
           key: 'clientIp',
           sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
+          render: (text, trace, index) => {
+            return Setting.wrapClientIp(text);
+          }
         },
       );
     }

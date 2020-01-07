@@ -1,3 +1,4 @@
+import React from "react";
 
 export let ServerUrl = '';
 
@@ -27,4 +28,16 @@ export function getEnablePlayerFastForward() {
 
 export function setEnablePlayerFastForward(enablePlayerFastForward) {
   localEnablePlayerFastForward = enablePlayerFastForward;
+}
+
+export function wrapClientIp(s) {
+  return <a target="_blank" href={`https://db-ip.com/${s}`}>{s}</a>
+}
+
+export function wrapUserAgent(s) {
+  return <a target="_blank" href={`https://www.google.com/search?q=${s}`}>{s}</a>
+}
+
+export function wrapUrl(s) {
+  return <a target="_blank" href={`${s}`}>{s}</a>
 }
