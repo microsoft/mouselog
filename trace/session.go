@@ -34,7 +34,7 @@ func (ss *Session) AddTrace(t *Trace) {
 
 func (ss *Session) ToJson() *SessionJson {
 	ruleCounts := []int{}
-	for i := 0; i < 7; i ++ {
+	for i := 0; i < 8; i ++ {
 		ruleCounts = append(ruleCounts, 0)
 	}
 	for _, t := range ss.Traces {

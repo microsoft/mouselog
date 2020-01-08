@@ -8,6 +8,7 @@ const (
 	RuleOverspeed
 	RuleRootlessClick
 	RuleHighPointDensity
+	RuleNegativeCursor
 	RuleUpperLimit
 )
 
@@ -29,6 +30,8 @@ func GetRuleName(rule int) string {
 		return "Rootless click found"
 	case RuleHighPointDensity:
 		return "Point density too high"
+	case RuleNegativeCursor:
+		return "Negative cursor found"
 	default:
 		return ""
 	}
