@@ -102,40 +102,42 @@ class CanvasPage extends React.Component {
 
     return (
       <div>
-        <Col span={6} style={{paddingLeft: '2.5px'}}>
-          <Row>
-            <Col span={6}>
-              <Popover placement="topRight" content={content()} title="" trigger="click">
-                <Button style={{margin: '5px'}} type="primary">Request Details</Button>
-              </Popover>
-            </Col>
-            <Col span={6}>
-            </Col>
-            <Col span={12}>
-              <div>
-                {
-                  `hoverRowIndex: ${this.state.hoverRowIndex}`
-                }
-              </div>
-              <div>
-                {
-                  `clickRowIndex: ${this.state.clickRowIndex}`
-                }
-              </div>
-            </Col>
-          </Row>
-          <Row>
-          </Row>
-          <Row>
-            {
-              this.renderEventTable()
-            }
-          </Row>
-        </Col>
-        <Col span={18}>
-          <Canvas ref={this.canvas} trace={this.state.trace} size={size}
-                  clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex}/>
-        </Col>
+        <Row>
+          <Col span={6} style={{paddingLeft: '2.5px'}}>
+            <Row>
+              <Col span={6}>
+                <Popover placement="topRight" content={content()} title="" trigger="click">
+                  <Button style={{margin: '5px'}} type="primary">Request Details</Button>
+                </Popover>
+              </Col>
+              <Col span={6}>
+              </Col>
+              <Col span={12}>
+                <div>
+                  {
+                    `hoverRowIndex: ${this.state.hoverRowIndex}`
+                  }
+                </div>
+                <div>
+                  {
+                    `clickRowIndex: ${this.state.clickRowIndex}`
+                  }
+                </div>
+              </Col>
+            </Row>
+            <Row>
+            </Row>
+            <Row>
+              {
+                this.renderEventTable()
+              }
+            </Row>
+          </Col>
+          <Col span={18}>
+            <Canvas ref={this.canvas} trace={this.state.trace} size={size}
+                    clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex}/>
+          </Col>
+        </Row>
       </div>
     )
   }

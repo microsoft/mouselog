@@ -1,7 +1,7 @@
 import React from "react"
 import * as Setting from "./Setting";
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Upload, message, Col } from 'antd';
+import {Button, Upload, message, Col, Row} from 'antd';
 
 class UploadFile extends React.Component {
   state = {
@@ -73,24 +73,26 @@ class UploadFile extends React.Component {
 
     return (
       <div>
-        <Col span={2} style={{marginLeft: '10px'}}>
-          <Upload {...props}>
-            <Button>
-              <UploadOutlined /> Select File
+        <Row>
+          <Col span={2} style={{marginLeft: '10px'}}>
+            <Upload {...props}>
+              <Button>
+                <UploadOutlined /> Select File
+              </Button>
+            </Upload>
+          </Col>
+          <Col span={2} style={{marginBottom: '10px'}}>
+            <Button
+              type="primary"
+              onClick={this.handleUpload}
+              disabled={fileList.length === 0}
+              loading={uploading}
+              style={{marginLeft: 16}}
+            >
+              {uploading ? 'Uploading' : 'Start Upload'}
             </Button>
-          </Upload>
-        </Col>
-        <Col span={2} style={{marginBottom: '10px'}}>
-          <Button
-            type="primary"
-            onClick={this.handleUpload}
-            disabled={fileList.length === 0}
-            loading={uploading}
-            style={{marginLeft: 16}}
-          >
-            {uploading ? 'Uploading' : 'Start Upload'}
-          </Button>
-        </Col>
+          </Col>
+        </Row>
       </div>
     );
   }

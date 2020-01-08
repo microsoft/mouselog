@@ -169,7 +169,7 @@ class DashboardPage extends React.Component {
     return (
       <div>
         <Table rowSelection={rowRadioSelection} columns={columns} dataSource={this.state.sessions} size="small"
-               bordered title={() => 'Sessions'} pagination={{pageSize: 100}} scroll={{y: 'calc(90vh - 150px)'}}/>
+               bordered title={() => 'Sessions'} pagination={{pageSize: 100}} scroll={{y: 'calc(90vh - 200px)'}}/>
         <UploadFile/>
       </div>
     );
