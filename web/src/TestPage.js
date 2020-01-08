@@ -1,7 +1,6 @@
 import React from "react";
 import * as Setting from "./Setting";
 import {Alert, Button, Card, Checkbox, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
-import WrappedNormalLoginForm from "./Login";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
 import EventSelectionCheckBox from "./EventSelectionCheckBox"
@@ -341,11 +340,6 @@ class TestPage extends React.Component {
             <Canvas trace={this.trace} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground}/>
           </Col>
           <Col span={6}>
-            <Row>
-              <Card title="Beat Me !" extra={<a href="#">More</a>}>
-                <WrappedNormalLoginForm/>
-              </Card>
-            </Row>
             <Row>
               <EventSelectionCheckBox
                 allCheckedList={allTargetEvents}

@@ -3,6 +3,7 @@ import {Circle, Group, Image, Layer, Line, Stage} from "react-konva";
 import {getPoints} from "./Shared";
 import {Text as KonvaText} from "react-konva/";
 import {Button, Col, Row, Slider, message} from "antd";
+import { CaretRightOutlined, PauseOutlined } from '@ant-design/icons';
 import { TaskTimer } from 'tasktimer';
 import * as Setting from "./Setting";
 
@@ -334,41 +335,40 @@ class Canvas extends React.Component {
 
   render() {
     return (
-        <div>
-          {
-            this.renderCanvas()
-          }
-          <Row style={{marginTop: '5px'}}>
-            <Col span={1}>
-              <Button type="primary" shape="circle" icon={this.state.isPaused ? "caret-right" : "pause"}
-                      onClick={this.togglePaused.bind(this)}/>
-            </Col>
-            <Col span={23}>
-              <Row>
-                <Col span={2}>
-                  <div style={{marginTop: '9px', textAlign: 'center'}}>
-                    {
-                      `${this.printTimestamp(this.state.curTimestamp)} (${this.state.curEventIndex})`
-                    }
-                  </div>
-                </Col>
-                <Col span={20}>
+      <div>
+        {
+          this.renderCanvas()
+        }
+        <Row style={{marginTop: '5px'}}>
+          <Col span={1}>
+            <Button type="primary" shape="circle" icon={this.state.isPaused ? <CaretRightOutlined /> : <PauseOutlined />} onClick={this.togglePaused.bind(this)}/>
+          </Col>
+          <Col span={23}>
+            <Row>
+              <Col span={2}>
+                <div style={{marginTop: '9px', textAlign: 'center'}}>
                   {
-                    this.props.trace !== null ? this.renderSlider() : null
+                    `${this.printTimestamp(this.state.curTimestamp)} (${this.state.curEventIndex})`
                   }
-                </Col>
-                <Col span={2}>
-                  <div style={{marginTop: '9px', textAlign: 'center'}}>
-                    {
-                      this.printTimestamp(this.getLastTimestamp())
-                    }
-                  </div>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </div>
-    )
+                </div>
+              </Col>
+              <Col span={20}>
+                {
+                  this.props.trace !== null ? this.renderSlider() : null
+                }
+              </Col>
+              <Col span={2}>
+                <div style={{marginTop: '9px', textAlign: 'center'}}>
+                  {
+                    this.printTimestamp(this.getLastTimestamp())
+                  }
+                </div>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </div>
+    );
   }
 }
 

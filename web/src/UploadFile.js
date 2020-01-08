@@ -1,6 +1,7 @@
 import React from "react"
 import * as Setting from "./Setting";
-import {Icon, Button, Upload, message, Col} from 'antd'
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Upload, message, Col } from 'antd';
 
 class UploadFile extends React.Component {
   state = {
@@ -75,7 +76,7 @@ class UploadFile extends React.Component {
         <Col span={2} style={{marginLeft: '10px'}}>
           <Upload {...props}>
             <Button>
-              <Icon type="upload"/> Select File
+              <UploadOutlined /> Select File
             </Button>
           </Upload>
         </Col>

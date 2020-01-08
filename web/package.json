@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.25.1",
+    "antd": "^4.0.0-rc.0",
     "konva": "^4.0.17",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-konva": "^16.10.1-0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "tasktimer": "^3.0.0"
+    "tasktimer": "^3.0.0",
+    "@ant-design/icons": "latest"
   },
   "scripts": {
     "start": "set PORT=4000 && react-scripts start",
