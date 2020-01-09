@@ -1,12 +1,11 @@
 import React from "react";
 import * as Setting from "./Setting";
-import {Alert, Button, Card, Checkbox, Col, Progress, Row, Switch, Table, Tag, Typography} from "antd";
+import {Alert, Button, Col, Progress, Row, Switch, Tag, Typography} from "antd";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
 import EventSelectionCheckBox from "./EventSelectionCheckBox"
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
-import CheckboxGroup from "antd/lib/checkbox/Group";
 
 const {Text} = Typography;
 
@@ -79,7 +78,7 @@ class TestPage extends React.Component {
         });
         this.uploadTrace();
       })
-      .catch(error => {
+      .catch(() => {
         this.setState({
           status: false
         });
@@ -136,7 +135,7 @@ class TestPage extends React.Component {
             this.trace.reason = (res.traces.length === 0 ? null : res.traces[0].reason);
           }
         }
-      ).catch(error => {
+      ).catch(() => {
       console.log("BACKEND ERROR");
       this.setState({
         status: false
@@ -148,7 +147,7 @@ class TestPage extends React.Component {
     this.uploadTrace('clear');
 
     this.events = [];
-    this.traces = []
+    this.traces = [];
     this.trace = null;
 
     this.setState({
@@ -178,10 +177,6 @@ class TestPage extends React.Component {
     }
   }
 
-  parseDateString(date) {
-    return new Date(Date.parse(date));
-  }
-
   getRelativeTimestampInSeconds() {
     let diff = new Date() - this.state.pageLoadTime;
     return Math.trunc(diff) / 1000;
@@ -204,7 +199,7 @@ class TestPage extends React.Component {
     }
 
     // Don't capture the untracked events.
-    if (this.targetEvents.indexOf(type) == -1) {
+    if (this.targetEvents.indexOf(type) === -1) {
       return;
     }
 
