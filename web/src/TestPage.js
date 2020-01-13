@@ -95,17 +95,28 @@ class TestPage extends React.Component {
     return count;
   }
 
+  getUrl() {
+    return window.location.pathname;
+  }
+
+  newTrace() {
+    return {
+      id: '0',
+      url: this.getUrl(),
+      width: document.body.scrollWidth,
+      height: document.body.scrollHeight,
+      pageLoadTime: this.state.pageLoadTime,
+      label: -1,
+      guess: -1,
+      events: [],
+    };
+  }
+
   uploadTrace(action = 'upload') {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
-    const trace = {
-      id: window.location.pathname,
-      width: width,
-      height: height,
-      pageLoadTime: this.state.pageLoadTime,
-      label: -1, guess: -1,
-      events: this.events
-    };
+    let trace = this.newTrace();
+    trace.events = this.events;
     const traceStr = JSON.stringify(trace);
 
     if (this.events.length === 50) {
@@ -211,6 +222,7 @@ class TestPage extends React.Component {
     }
 
     let p = {
+      id: this.events.length,
       timestamp: this.getRelativeTimestampInSeconds(),
       type: type,
       x: x,
@@ -225,16 +237,7 @@ class TestPage extends React.Component {
     }
 
     if (this.trace === null) {
-      const width = document.body.scrollWidth;
-      const height = document.body.scrollHeight;
-      this.trace = {
-        id: window.location.pathname,
-        width: width,
-        height: height,
-        label: -1,
-        guess: -1,
-        events: []
-      }
+      this.trace = this.newTrace();
     }
     this.trace.events.push(p);
     this.traces = [this.trace];
@@ -327,7 +330,7 @@ class TestPage extends React.Component {
             </Row>
             <Row>
               {
-                !this.state.isBackground ? Shared.renderEventTable(window.location.pathname, this.events.slice(-6)) : Shared.renderEventTable('', [])
+                !this.state.isBackground ? Shared.renderEventTable(this.getUrl(), this.events.slice(-6)) : Shared.renderEventTable('', [])
               }
             </Row>
           </Col>

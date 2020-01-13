@@ -48,6 +48,15 @@ class TraceTable extends React.Component {
         sorter: (a, b) => a.id - b.id,
         ellipsis: true,
       },
+      {
+        title: 'Url',
+        dataIndex: 'url',
+        key: 'url',
+        sorter: (a, b) => a.url.localeCompare(b.url),
+        render: (text, trace, index) => {
+          return Setting.wrapUrl(text);
+        }
+      },
       // {
       //   title: 'Width',
       //   dataIndex: 'width',
@@ -64,15 +73,6 @@ class TraceTable extends React.Component {
 
     if (hasCanvas) {
       columns.push(
-        {
-          title: 'Url',
-          dataIndex: 'url',
-          key: 'url',
-          sorter: (a, b) => a.url.localeCompare(b.url),
-          render: (text, trace, index) => {
-            return Setting.wrapUrl(text);
-          }
-        },
         {
           title: 'UserAgent',
           dataIndex: 'userAgent',
@@ -91,21 +91,21 @@ class TraceTable extends React.Component {
             return Setting.wrapClientIp(text);
           }
         },
+        {
+          title: 'PointerType',
+          dataIndex: 'pointerType',
+          key: 'pointerType',
+          sorter: (a, b) => a.pointerType.localeCompare(b.pointerType),
+        },
       );
     }
 
     columns.push(
       {
         title: 'Event Count',
-        dataIndex: 'events.length',
+        dataIndex: ['events', 'length'],
         key: 'count',
         sorter: (a, b) => a.events.length - b.events.length,
-      },
-      {
-        title: 'PointerType',
-        dataIndex: 'pointerType',
-        key: 'pointerType',
-        sorter: (a, b) => a.pointerType.localeCompare(b.pointerType),
       },
       {
         title: 'Label',
