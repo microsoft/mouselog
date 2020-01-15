@@ -43,3 +43,18 @@ export function listRules() {
     credentials: 'include'
   }).then(res => res.json());
 }
+
+export function getWebsites() {
+  return fetch(`${Setting.ServerUrl}/api/get-websites`, {
+    method: "GET",
+    credentials: "include"
+  }).then(res => res.json());
+}
+
+export function updateWebsites(websites) {
+  return fetch(`${Setting.ServerUrl}/api/update-websites`, {
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(websites),
+  }).then(res => res.json());
+}

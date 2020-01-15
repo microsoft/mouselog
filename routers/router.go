@@ -29,4 +29,7 @@ func initAPI() {
 
 	beego.Router("/api/list-rules", &controllers.ApiController{}, "GET:ListRules")
 	beego.Router("/api/upload-file", &controllers.ApiController{}, "POST:UploadFile")
+
+	beego.Router("/api/get-websites", &controllers.ApiController{}, "GET:GetWebsites")
+	beego.Router("/api/update-websites", &controllers.ApiController{}, "POST:UpdateWebsites")
 }

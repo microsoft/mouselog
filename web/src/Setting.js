@@ -1,10 +1,35 @@
 import React from "react";
+import {message} from "antd";
 
 export let ServerUrl = '';
 
 export function initServerUrl() {
   const hostname = window.location.hostname;
   ServerUrl = `http://${hostname}:9000`;
+}
+
+export function openLink(link) {
+  const w = window.open('about:blank');
+  w.location.href = link;
+}
+
+export function showMessage(type, text) {
+  if (type === "") {
+    return;
+  } else if (type === "success") {
+    message.success(text);
+  } else if (type === "error") {
+    message.error(text);
+  }
+}
+
+export function deepCopy(obj) {
+  return Object.assign({}, obj);
+}
+
+export function myParseInt(i) {
+  const res = parseInt(i);
+  return isNaN(res) ? 0 : res;
 }
 
 export let component = null;
@@ -57,4 +82,16 @@ export function mixColor(rgbA, rgbB, amountToMix) {
   var g = mixChannel(rgbA[1], rgbB[1], amountToMix);
   var b = mixChannel(rgbA[2], rgbB[2], amountToMix);
   return "rgb(" + r + "," + g + "," + b + ")";
+}
+
+export function addRow(array, row) {
+  return [...array, row];
+}
+
+export function deleteRow(array, i) {
+  return [...array.slice(0, i), ...array.slice(i + 1)];
+}
+
+export function swapRow(array, i, j) {
+  return [...array.slice(0, i), array[j], ...array.slice(i + 1, j), array[i], ...array.slice(j + 1)];
 }

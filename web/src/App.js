@@ -11,6 +11,7 @@ import TracePage from "./TracePage";
 import * as Backend from "./Backend";
 import RulePage from "./RulePage";
 import CanvasPage from "./CanvasPage";
+import ConfigPage from "./ConfigPage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -40,6 +41,8 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 4});
     } else if (uri.includes('rule')) {
       this.setState({selectedMenuKey: 5});
+    } else if (uri.includes('config')) {
+      this.setState({selectedMenuKey: 6});
     } else {
       this.setState({selectedMenuKey: 1});
     }
@@ -119,6 +122,11 @@ class App extends React.Component {
                   Rule
                 </a>
               </Menu.Item>
+              <Menu.Item key="6">
+                <a href="/config">
+                  Config
+                </a>
+              </Menu.Item>
 
               <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: &nbsp;
                 {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
@@ -139,6 +147,7 @@ class App extends React.Component {
           <Route path="/trace/:sessionId" component={TracePage}/>
           <Route path="/canvas/:sessionId/:traceId" component={CanvasPage}/>
           <Route path="/rule/" component={RulePage}/>
+          <Route path="/config/" component={ConfigPage}/>
         </Switch>
       </div>
     );
