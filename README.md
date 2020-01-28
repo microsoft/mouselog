@@ -5,9 +5,29 @@ Mouselog is a web-based tool to help website owners, researchers and security ad
 
 ## Demo
 
-http://mouselog.org/
+https://mouselog.org/
+
+## Architecture
+
+Mouselog contains 3 parts:
+
+Name | Description | Language | Source code
+----|------|----|----
+Agent | Mouselog client-side agent that runs on end-user's browser to send mouse trace data to Mouselog server-side | Javascript | https://github.com/microsoft/mouselog.js
+Server-frontend | Web frontend UI for Mouselog server-side | Javascript + React + Ant Design | https://github.com/microsoft/mouselog/tree/master/web
+Server-backend | RESTful API backend for Mouselog server-side | Golang + Beego + MySQL | https://github.com/microsoft/mouselog
 
 ## Installation
+
+### Agent
+
+Install `mouselog` NPM package in the website that needs monitoring:
+
+```
+npm install mouselog
+```
+
+### Server-side
 
 - Get the code:
 
@@ -15,17 +35,17 @@ http://mouselog.org/
 go get github.com/microsoft/mouselog
 ```
 
-- Run backend (in port 9000):
+- Run Server-backend (in port 9000):
 
 ```
 go run main.go
  ```
 
-- Run frontend (in the same machine's port 4000):
+- Run Server-frontend (in the same machine's port 4000):
 
 ```
 cd web
-npm i
+npm install
 npm start
 ```
 
