@@ -3,6 +3,8 @@ package trace
 type Website struct {
 	Id   string `xorm:"varchar(100) notnull pk" json:"id"`
 	Name string `xorm:"varchar(100)" json:"name"`
+
+	State string `xorm:"varchar(100)" json:"state"`
 }
 
 func GetWebsites() []*Website {
@@ -15,26 +17,45 @@ func GetWebsites() []*Website {
 	return websites
 }
 
-func createWebsiteTable() error {
-	return ormManager.engine.Sync2(new(Website))
-}
-
-func dropWebsiteTable() error {
-	return ormManager.engine.DropTables(new(Website))
-}
-
-func UpdateWebsites(websites []*Website) bool {
-	err := dropWebsiteTable()
+func getWebsite(id string) *Website {
+	website := Website{Id: id}
+	existed, err := ormManager.engine.Get(&website)
 	if err != nil {
 		panic(err)
 	}
 
-	err = createWebsiteTable()
+	if existed {
+		return &website
+	} else {
+		return nil
+	}
+}
+
+func UpdateWebsite(id string, website *Website) bool {
+	if getWebsite(id) == nil {
+		return false
+	}
+
+	_, err := ormManager.engine.Id(id).AllCols().Update(website)
 	if err != nil {
 		panic(err)
 	}
 
-	affected, err := ormManager.engine.Insert(&websites)
+	//return affected != 0
+	return true
+}
+
+func AddWebsite(website *Website) bool {
+	affected, err := ormManager.engine.Insert(website)
+	if err != nil {
+		panic(err)
+	}
+
+	return affected != 0
+}
+
+func DeleteWebsite(website *Website) bool {
+	affected, err := ormManager.engine.Id(website.Id).Delete(&Website{})
 	if err != nil {
 		panic(err)
 	}
