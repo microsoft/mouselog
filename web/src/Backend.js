@@ -10,7 +10,8 @@ export function uploadTrace(action, sessionId, data) {
 }
 
 export function getSessionId() {
-  return fetch(`${Setting.ServerUrl}/api/get-session-id`, {
+  const websiteId = window.location.host;
+  return fetch(`${Setting.ServerUrl}/api/get-session-id?websiteId=${websiteId}`, {
     method: 'GET',
     credentials: "include"
   }).then(res => res.json());

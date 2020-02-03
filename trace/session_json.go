@@ -1,7 +1,7 @@
 package trace
 
 type SessionJson struct {
-	Id string `json:"sessionId"`
+	Id string `json:"id"`
 
 	TraceSize int `json:"traceSize"`
 
