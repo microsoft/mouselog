@@ -99,7 +99,7 @@ class WebsitePage extends React.Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Button style={{marginTop: '10px', marginBottom: '10px'}} type="primary" onClick={() => Setting.openLink(`/website-edit/${record.name}`)}>Edit</Button>
+              <Button style={{marginTop: '10px', marginBottom: '10px'}} type="primary" onClick={() => Setting.openLink(`/websites/${record.id}`)}>Edit</Button>
               <Popconfirm
                 title={`Are you sure to delete website: ${record.name} ?`}
                 onConfirm={() => this.deleteWebsite(index)}

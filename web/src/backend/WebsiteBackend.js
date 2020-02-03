@@ -7,6 +7,13 @@ export function getWebsites() {
   }).then(res => res.json());
 }
 
+export function getWebsite(id) {
+  return fetch(`${Setting.ServerUrl}/api/get-website?id=${id}`, {
+    method: "GET",
+    credentials: "include"
+  }).then(res => res.json());
+}
+
 export function updateWebsite(id, website) {
   return fetch(`${Setting.ServerUrl}/api/update-website?id=${id}`, {
     method: 'POST',

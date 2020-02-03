@@ -31,6 +31,8 @@ func initAPI() {
 	beego.Router("/api/upload-file", &controllers.ApiController{}, "POST:UploadFile")
 
 	beego.Router("/api/get-websites", &controllers.ApiController{}, "GET:GetWebsites")
+	beego.Router("/api/get-website", &controllers.ApiController{}, "GET:GetWebsite")
+	beego.Router("/api/update-website", &controllers.ApiController{}, "POST:UpdateWebsite")
 	beego.Router("/api/add-website", &controllers.ApiController{}, "POST:AddWebsite")
 	beego.Router("/api/delete-website", &controllers.ApiController{}, "POST:DeleteWebsite")
 }

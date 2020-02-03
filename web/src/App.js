@@ -12,6 +12,7 @@ import * as Backend from "./Backend";
 import RulePage from "./RulePage";
 import CanvasPage from "./CanvasPage";
 import WebsitePage from "./WebsitePage";
+import WebsiteEditPage from "./WebsiteEditPage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -147,7 +148,8 @@ class App extends React.Component {
           <Route path="/trace/:sessionId" component={TracePage}/>
           <Route path="/canvas/:sessionId/:traceId" component={CanvasPage}/>
           <Route path="/rule/" component={RulePage}/>
-          <Route path="/websites/" component={WebsitePage}/>
+          <Route exact path="/websites/" component={WebsitePage}/>
+          <Route path="/websites/:websiteId" component={WebsiteEditPage}/>
         </Switch>
       </div>
     );

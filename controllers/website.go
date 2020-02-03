@@ -11,6 +11,13 @@ func (c *ApiController) GetWebsites() {
 	c.ServeJSON()
 }
 
+func (c *ApiController) GetWebsite() {
+	id := c.Input().Get("id")
+
+	c.Data["json"] = trace.GetWebsite(id)
+	c.ServeJSON()
+}
+
 func (c *ApiController) UpdateWebsite() {
 	id := c.Input().Get("id")
 

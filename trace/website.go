@@ -17,7 +17,7 @@ func GetWebsites() []*Website {
 	return websites
 }
 
-func getWebsite(id string) *Website {
+func GetWebsite(id string) *Website {
 	website := Website{Id: id}
 	existed, err := ormManager.engine.Get(&website)
 	if err != nil {
@@ -32,7 +32,7 @@ func getWebsite(id string) *Website {
 }
 
 func UpdateWebsite(id string, website *Website) bool {
-	if getWebsite(id) == nil {
+	if GetWebsite(id) == nil {
 		return false
 	}
 
