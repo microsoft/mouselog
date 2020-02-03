@@ -36,8 +36,8 @@ func getOrCreateSs(sessionId string) *trace.Session {
 func (c *ApiController) GetSessionId() {
 	sessionId := c.StartSession().SessionID()
 	websiteId := c.Input().Get("websiteId")
-	userAgent := c.Input().Get("userAgent")
-	clientIp := c.Input().Get("clientIp")
+	userAgent := getUserAgent(c.Ctx)
+	clientIp := getClientIp(c.Ctx)
 
 	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
 
