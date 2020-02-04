@@ -21,7 +21,13 @@ Server-backend | RESTful API backend for Mouselog server-side | Golang + Beego +
 
 ### Agent
 
-Install `mouselog` NPM package in the website that needs monitoring:
+- If your website is managed by NPM:
+
+Install [mouselog](https://www.npmjs.com/package/mouselog) NPM package in the website that needs monitoring:
+
+- If your website is plain HTML/Javascript:
+
+[TODO] we also provide an embeddable version: https://mouselog.org/mouselog.js
 
 ```
 npm install mouselog
@@ -34,6 +40,22 @@ npm install mouselog
 ```
 go get github.com/microsoft/mouselog
 ```
+
+- Prepare a [Xorm ORM](https://gitea.com/xorm/xorm) supported database (MySQL is recommended), replace `root:123@tcp(localhost:3306)/` in [conf/app.conf](https://github.com/microsoft/mouselog/blob/master/conf/app.conf) with your own connection string. Mouselog will create a database named `mouselog` and necessary tables in it if not exist. [All Xorm supported databases](https://gitea.com/xorm/xorm#user-content-drivers-support) include:
+
+1. Mysql: github.com/go-sql-driver/mysql
+
+2. MyMysql: github.com/ziutek/mymysql/godrv
+
+3. Postgres: github.com/lib/pq
+
+4. Tidb: github.com/pingcap/tidb
+
+5. SQLite: github.com/mattn/go-sqlite3
+
+6. MsSql: github.com/denisenkom/go-mssqldb
+
+7. Oracle: github.com/mattn/go-oci8 (experiment)
 
 - Run Server-backend (in port 9000):
 

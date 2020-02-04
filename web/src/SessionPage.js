@@ -102,7 +102,7 @@ class SessionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}}
+        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 20}}
                title={() => (
                  <div>
                    Sessions for: <Tag color="#108ee9">{this.state.websiteId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
