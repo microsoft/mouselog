@@ -13,6 +13,7 @@ import RulePage from "./RulePage";
 import CanvasPage from "./CanvasPage";
 import WebsitePage from "./WebsitePage";
 import WebsiteEditPage from "./WebsiteEditPage";
+import SessionPage from "./SessionPage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -42,6 +43,8 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 4});
     } else if (uri.includes('rule')) {
       this.setState({selectedMenuKey: 5});
+    } else if (uri.includes('sessions')) {
+      this.setState({selectedMenuKey: 7});
     } else if (uri.includes('websites')) {
       this.setState({selectedMenuKey: 6});
     } else {
@@ -128,6 +131,11 @@ class App extends React.Component {
                   Websites
                 </a>
               </Menu.Item>
+              <Menu.Item key="7">
+                <a href="/sessions">
+                  Sessions
+                </a>
+              </Menu.Item>
 
               <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: &nbsp;
                 {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
@@ -149,7 +157,8 @@ class App extends React.Component {
           <Route path="/canvas/:sessionId/:traceId" component={CanvasPage}/>
           <Route path="/rule/" component={RulePage}/>
           <Route exact path="/websites/" component={WebsitePage}/>
-          <Route path="/websites/:websiteId" component={WebsiteEditPage}/>
+          <Route exact path="/websites/:websiteId" component={WebsiteEditPage}/>
+          <Route path="/websites/:websiteId/sessions" component={SessionPage}/>
         </Switch>
       </div>
     );

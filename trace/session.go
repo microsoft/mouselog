@@ -17,14 +17,24 @@ type Session struct {
 	UN int `json:"un"`
 }
 
-func GetSession(id string) *Session {
-	s := Session{Id: id}
-	has, err := ormManager.engine.Get(&s)
+func GetSessions(websiteId string) []*Session {
+	sessions := []*Session{}
+	err := ormManager.engine.Where("website_id = ?", websiteId).Asc("created_time").Find(&sessions)
 	if err != nil {
 		panic(err)
 	}
 
-	if has {
+	return sessions
+}
+
+func GetSession(id string) *Session {
+	s := Session{Id: id}
+	existed, err := ormManager.engine.Get(&s)
+	if err != nil {
+		panic(err)
+	}
+
+	if existed {
 		return &s
 	} else {
 		return nil
@@ -51,14 +61,13 @@ func StartSession(id string, websiteId string, userAgent string, clientIp string
 	}
 }
 
-func GetSessions(websiteId string) []*Session {
-	sessions := []*Session{}
-	err := ormManager.engine.Where("website_id = ?", websiteId).Find(&sessions)
+func DeleteSession(id string) bool {
+	affected, err := ormManager.engine.Id(id).Delete(&Session{})
 	if err != nil {
 		panic(err)
 	}
 
-	return sessions
+	return affected != 0
 }
 
 func NewSession(id string) *Session {

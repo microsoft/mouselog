@@ -1,0 +1,24 @@
+package controllers
+
+import "github.com/microsoft/mouselog/trace"
+
+func (c *ApiController) GetSessions() {
+	websiteId := c.Input().Get("websiteId")
+
+	c.Data["json"] = trace.GetSessions(websiteId)
+	c.ServeJSON()
+}
+
+func (c *ApiController) GetSession() {
+	id := c.Input().Get("id")
+
+	c.Data["json"] = trace.GetSession(id)
+	c.ServeJSON()
+}
+
+func (c *ApiController) DeleteSession() {
+	id := c.Input().Get("id")
+
+	c.Data["json"] = trace.DeleteSession(id)
+	c.ServeJSON()
+}

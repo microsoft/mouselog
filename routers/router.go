@@ -35,4 +35,8 @@ func initAPI() {
 	beego.Router("/api/update-website", &controllers.ApiController{}, "POST:UpdateWebsite")
 	beego.Router("/api/add-website", &controllers.ApiController{}, "POST:AddWebsite")
 	beego.Router("/api/delete-website", &controllers.ApiController{}, "POST:DeleteWebsite")
+
+	beego.Router("/api/get-sessions", &controllers.ApiController{}, "GET:GetSessions")
+	beego.Router("/api/get-session", &controllers.ApiController{}, "GET:GetSession")
+	beego.Router("/api/delete-session", &controllers.ApiController{}, "POST:DeleteSession")
 }
