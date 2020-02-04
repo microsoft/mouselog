@@ -43,12 +43,8 @@ func (c *ApiController) AddWebsite() {
 }
 
 func (c *ApiController) DeleteWebsite() {
-	var website trace.Website
-	err := json.Unmarshal(c.Ctx.Input.RequestBody, &website)
-	if err != nil {
-		panic(err)
-	}
+	id := c.Input().Get("id")
 
-	c.Data["json"] = trace.DeleteWebsite(&website)
+	c.Data["json"] = trace.DeleteWebsite(id)
 	c.ServeJSON()
 }

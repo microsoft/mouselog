@@ -54,8 +54,8 @@ func AddWebsite(website *Website) bool {
 	return affected != 0
 }
 
-func DeleteWebsite(website *Website) bool {
-	affected, err := ormManager.engine.Id(website.Id).Delete(&Website{})
+func DeleteWebsite(id string) bool {
+	affected, err := ormManager.engine.Id(id).Delete(&Website{})
 	if err != nil {
 		panic(err)
 	}

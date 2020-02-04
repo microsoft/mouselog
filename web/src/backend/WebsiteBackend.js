@@ -30,10 +30,9 @@ export function addWebsite(website) {
   }).then(res => res.json());
 }
 
-export function deleteWebsite(website) {
-  return fetch(`${Setting.ServerUrl}/api/delete-website`, {
+export function deleteWebsite(id) {
+  return fetch(`${Setting.ServerUrl}/api/delete-website?id=${id}`, {
     method: 'POST',
     credentials: 'include',
-    body: JSON.stringify(website),
   }).then(res => res.json());
 }

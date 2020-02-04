@@ -50,7 +50,7 @@ class WebsitePage extends React.Component {
   }
 
   deleteWebsite(i) {
-    WebsiteBackend.deleteWebsite(this.state.websites[i])
+    WebsiteBackend.deleteWebsite(this.state.websites[i].id)
       .then((res) => {
           Setting.showMessage("success", `Deleting website succeeded`);
           this.setState({
