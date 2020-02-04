@@ -1,5 +1,6 @@
 import React from "react";
-import {Button, Col, Popconfirm, Row, Table, Tag} from 'antd';
+import {Button, Col, Popconfirm, Row, Table, Tag, Tooltip} from 'antd';
+import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as SessionBackend from "./backend/SessionBackend";
 
@@ -41,6 +42,12 @@ class SessionPage extends React.Component {
       });
   }
 
+  getFormattedDate(date) {
+    date = date.replace('T', ' ');
+    date = date.replace('+08:00', ' ');
+    return date;
+  }
+
   renderTable(sessions) {
     const columns = [
       {
@@ -52,6 +59,9 @@ class SessionPage extends React.Component {
         title: 'Created Time',
         dataIndex: 'createdTime',
         key: 'createdTime',
+        render: (text, record, index) => {
+          return this.getFormattedDate(text);
+        }
       },
       {
         title: 'User Agent',
@@ -71,14 +81,18 @@ class SessionPage extends React.Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Button style={{marginTop: '10px', marginBottom: '10px'}} type="primary" onClick={() => Setting.openLink(`/sessions/${record.id}`)}>View</Button>
+              <Tooltip placement="topLeft" title="View">
+                <Button style={{marginRight: "5px"}} icon={<EyeOutlined />} size="small" onClick={() => Setting.openLink(`/sessions/${record.id}`)} />
+              </Tooltip>
               <Popconfirm
                 title={`Are you sure to delete session: ${record.id} ?`}
                 onConfirm={() => this.deleteSession(index)}
                 okText="Yes"
                 cancelText="No"
               >
-                <Button style={{marginBottom: '10px'}} type="danger">Delete</Button>
+                <Tooltip placement="topLeft" title="Delete">
+                  <Button icon={<MinusOutlined />} size="small" />
+                </Tooltip>
               </Popconfirm>
             </div>
           )
