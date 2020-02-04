@@ -4,6 +4,8 @@ type Website struct {
 	Id   string `xorm:"varchar(100) notnull pk" json:"id"`
 	Name string `xorm:"varchar(100)" json:"name"`
 
+	Url string `xorm:"varchar(100)" json:"url"`
+
 	State string `xorm:"varchar(100)" json:"state"`
 }
 

@@ -76,6 +76,14 @@ class WebsitePage extends React.Component {
         key: 'name',
       },
       {
+        title: 'Url',
+        dataIndex: 'url',
+        key: 'url',
+        render: (text, record, index) => {
+          return <a target="_blank" href={text}>{text}</a>
+        }
+      },
+      {
         title: 'State',
         dataIndex: 'state',
         key: 'state',

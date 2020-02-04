@@ -76,6 +76,16 @@ class WebsiteEditPage extends React.Component {
         </Row>
         <Row style={{marginTop: '20px'}} >
           <Col style={{marginTop: '5px'}} span={2}>
+            Url:
+          </Col>
+          <Col span={22} >
+            <Input value={this.state.website.url} onChange={e => {
+              this.updateWebsiteField('url', e.target.value);
+            }} />
+          </Col>
+        </Row>
+        <Row style={{marginTop: '20px'}} >
+          <Col style={{marginTop: '5px'}} span={2}>
             State:
           </Col>
           <Col span={22} >
