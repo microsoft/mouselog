@@ -61,6 +61,7 @@ func (c *ApiController) UploadTrace() {
 
 	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
 	trace.StartImpression(impressionId, sessionId, t.Url)
+	trace.AppendTraceToImpression(impressionId, &t)
 
 	ss := getOrCreateSs(sessionId)
 	if len(t.Events) > 0 {

@@ -70,6 +70,32 @@ class ImpressionPage extends React.Component {
         key: 'urlPath',
       },
       {
+        title: 'Width',
+        dataIndex: 'width',
+        key: 'width',
+      },
+      {
+        title: 'Height',
+        dataIndex: 'height',
+        key: 'height',
+      },
+      // {
+      //   title: 'Page Load Time',
+      //   dataIndex: 'pageLoadTime',
+      //   key: 'pageLoadTime',
+      // },
+      {
+        title: 'Event Count',
+        key: 'eventCount',
+        render: (text, record, index) => {
+          if (record.events === null) {
+            return null;
+          }
+
+          return record.events.length;
+        }
+      },
+      {
         title: 'Action',
         dataIndex: '',
         key: 'op',
