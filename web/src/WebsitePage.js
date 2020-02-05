@@ -1,7 +1,13 @@
 import React from "react";
-import {Button, Col, Popconfirm, Row, Table} from 'antd';
+import {Button, Col, Popconfirm, Popover, Row, Table} from 'antd';
 import * as Setting from "./Setting";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
+import copy from 'copy-to-clipboard';
+
+import {Controlled as CodeMirror} from 'react-codemirror2'
+import "codemirror/lib/codemirror.css"
+require('codemirror/theme/material-darker.css');
+require("codemirror/mode/javascript/javascript");
 
 class WebsitePage extends React.Component {
   constructor(props) {
@@ -64,6 +70,36 @@ class WebsitePage extends React.Component {
   }
 
   renderTable(websites) {
+    const content = (serverUrl, websiteId) => {
+      const code = `<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://cdn.jsdelivr.net/npm/mouselog@0.0.5-beta2/mouselog.js";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+
+mouselog.run("${serverUrl}", "${websiteId}");
+</script>`;
+
+      return (
+        <div>
+          <CodeMirror
+            value={code}
+            options={{mode: 'javascript', theme: "material-darker"}}
+          />
+          <Button style={{marginTop: '10px'}} type="primary" onClick={() => {
+            copy(code);
+            Setting.showMessage("success", `Copied to clipboard!`);
+          }}
+          >
+            Copy to Clipboard
+          </Button>
+        </div>
+      )
+    };
+
     const columns = [
       {
         title: 'ID',
@@ -81,6 +117,19 @@ class WebsitePage extends React.Component {
         key: 'url',
         render: (text, record, index) => {
           return <a target="_blank" href={text}>{text}</a>
+        }
+      },
+      {
+        title: 'Tracking Code',
+        key: 'code',
+        render: (text, record, index) => {
+          return (
+            <div>
+              <Popover placement="topRight" content={content("https://mouselog.org", record.id)} title="" trigger="click">
+                <Button type="primary">View Code</Button>
+              </Popover>
+            </div>
+          )
         }
       },
       {

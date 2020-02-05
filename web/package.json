@@ -5,8 +5,11 @@
   "dependencies": {
     "@ant-design/icons": "^4.0.0-rc.0",
     "antd": "^4.0.0-rc.3",
+    "codemirror": "^5.51.0",
+    "copy-to-clipboard": "^3.2.1",
     "konva": "^4.0.17",
     "react": "^16.12.0",
+    "react-codemirror2": "^6.0.0",
     "react-dom": "^16.12.0",
     "react-konva": "^16.10.1-0",
     "react-router-dom": "^5.1.2",
