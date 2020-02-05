@@ -7,7 +7,9 @@ export let ImpressionId = uuid();
 
 export function initServerUrl() {
   const hostname = window.location.hostname;
-  ServerUrl = `http://${hostname}:9000`;
+  if (hostname === 'localhost') {
+    ServerUrl = `http://${hostname}:9000`;
+  }
 }
 
 export function getWebsiteId() {

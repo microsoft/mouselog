@@ -5,6 +5,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
+	"github.com/microsoft/mouselog/routers"
 
 	_ "github.com/microsoft/mouselog/routers"
 	"github.com/microsoft/mouselog/trace"
@@ -20,6 +21,12 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
+
+	//beego.DelStaticPath("/static")
+	beego.SetStaticPath("/static", "web/build/static")
+	// https://studygolang.com/articles/2303
+	beego.InsertFilter("/", beego.BeforeRouter, routers.TransparentStatic) // must has this for default page
+	beego.InsertFilter("/*", beego.BeforeRouter, routers.TransparentStatic)
 
 	beego.BConfig.WebConfig.Session.SessionProvider="file"
 	beego.BConfig.WebConfig.Session.SessionProviderConfig = "./tmp"
