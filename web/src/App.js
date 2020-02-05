@@ -110,33 +110,7 @@ class App extends React.Component {
 
               <Menu.Item key="1">
                 <a href="/">
-                  Home
-                </a>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <a href="/dashboard">
-                  Dashboard
-                </a>
-              </Menu.Item>
-              {
-                !this.getUrlPath().includes('trace') ? null :
-                  <Menu.Item key="3">
-                    <a href="#">
-                      Trace
-                    </a>
-                  </Menu.Item>
-              }
-              {
-                !this.getUrlPath().includes('canvas') ? null :
-                  <Menu.Item key="4">
-                    <a href="#">
-                      Canvas
-                    </a>
-                  </Menu.Item>
-              }
-              <Menu.Item key="5">
-                <a href="/rule">
-                  Rule
+                  Get Started
                 </a>
               </Menu.Item>
               <Menu.Item key="6">
@@ -160,6 +134,32 @@ class App extends React.Component {
                     </a>
                   </Menu.Item>
               }
+              <Menu.Item key="2">
+                <a href="/dashboard">
+                  Dataset
+                </a>
+              </Menu.Item>
+              {
+                !this.getUrlPath().includes('trace') ? null :
+                  <Menu.Item key="3">
+                    <a href="#">
+                      Trace
+                    </a>
+                  </Menu.Item>
+              }
+              {
+                !this.getUrlPath().includes('canvas') ? null :
+                  <Menu.Item key="4">
+                    <a href="#">
+                      Canvas
+                    </a>
+                  </Menu.Item>
+              }
+              <Menu.Item key="5">
+                <a href="/rule">
+                  Rule
+                </a>
+              </Menu.Item>
               <Menu.Item key='5' style={{float: 'right'}}>
                 <a target="_blank" href="https://github.com/microsoft/mouselog">
                   <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />

@@ -340,32 +340,24 @@ class Canvas extends React.Component {
           this.renderCanvas()
         }
         <Row style={{marginTop: '5px'}}>
-          <Col span={1}>
+          <div style={{marginLeft: "10px", marginRight: "10px"}}>
             <Button type="primary" shape="circle" icon={this.state.isPaused ? <CaretRightOutlined /> : <PauseOutlined />} onClick={this.togglePaused.bind(this)}/>
-          </Col>
-          <Col span={23}>
-            <Row>
-              <Col span={2}>
-                <div style={{marginTop: '9px', textAlign: 'center'}}>
-                  {
-                    `${this.printTimestamp(this.state.curTimestamp)} (${this.state.curEventIndex})`
-                  }
-                </div>
-              </Col>
-              <Col span={20}>
-                {
-                  this.props.trace !== null ? this.renderSlider() : null
-                }
-              </Col>
-              <Col span={2}>
-                <div style={{marginTop: '9px', textAlign: 'center'}}>
-                  {
-                    this.printTimestamp(this.getLastTimestamp())
-                  }
-                </div>
-              </Col>
-            </Row>
-          </Col>
+          </div>
+          <div style={{marginRight: "10px", marginTop: "4px"}}>
+            {
+              `${this.printTimestamp(this.state.curTimestamp)} (${this.state.curEventIndex})`
+            }
+          </div>
+          <div style={{width: "calc(100% - 200px)", marginRight: "10px"}}>
+            {
+              this.props.trace !== null ? this.renderSlider() : null
+            }
+          </div>
+          <div style={{marginTop: "4px"}}>
+            {
+              this.printTimestamp(this.getLastTimestamp())
+            }
+          </div>
         </Row>
       </div>
     );
