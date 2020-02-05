@@ -3,6 +3,8 @@ import {Button, Col, Popconfirm, Row, Table, Tag, Tooltip} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as ImpressionBackend from "./backend/ImpressionBackend";
+import Canvas from "./Canvas";
+import * as Shared from "./Shared";
 
 class ImpressionPage extends React.Component {
   constructor(props) {
@@ -96,6 +98,19 @@ class ImpressionPage extends React.Component {
         }
       },
       {
+        title: 'Canvas',
+        key: 'canvas',
+        width: 500,
+        render: (text, record, index) => {
+          if (record.events.length === 0) {
+            return null;
+          }
+
+          return <Canvas trace={record} size={Shared.getSize(record, 4)} isBackground={false}
+                         focusIndex={-1}/>
+        }
+      },
+      {
         title: 'Action',
         dataIndex: '',
         key: 'op',
@@ -104,7 +119,7 @@ class ImpressionPage extends React.Component {
           return (
             <div>
               <Tooltip placement="topLeft" title="View">
-                <Button style={{marginRight: "5px"}} icon={<EyeOutlined />} size="small" onClick={() => Setting.openLink(`/impressions/${record.id}`)} />
+                <Button style={{marginRight: "5px"}} icon={<EyeOutlined />} size="small" onClick={() => Setting.openLink(`/websites/${this.state.websiteId}/sessions/${this.state.sessionId}/impressions/${record.id}/events`)} />
               </Tooltip>
               <Popconfirm
                 title={`Are you sure to delete impression: ${record.id} ?`}

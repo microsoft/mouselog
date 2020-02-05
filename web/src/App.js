@@ -197,6 +197,7 @@ class App extends React.Component {
           <Route exact path="/websites/:websiteId" component={WebsiteEditPage}/>
           <Route exact path="/websites/:websiteId/sessions" component={SessionPage}/>
           <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions" component={ImpressionPage}/>
+          <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions/:impressionId/events" component={CanvasPage}/>
         </Switch>
       </div>
     );

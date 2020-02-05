@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Col, Descriptions, Popover, Row} from "antd";
-import * as Backend from "./Backend";
+import * as ImpressionBackend from "./backend/ImpressionBackend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
 import * as Setting from "./Setting";
@@ -10,8 +10,7 @@ class CanvasPage extends React.Component {
     super(props);
     this.state = {
       classes: props,
-      sessionId: props.match.params.sessionId,
-      traceId: props.match.params.traceId,
+      impressionId: props.match.params.impressionId,
       trace: null,
       hoverRowIndex: -1,
       clickRowIndex: -1,
@@ -21,7 +20,7 @@ class CanvasPage extends React.Component {
   }
 
   componentDidMount() {
-    Backend.getTrace(this.state.sessionId, this.state.traceId)
+    ImpressionBackend.getImpression(this.state.impressionId)
       .then(res => {
         this.setState({
           trace: res,
@@ -30,11 +29,7 @@ class CanvasPage extends React.Component {
   }
 
   getProperty(name) {
-    if (this.state.trace === null) {
-      return 'Loading...'
-    } else {
-      return this.state.trace[name];
-    }
+    return this.state.trace[name];
   }
 
   getEventCount() {
@@ -84,21 +79,28 @@ class CanvasPage extends React.Component {
     //   <Button style={{marginTop: '10px'}} type="primary" onClick={() => onClick(`/canvas/${title}/${trace.id}`)}>Details</Button>
     // </div>
 
-    const content = () => (
-      <div style={{width: '1500px'}}>
-        <Descriptions bordered title="Properties" size='small'>
-          <Descriptions.Item label="Id">{this.getProperty('id')}</Descriptions.Item>
-          <Descriptions.Item label="Url">{Setting.wrapUrl(this.getProperty('url'))}</Descriptions.Item>
-          <Descriptions.Item label="UserAgent">{Setting.wrapUserAgent(this.getProperty('userAgent'))}</Descriptions.Item>
-          <Descriptions.Item label="ClientIp">{Setting.wrapClientIp(this.getProperty('clientIp'))}</Descriptions.Item>
-          <Descriptions.Item label="EventCount">{this.getEventCount()}</Descriptions.Item>
-          <Descriptions.Item label="PointerType">{this.getProperty('pointerType')}</Descriptions.Item>
-          <Descriptions.Item label="Label">{this.getProperty('label')}</Descriptions.Item>
-          <Descriptions.Item label="Guess">{this.getProperty('guess')}</Descriptions.Item>
-          <Descriptions.Item label="Reason">{this.getProperty('reason')}</Descriptions.Item>
-        </Descriptions>
-      </div>
-    );
+    const content = () => {
+      if (this.state.trace === null) {
+        return 'Loading...';
+      }
+
+      return (
+        <div style={{width: '1500px'}}>
+          <Descriptions bordered title="Properties" size='small'>
+            <Descriptions.Item label="Id">{this.getProperty('id')}</Descriptions.Item>
+            <Descriptions.Item label="Url">{Setting.wrapUrl(this.getProperty('url'))}</Descriptions.Item>
+            <Descriptions.Item
+              label="UserAgent">{Setting.wrapUserAgent(this.getProperty('userAgent'))}</Descriptions.Item>
+            <Descriptions.Item label="ClientIp">{Setting.wrapClientIp(this.getProperty('clientIp'))}</Descriptions.Item>
+            <Descriptions.Item label="EventCount">{this.getEventCount()}</Descriptions.Item>
+            <Descriptions.Item label="PointerType">{this.getProperty('pointerType')}</Descriptions.Item>
+            <Descriptions.Item label="Label">{this.getProperty('label')}</Descriptions.Item>
+            <Descriptions.Item label="Guess">{this.getProperty('guess')}</Descriptions.Item>
+            <Descriptions.Item label="Reason">{this.getProperty('reason')}</Descriptions.Item>
+          </Descriptions>
+        </div>
+      )
+    };
 
     return (
       <div>
