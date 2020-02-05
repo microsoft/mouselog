@@ -214,7 +214,7 @@ class TraceTable extends React.Component {
       <div>
         <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
                title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}
-               pagination={{pageSize: 100}} scroll={{y: scrollY}}
+               pagination={{pageSize: 100, hideOnSinglePage: true}} scroll={{y: scrollY}}
                rowClassName={(record, index) => {
                  return (record.label === 1 || record.guess === 1) ? 'bot-row' : ''
                }}/>

@@ -26,6 +26,7 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
       title: 'Timestamp',
       dataIndex: 'timestamp',
       key: 'timestamp',
+      width: 90,
     },
     {
       title: 'Event Type',
@@ -34,7 +35,7 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
       width: 110,
     },
     {
-      title: 'Button',
+      title: 'Btn',
       dataIndex: 'button',
       key: 'button',
     },
@@ -68,7 +69,7 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
     handleRow = null;
   }
 
-  let scrollY = 'calc(95vh - 450px)';
+  let scrollY = 'calc(95vh - 300px)';
   if (isLong) {
     scrollY = document.body.scrollHeight - 280;
   }

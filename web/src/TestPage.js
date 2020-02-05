@@ -1,6 +1,6 @@
 import React from "react";
 import * as Setting from "./Setting";
-import {Alert, Button, Col, Progress, Row, Switch, Tag, Typography} from "antd";
+import {Alert, Button, Card, Col, Input, Progress, Row, Select, Switch, Tag, Typography} from "antd";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
 import EventSelectionCheckBox from "./EventSelectionCheckBox"
@@ -297,11 +297,13 @@ class TestPage extends React.Component {
         {this.renderResult()}
         <Row>
           <Col span={6}>
-            {
-              !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.traces} self={null}/> :
-                <TraceTable title={''} traces={[]} self={null}/>
-            }
             <Row>
+              {
+                !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.traces} self={null}/> :
+                  <TraceTable title={''} traces={[]} self={null}/>
+              }
+            </Row>
+            <Row style={{marginTop: "10px"}}>
               <Col span={12}>
                 {/*<div><Text>Events for: </Text><Tag color="#108ee9">{this.state.speed}</Tag></div>*/}
                 <Text>Events/s: </Text>
@@ -329,9 +331,11 @@ class TestPage extends React.Component {
               </Col>
             </Row>
             <Row>
-              {
-                !this.state.isBackground ? Shared.renderEventTable(this.getUrl(), this.events.slice(-6)) : Shared.renderEventTable('', [])
-              }
+              <EventSelectionCheckBox
+                allCheckedList={allTargetEvents}
+                defaultCheckedList={defaultTargetEvents}
+                onCheckedListChange={this.onTargetEventsChange.bind(this)}
+              />
             </Row>
           </Col>
           <Col span={12}>
@@ -339,11 +343,9 @@ class TestPage extends React.Component {
           </Col>
           <Col span={6}>
             <Row>
-              <EventSelectionCheckBox
-                allCheckedList={allTargetEvents}
-                defaultCheckedList={defaultTargetEvents}
-                onCheckedListChange={this.onTargetEventsChange.bind(this)}
-              />
+              {
+                !this.state.isBackground ? Shared.renderEventTable(this.getUrl(), this.events.slice(-10)) : Shared.renderEventTable('', [])
+              }
             </Row>
           </Col>
         </Row>
