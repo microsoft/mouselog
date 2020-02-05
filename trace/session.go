@@ -1,8 +1,10 @@
 package trace
 
+import "xorm.io/core"
+
 type Session struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
-	WebsiteId   string `xorm:"varchar(100)" json:"websiteId"`
+	WebsiteId   string `xorm:"varchar(100) notnull pk" json:"websiteId"`
 	CreatedTime string `xorm:"varchar(100)" json:"createdTime"`
 	UserAgent   string `xorm:"varchar(500)" json:"userAgent"`
 	ClientIp    string `xorm:"varchar(100)" json:"clientIp"`
@@ -27,8 +29,8 @@ func GetSessions(websiteId string) []*Session {
 	return sessions
 }
 
-func GetSession(id string) *Session {
-	s := Session{Id: id}
+func GetSession(id string, websiteId string) *Session {
+	s := Session{Id: id, WebsiteId: websiteId}
 	existed, err := ormManager.engine.Get(&s)
 	if err != nil {
 		panic(err)
@@ -41,8 +43,8 @@ func GetSession(id string) *Session {
 	}
 }
 
-func HasSession(id string) bool {
-	return GetSession(id) != nil
+func HasSession(id string, websiteId string) bool {
+	return GetSession(id, websiteId) != nil
 }
 
 func AddSession(id string, websiteId string, userAgent string, clientIp string) bool {
@@ -56,13 +58,13 @@ func AddSession(id string, websiteId string, userAgent string, clientIp string) 
 }
 
 func StartSession(id string, websiteId string, userAgent string, clientIp string) {
-	if !HasSession(id) {
+	if !HasSession(id, websiteId) {
 		AddSession(id, websiteId, userAgent, clientIp)
 	}
 }
 
-func DeleteSession(id string) bool {
-	affected, err := ormManager.engine.Id(id).Delete(&Session{})
+func DeleteSession(id string, websiteId string) bool {
+	affected, err := ormManager.engine.Id(core.PK{id, websiteId}).Delete(&Session{})
 	if err != nil {
 		panic(err)
 	}

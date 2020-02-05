@@ -29,7 +29,7 @@ class SessionPage extends React.Component {
   }
 
   deleteSession(i) {
-    SessionBackend.deleteSession(this.state.sessions[i].id)
+    SessionBackend.deleteSession(this.state.sessions[i].id, this.state.websiteId)
       .then((res) => {
           Setting.showMessage("success", `Deleting session succeeded`);
           this.setState({

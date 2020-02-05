@@ -7,15 +7,15 @@ export function getSessions(websiteId) {
   }).then(res => res.json());
 }
 
-export function getSession(id) {
-  return fetch(`${Setting.ServerUrl}/api/get-session?id=${id}`, {
+export function getSession(id, websiteId) {
+  return fetch(`${Setting.ServerUrl}/api/get-session?id=${id}&websiteId=${websiteId}`, {
     method: "GET",
     credentials: "include"
   }).then(res => res.json());
 }
 
-export function deleteSession(id) {
-  return fetch(`${Setting.ServerUrl}/api/delete-session?id=${id}`, {
+export function deleteSession(id, websiteId) {
+  return fetch(`${Setting.ServerUrl}/api/delete-session?id=${id}&websiteId=${websiteId}`, {
     method: 'POST',
     credentials: 'include',
   }).then(res => res.json());
