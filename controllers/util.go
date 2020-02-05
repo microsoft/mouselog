@@ -15,3 +15,7 @@ func getClientIp(ctx *context.Context) string {
 
 	return clientIp
 }
+
+func getSessionId(c *ApiController) string {
+	return c.StartSession().SessionID()
+}

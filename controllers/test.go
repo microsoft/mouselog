@@ -34,8 +34,8 @@ func getOrCreateSs(sessionId string) *trace.Session {
 }
 
 func (c *ApiController) GetSessionId() {
-	sessionId := c.StartSession().SessionID()
 	websiteId := c.Input().Get("websiteId")
+	sessionId := getSessionId(c)
 	userAgent := getUserAgent(c.Ctx)
 	clientIp := getClientIp(c.Ctx)
 
@@ -46,8 +46,7 @@ func (c *ApiController) GetSessionId() {
 }
 
 func (c *ApiController) UploadTrace() {
-	sessionId := c.StartSession().SessionID()
-	//sessionId := c.Input().Get("sessionId")
+	sessionId := getSessionId(c)
 	data := c.Ctx.Input.RequestBody
 
 	var t trace.Trace
@@ -72,8 +71,7 @@ func (c *ApiController) UploadTrace() {
 }
 
 func (c *ApiController) ClearTrace() {
-	sessionId := c.StartSession().SessionID()
-	//sessionId := c.Input().Get("sessionId")
+	sessionId := getSessionId(c)
 	data := c.Ctx.Input.RequestBody
 
 	var t trace.Trace
