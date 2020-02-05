@@ -83,8 +83,8 @@ class SessionTable extends React.Component {
     const columns = [
       {
         title: 'Session ID (dataset)',
-        dataIndex: 'sessionId',
-        key: 'sessionId',
+        dataIndex: 'id',
+        key: 'id',
         render: (text, record, index) => {
           return <Link to={`/trace/${text}`} target='_blank'>{text}</Link>
         }

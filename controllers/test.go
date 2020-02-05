@@ -46,14 +46,21 @@ func (c *ApiController) GetSessionId() {
 }
 
 func (c *ApiController) UploadTrace() {
+	websiteId := c.Input().Get("websiteId")
 	sessionId := getSessionId(c)
-	data := c.Ctx.Input.RequestBody
+	impressionId := c.Input().Get("impressionId")
+	userAgent := getUserAgent(c.Ctx)
+	clientIp := getClientIp(c.Ctx)
 
+	data := c.Ctx.Input.RequestBody
 	var t trace.Trace
 	err := json.Unmarshal(data, &t)
 	if err != nil {
 		panic(err)
 	}
+
+	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
+	trace.StartImpression(impressionId, sessionId, t.Url)
 
 	ss := getOrCreateSs(sessionId)
 	if len(t.Events) > 0 {

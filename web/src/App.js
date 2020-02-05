@@ -14,6 +14,7 @@ import CanvasPage from "./CanvasPage";
 import WebsitePage from "./WebsitePage";
 import WebsiteEditPage from "./WebsiteEditPage";
 import SessionPage from "./SessionPage";
+import ImpressionPage from "./ImpressionPage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -47,6 +48,8 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 4});
     } else if (path.includes('rule')) {
       this.setState({selectedMenuKey: 5});
+    } else if (path.includes('impressions')) {
+      this.setState({selectedMenuKey: 8});
     } else if (path.includes('sessions')) {
       this.setState({selectedMenuKey: 7});
     } else if (path.includes('websites')) {
@@ -55,7 +58,7 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 1});
     }
 
-    Backend.getSessionId()
+    Backend.getSessionId(Setting.getWebsiteId())
       .then(res => {
         this.setState({
           sessionId: res,
@@ -149,6 +152,14 @@ class App extends React.Component {
                     </a>
                   </Menu.Item>
               }
+              {
+                !this.getUrlPath().includes('impressions') ? null :
+                  <Menu.Item key="8">
+                    <a href="#">
+                      Impressions
+                    </a>
+                  </Menu.Item>
+              }
               <Menu.Item key='5' style={{float: 'right'}}>
                 <a target="_blank" href="https://github.com/microsoft/mouselog">
                   <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />
@@ -175,7 +186,8 @@ class App extends React.Component {
           <Route path="/rule/" component={RulePage}/>
           <Route exact path="/websites/" component={WebsitePage}/>
           <Route exact path="/websites/:websiteId" component={WebsiteEditPage}/>
-          <Route path="/websites/:websiteId/sessions" component={SessionPage}/>
+          <Route exact path="/websites/:websiteId/sessions" component={SessionPage}/>
+          <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions" component={ImpressionPage}/>
         </Switch>
       </div>
     );

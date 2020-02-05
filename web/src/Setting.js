@@ -8,6 +8,12 @@ export function initServerUrl() {
   ServerUrl = `http://${hostname}:9000`;
 }
 
+export function getWebsiteId() {
+  // const websiteId = window.location.host;
+  const websiteId = "mouselog";
+  return websiteId;
+}
+
 export function openLink(link) {
   const w = window.open('about:blank');
   w.location.href = link;

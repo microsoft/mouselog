@@ -1,7 +1,7 @@
 package trace
 
 type Session struct {
-	Id          string `xorm:"varchar(100) unique pk" json:"id"`
+	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
 	WebsiteId   string `xorm:"varchar(100)" json:"websiteId"`
 	CreatedTime string `xorm:"varchar(100)" json:"createdTime"`
 	UserAgent   string `xorm:"varchar(500)" json:"userAgent"`

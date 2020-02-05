@@ -1,17 +1,15 @@
 import React from "react";
 import * as Setting from "./Setting";
 
-export function uploadTrace(action, sessionId, data) {
-  return fetch(`${Setting.ServerUrl}/api/${action}-trace?sessionId=${sessionId}`, {
+export function uploadTrace(action, websiteId, impressionId, data) {
+  return fetch(`${Setting.ServerUrl}/api/${action}-trace?websiteId=${websiteId}&impressionId=${impressionId}`, {
     method: "POST",
     credentials: "include",
     body: data
   }).then(res => res.json());
 }
 
-export function getSessionId() {
-  // const websiteId = window.location.host;
-  const websiteId = "mouselog";
+export function getSessionId(websiteId) {
   return fetch(`${Setting.ServerUrl}/api/get-session-id?websiteId=${websiteId}`, {
     method: 'GET',
     credentials: "include"

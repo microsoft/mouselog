@@ -84,4 +84,9 @@ func (a *OrmManager) createTables() {
 	if err != nil {
 		panic(err)
 	}
+
+	err = a.engine.Sync2(new(Impression))
+	if err != nil {
+		panic(err)
+	}
 }

@@ -2,43 +2,44 @@ import React from "react";
 import {Button, Col, Popconfirm, Row, Table, Tag, Tooltip} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
-import * as SessionBackend from "./backend/SessionBackend";
+import * as ImpressionBackend from "./backend/ImpressionBackend";
 
-class SessionPage extends React.Component {
+class ImpressionPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       classes: props,
       websiteId: props.match.params.websiteId,
-      sessions: [],
+      sessionId: props.match.params.sessionId,
+      impressions: [],
     };
   }
 
   componentDidMount() {
-    this.getSessions();
+    this.getImpressions();
   }
 
-  getSessions() {
-    SessionBackend.getSessions(this.state.websiteId)
+  getImpressions() {
+    ImpressionBackend.getImpressions(this.state.sessionId)
       .then((res) => {
           this.setState({
-            sessions: res,
+            impressions: res,
           });
         }
       );
   }
 
-  deleteSession(i) {
-    SessionBackend.deleteSession(this.state.sessions[i].id)
+  deleteImpression(i) {
+    ImpressionBackend.deleteImpression(this.state.impressions[i].id)
       .then((res) => {
-          Setting.showMessage("success", `Deleting session succeeded`);
+          Setting.showMessage("success", `Deleting impression succeeded`);
           this.setState({
-            sessions: Setting.deleteRow(this.state.sessions, i),
+            impressions: Setting.deleteRow(this.state.impressions, i),
           });
         }
       )
       .catch(error => {
-        Setting.showMessage("error", `Deleting session succeeded：${error}`);
+        Setting.showMessage("error", `Deleting impression succeeded：${error}`);
       });
   }
 
@@ -48,7 +49,7 @@ class SessionPage extends React.Component {
     return date;
   }
 
-  renderTable(sessions) {
+  renderTable(impressions) {
     const columns = [
       {
         title: 'ID',
@@ -64,14 +65,9 @@ class SessionPage extends React.Component {
         }
       },
       {
-        title: 'User Agent',
-        dataIndex: 'userAgent',
-        key: 'userAgent',
-      },
-      {
-        title: 'Client IP',
-        dataIndex: 'clientIp',
-        key: 'clientIp',
+        title: 'Url Path',
+        dataIndex: 'urlPath',
+        key: 'urlPath',
       },
       {
         title: 'Action',
@@ -82,11 +78,11 @@ class SessionPage extends React.Component {
           return (
             <div>
               <Tooltip placement="topLeft" title="View">
-                <Button style={{marginRight: "5px"}} icon={<EyeOutlined />} size="small" onClick={() => Setting.openLink(`/websites/${this.state.websiteId}/sessions/${record.id}/impressions`)} />
+                <Button style={{marginRight: "5px"}} icon={<EyeOutlined />} size="small" onClick={() => Setting.openLink(`/impressions/${record.id}`)} />
               </Tooltip>
               <Popconfirm
-                title={`Are you sure to delete session: ${record.id} ?`}
-                onConfirm={() => this.deleteSession(index)}
+                title={`Are you sure to delete impression: ${record.id} ?`}
+                onConfirm={() => this.deleteImpression(index)}
                 okText="Yes"
                 cancelText="No"
               >
@@ -102,11 +98,11 @@ class SessionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 20}}
+        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 20}}
                title={() => (
                  <div>
-                   Sessions for: <Tag color="#108ee9">{this.state.websiteId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
-                   {/*<Button type="primary" size="small" onClick={this.addSession.bind(this)}>Add</Button>*/}
+                   Impressions for: <Tag color="#108ee9">{this.state.websiteId}</Tag> -> <Tag color="#108ee9">{this.state.sessionId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
+                   {/*<Button type="primary" size="small" onClick={this.addImpression.bind(this)}>Add</Button>*/}
                  </div>
                )}
         />
@@ -120,7 +116,7 @@ class SessionPage extends React.Component {
         <Row>
           <Col span={24}>
             {
-              this.renderTable(this.state.sessions)
+              this.renderTable(this.state.impressions)
             }
           </Col>
         </Row>
@@ -129,4 +125,4 @@ class SessionPage extends React.Component {
   }
 }
 
-export default SessionPage;
+export default ImpressionPage;

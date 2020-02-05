@@ -39,4 +39,8 @@ func initAPI() {
 	beego.Router("/api/get-sessions", &controllers.ApiController{}, "GET:GetSessions")
 	beego.Router("/api/get-session", &controllers.ApiController{}, "GET:GetSession")
 	beego.Router("/api/delete-session", &controllers.ApiController{}, "POST:DeleteSession")
+
+	beego.Router("/api/get-impressions", &controllers.ApiController{}, "GET:GetImpressions")
+	beego.Router("/api/get-impression", &controllers.ApiController{}, "GET:GetImpression")
+	beego.Router("/api/delete-impression", &controllers.ApiController{}, "POST:DeleteImpression")
 }
