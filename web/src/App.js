@@ -32,20 +32,24 @@ class App extends React.Component {
     Setting.initServerUrl();
   }
 
-  componentWillMount() {
+  getUrlPath() {
     // eslint-disable-next-line no-restricted-globals
-    const uri = location.pathname;
-    if (uri.includes('dashboard')) {
+    return location.pathname;
+  }
+
+  componentWillMount() {
+    const path = this.getUrlPath();
+    if (path.includes('dashboard')) {
       this.setState({selectedMenuKey: 2});
-    } else if (uri.includes('trace')) {
+    } else if (path.includes('trace')) {
       this.setState({selectedMenuKey: 3});
-    } else if (uri.includes('canvas')) {
+    } else if (path.includes('canvas')) {
       this.setState({selectedMenuKey: 4});
-    } else if (uri.includes('rule')) {
+    } else if (path.includes('rule')) {
       this.setState({selectedMenuKey: 5});
-    } else if (uri.includes('sessions')) {
+    } else if (path.includes('sessions')) {
       this.setState({selectedMenuKey: 7});
-    } else if (uri.includes('websites')) {
+    } else if (path.includes('websites')) {
       this.setState({selectedMenuKey: 6});
     } else {
       this.setState({selectedMenuKey: 1});
@@ -111,16 +115,22 @@ class App extends React.Component {
                   Dashboard
                 </a>
               </Menu.Item>
-              <Menu.Item key="3">
-                <a href="/trace">
-                  Trace
-                </a>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <a href="/canvas">
-                  Canvas
-                </a>
-              </Menu.Item>
+              {
+                !this.getUrlPath().includes('trace') ? null :
+                  <Menu.Item key="3">
+                    <a href="#">
+                      Trace
+                    </a>
+                  </Menu.Item>
+              }
+              {
+                !this.getUrlPath().includes('canvas') ? null :
+                  <Menu.Item key="4">
+                    <a href="#">
+                      Canvas
+                    </a>
+                  </Menu.Item>
+              }
               <Menu.Item key="5">
                 <a href="/rule">
                   Rule
@@ -131,12 +141,14 @@ class App extends React.Component {
                   Websites
                 </a>
               </Menu.Item>
-              <Menu.Item key="7">
-                <a href="/sessions">
-                  Sessions
-                </a>
-              </Menu.Item>
-
+              {
+                !this.getUrlPath().includes('sessions') ? null :
+                  <Menu.Item key="7">
+                    <a href="#">
+                      Sessions
+                    </a>
+                  </Menu.Item>
+              }
               <Menu.Item key='5' style={{float: 'right'}}>
                 <a target="_blank" href="https://github.com/microsoft/mouselog">
                   <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />
