@@ -56,7 +56,7 @@ func updateImpression(id string, impression *Impression) bool {
 }
 
 func AddImpression(id string, sessionId string, urlPath string) bool {
-	s := Impression{Id: id, SessionId: sessionId, CreatedTime: getCurrentTime(), UrlPath: urlPath}
+	s := Impression{Id: id, SessionId: sessionId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
 	affected, err := ormManager.engine.Insert(s)
 	if err != nil {
 		panic(err)

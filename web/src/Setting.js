@@ -1,7 +1,9 @@
 import React from "react";
 import {message} from "antd";
+import { v4 as uuid } from 'uuid';
 
 export let ServerUrl = '';
+export let ImpressionId = uuid();
 
 export function initServerUrl() {
   const hostname = window.location.hostname;
@@ -14,6 +16,9 @@ export function getWebsiteId() {
   return websiteId;
 }
 
+export function getImpressionId() {
+  return ImpressionId;
+}
 export function openLink(link) {
   const w = window.open('about:blank');
   w.location.href = link;

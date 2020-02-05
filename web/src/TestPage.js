@@ -1,7 +1,6 @@
 import React from "react";
 import * as Setting from "./Setting";
 import {Alert, Button, Col, Progress, Row, Switch, Tag, Typography} from "antd";
-import { v4 as uuid } from 'uuid';
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
 import EventSelectionCheckBox from "./EventSelectionCheckBox"
@@ -35,8 +34,6 @@ const defaultTargetEvents = [
   "touchmove",
   "touchend"
 ];
-
-const impressionId = uuid();
 
 class TestPage extends React.Component {
   constructor(props) {
@@ -128,7 +125,7 @@ class TestPage extends React.Component {
       });
     }
 
-    Backend.uploadTrace(action, Setting.getWebsiteId(), impressionId, traceStr)
+    Backend.uploadTrace(action, Setting.getWebsiteId(), Setting.getImpressionId(), traceStr)
       .then(res => {
           this.events = [];
           if (!this.trace && res.traces.length > 0) {

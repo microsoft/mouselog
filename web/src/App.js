@@ -165,15 +165,24 @@ class App extends React.Component {
                   <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />
                 </a>
               </Menu.Item>
-              <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: &nbsp;
-                {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
-              </Text>
+              {
+                this.getUrlPath() !== "/" ? null :
+                  <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Impression ID: &nbsp;
+                    {<Tag color="#108ee9">{Setting.getImpressionId()}</Tag>}
+                  </Text>
+              }
+              {
+                this.getUrlPath() !== "/" ? null :
+                  <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Session ID: &nbsp;
+                    {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
+                  </Text>
+              }
               <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Server Status: &nbsp;
                 {this.state.status ? <Tag color="#87d068">On</Tag> : <Tag color="#f50">Off</Tag>}
               </Text>
-              <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Player Fast Forward: &nbsp;
-                <AntdSwitch checked={this.state.enablePlayerFastForward} onChange={this.onSwitchChange.bind(this)}/>
-              </Text>
+              {/*<Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Player Fast Forward: &nbsp;*/}
+              {/*  <AntdSwitch checked={this.state.enablePlayerFastForward} onChange={this.onSwitchChange.bind(this)}/>*/}
+              {/*</Text>*/}
             </Menu>
           </Header>
         </Layout>
