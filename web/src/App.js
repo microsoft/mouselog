@@ -137,6 +137,11 @@ class App extends React.Component {
                 </a>
               </Menu.Item>
 
+              <Menu.Item key='5' style={{float: 'right'}}>
+                <a target="_blank" href="https://github.com/microsoft/mouselog">
+                  <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />
+                </a>
+              </Menu.Item>
               <Text style={{float: 'right'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Session ID: &nbsp;
                 {<Tag color="#108ee9">{this.state.sessionId !== '' ? this.state.sessionId : 'NULL'}</Tag>}
               </Text>
