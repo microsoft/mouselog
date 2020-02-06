@@ -51,12 +51,14 @@ func (c *ApiController) UploadTrace() {
 	impressionId := c.Input().Get("impressionId")
 	userAgent := getUserAgent(c.Ctx)
 	clientIp := getClientIp(c.Ctx)
+
 	var data []byte
-	if (c.Ctx.Request.Method == "GET") {
+	if c.Ctx.Request.Method == "GET" {
 		data = []byte(c.Input().Get("data"))
 	} else { // Method == "POST"
 		data = c.Ctx.Input.RequestBody
 	}
+
 	var t trace.Trace
 	err := json.Unmarshal(data, &t)
 	if err != nil {
@@ -66,6 +68,12 @@ func (c *ApiController) UploadTrace() {
 	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
 	trace.StartImpression(impressionId, sessionId, t.Url)
 	trace.AppendTraceToImpression(impressionId, &t)
+
+	if websiteId != "mouselog" {
+		c.Data["json"] = "OK"
+		c.ServeJSON()
+		return
+	}
 
 	ss := getOrCreateSs(sessionId)
 	if len(t.Events) > 0 {
