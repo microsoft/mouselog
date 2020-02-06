@@ -51,8 +51,12 @@ func (c *ApiController) UploadTrace() {
 	impressionId := c.Input().Get("impressionId")
 	userAgent := getUserAgent(c.Ctx)
 	clientIp := getClientIp(c.Ctx)
-
-	data := c.Ctx.Input.RequestBody
+	var data []byte
+	if (c.Ctx.Request.Method == "GET") {
+		data = []byte(c.Input().Get("data"))
+	} else { // Method == "POST"
+		data = c.Ctx.Input.RequestBody
+	}
 	var t trace.Trace
 	err := json.Unmarshal(data, &t)
 	if err != nil {
