@@ -114,7 +114,7 @@ func (c *ApiController) UploadFile() {
 		} else {
 			for _, trace := range traces {
 				// Use Filename as SessionId
-				ss := getOrCreateSs(header.Filename)
+				ss := Session(header.Filename)
 				if len(trace.Events) != 0 {
 					ss.AddTrace(&trace)
 				}
