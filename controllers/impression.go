@@ -3,22 +3,16 @@ package controllers
 import "github.com/microsoft/mouselog/trace"
 
 func (c *ApiController) GetImpressions() {
-	sessionId := c.Input().Get("sessionId")
-
-	c.Data["json"] = trace.GetImpressions(sessionId)
+	c.Data["json"] = trace.GetImpressions(c.Input().Get("sessionId"))
 	c.ServeJSON()
 }
 
 func (c *ApiController) GetImpression() {
-	id := c.Input().Get("id")
-
-	c.Data["json"] = trace.GetImpression(id)
+	c.Data["json"] = trace.GetImpression(c.Input().Get("id"))
 	c.ServeJSON()
 }
 
 func (c *ApiController) DeleteImpression() {
-	id := c.Input().Get("id")
-
-	c.Data["json"] = trace.DeleteImpression(id)
+	c.Data["json"] = trace.DeleteImpression(c.Input().Get("id"))
 	c.ServeJSON()
 }

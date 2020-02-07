@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"path/filepath"
 	"strconv"
 
 	"github.com/microsoft/mouselog/detect"
@@ -15,7 +16,7 @@ func trackNewSession(s *trace.Session) {
 	s.SyncStatistics()
 }
 
-func listTraceFiles(path string) []*trace.Session {
+func traceFiles(path string) []*trace.Session {
 	res := []*trace.Session{}
 
 	if util.FileExist(path) {
@@ -27,7 +28,7 @@ func listTraceFiles(path string) []*trace.Session {
 	}
 
 	m := map[string]interface{}{}
-	for k, v := range ssm {
+	for k, v := range sessions {
 		m[k] = v
 	}
 	kv := util.SortMapsByKey(&m)
@@ -39,9 +40,9 @@ func listTraceFiles(path string) []*trace.Session {
 }
 
 func (c *ApiController) ListSessions() {
-	sss := listTraceFiles(util.CacheDir + "mouselog/")
+	path := filepath.Join(util.CacheDir, "mouselog")
 	res := []*trace.SessionJson{}
-	for _, ss := range sss {
+	for _, ss := range traceFiles(path) {
 		res = append(res, ss.ToJson())
 	}
 
@@ -50,43 +51,39 @@ func (c *ApiController) ListSessions() {
 }
 
 func (c *ApiController) ListTraces() {
-	fileId := c.Input().Get("fileId")
 	perPage := util.ParseInt(c.Input().Get("perPage"))
 	page := util.ParseInt(c.Input().Get("page"))
-	ss, isNew := Session(fileId)
+	session, isNew := Session(c.Input().Get("fileId"))
 	if isNew {
-		trackNewSession(ss)
+		trackNewSession(session)
 	}
 
 	last := perPage * (page + 1)
-	if last > len(ss.Traces) {
-		last = len(ss.Traces)
+	if last > len(session.Traces) {
+		last = len(session.Traces)
 	}
-	table := ss.Traces[(perPage * page):last]
+	table := session.Traces[(perPage * page):last]
 
 	c.Data["json"] = map[string]interface{}{
 		"traces": table,
 		"page":   page,
-		"total":  len(ss.Traces),
+		"total":  len(session.Traces),
 	}
 	c.ServeJSON()
 }
 
 func (c *ApiController) GetTrace() {
-	fileId := c.Input().Get("fileId")
-	traceId := util.ParseInt(c.Input().Get("traceId"))
-	ss, isNew := Session(fileId)
+	session, isNew := Session(c.Input().Get("fileId"))
 	if isNew {
-		trackNewSession(ss)
+		trackNewSession(session)
 	}
 
-	c.Data["json"] = ss.Traces[traceId]
+	c.Data["json"] = session.Traces[util.ParseInt(c.Input().Get("traceId"))]
 	c.ServeJSON()
 }
 
 func (c *ApiController) UploadFile() {
-	sessionId := getSessionId(c)
-	fmt.Printf("[SessionId %s]\n", sessionId)
+	fmt.Printf("[SessionId %s]\n", getSessionId(c))
 
 	fileCount := 0
 	success := 0

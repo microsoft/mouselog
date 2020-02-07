@@ -14,28 +14,27 @@ type ApiController struct {
 	beego.Controller
 }
 
-var ssm map[string]*trace.Session
+var sessions map[string]*trace.Session
 
 func init() {
-	ssm = map[string]*trace.Session{}
+	sessions = map[string]*trace.Session{}
 }
 
-func Session(sessionId string) (*trace.Session,bool) {
-	if val, ok := ssm[sessionId]; ok {
+// Session either returns an already existing session or creates and returns a new one.
+// If a new session has been created, the returned boolean will be true.
+func Session(sessionId string) (*trace.Session, bool) {
+	if val, ok := sessions[sessionId]; ok {
 		return val, false
 	}
 
-	ssm[sessionId] = trace.NewSession(sessionId)
-	return ssm[sessionId], true
+	sessions[sessionId] = trace.NewSession(sessionId)
+	return sessions[sessionId], true
 }
 
 func (c *ApiController) GetSessionId() {
-	websiteId := c.Input().Get("websiteId")
 	sessionId := getSessionId(c)
-	userAgent := getUserAgent(c.Ctx)
-	clientIp := getClientIp(c.Ctx)
 
-	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
+	trace.AddSession(sessionId, c.Input().Get("websiteId"), getUserAgent(c.Ctx), getClientIp(c.Ctx))
 
 	c.Data["json"] = sessionId
 	c.ServeJSON()
@@ -61,8 +60,8 @@ func (c *ApiController) UploadTrace() {
 		panic(err)
 	}
 
-	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
-	trace.StartImpression(impressionId, sessionId, t.Path)
+	trace.AddSession(sessionId, websiteId, userAgent, clientIp)
+	trace.AddImpression(impressionId, sessionId, t.Path)
 	trace.AppendTraceToImpression(impressionId, &t)
 
 	if websiteId != "mouselog" {

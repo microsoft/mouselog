@@ -73,10 +73,6 @@ func AddImpression(id string, sessionId string, urlPath string) bool {
 	return affected != 0
 }
 
-func StartImpression(id string, sessionId string, urlPath string) {
-	AddImpression(id, sessionId, urlPath)
-}
-
 func DeleteImpression(id string) bool {
 	affected, err := ormManager.engine.Id(id).Delete(&Impression{})
 	if err != nil {
