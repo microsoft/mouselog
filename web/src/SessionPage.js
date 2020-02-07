@@ -74,6 +74,11 @@ class SessionPage extends React.Component {
         key: 'clientIp',
       },
       {
+        title: 'Impression Count',
+        dataIndex: 'impressionCount',
+        key: 'impressionCount',
+      },
+      {
         title: 'Action',
         dataIndex: '',
         key: 'op',

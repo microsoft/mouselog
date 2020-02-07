@@ -121,6 +121,11 @@ class WebsitePage extends React.Component {
         }
       },
       {
+        title: 'Session Count',
+        dataIndex: 'sessionCount',
+        key: 'sessionCount',
+      },
+      {
         title: 'Tracking Code',
         key: 'code',
         render: (text, record, index) => {

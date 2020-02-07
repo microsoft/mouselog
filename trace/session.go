@@ -9,6 +9,8 @@ type Session struct {
 	UserAgent   string `xorm:"varchar(500)" json:"userAgent"`
 	ClientIp    string `xorm:"varchar(100)" json:"clientIp"`
 
+	ImpressionCount int `json:"impressionCount"`
+
 	Traces   []*Trace          `json:"traces"`
 	TraceMap map[string]*Trace `json:"-"`
 
@@ -19,12 +21,31 @@ type Session struct {
 	UN int `json:"un"`
 }
 
+func countSessions(sessions []*Session) {
+	allImpressions := getAllImpressions()
+
+	m := map[string]int{}
+	for _, impression := range allImpressions {
+		if v, ok := m[impression.SessionId]; ok {
+			m[impression.SessionId] = v + 1
+		} else {
+			m[impression.SessionId] = 1
+		}
+	}
+
+	for _, session := range sessions {
+		session.ImpressionCount = m[session.Id]
+	}
+}
+
 func GetSessions(websiteId string) []*Session {
 	sessions := []*Session{}
 	err := ormManager.engine.Where("website_id = ?", websiteId).Asc("created_time").Find(&sessions)
 	if err != nil {
 		panic(err)
 	}
+
+	countSessions(sessions)
 
 	return sessions
 }

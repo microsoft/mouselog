@@ -6,7 +6,19 @@ type Website struct {
 
 	Url string `xorm:"varchar(100)" json:"url"`
 
-	State string `xorm:"varchar(100)" json:"state"`
+	State        string `xorm:"varchar(100)" json:"state"`
+	SessionCount int    `json:"sessionCount"`
+}
+
+func countWebsites(websites []*Website) {
+	for _, website := range websites {
+		sessionCount, err := ormManager.engine.Where("website_id = ?", website.Id).Count(&Session{})
+		if err != nil {
+			panic(err)
+		}
+
+		website.SessionCount = int(sessionCount)
+	}
 }
 
 func GetWebsites() []*Website {
@@ -15,6 +27,8 @@ func GetWebsites() []*Website {
 	if err != nil {
 		panic(err)
 	}
+
+	countWebsites(websites)
 
 	return websites
 }
