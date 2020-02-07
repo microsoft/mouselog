@@ -1,6 +1,9 @@
 package trace
 
-import "xorm.io/core"
+import (
+	"strings"
+	"xorm.io/core"
+)
 
 type Session struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
@@ -64,14 +67,10 @@ func GetSession(id string, websiteId string) *Session {
 	}
 }
 
-func HasSession(id string, websiteId string) bool {
-	return GetSession(id, websiteId) != nil
-}
-
 func AddSession(id string, websiteId string, userAgent string, clientIp string) bool {
 	s := Session{Id: id, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UserAgent: userAgent, ClientIp: clientIp}
 	affected, err := ormManager.engine.Insert(s)
-	if err != nil {
+	if err != nil && strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)
 	}
 
@@ -79,9 +78,7 @@ func AddSession(id string, websiteId string, userAgent string, clientIp string) 
 }
 
 func StartSession(id string, websiteId string, userAgent string, clientIp string) {
-	if !HasSession(id, websiteId) {
-		AddSession(id, websiteId, userAgent, clientIp)
-	}
+	AddSession(id, websiteId, userAgent, clientIp)
 }
 
 func DeleteSession(id string, websiteId string) bool {

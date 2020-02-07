@@ -1,5 +1,7 @@
 package trace
 
+import "strings"
+
 type Impression struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
 	SessionId   string `xorm:"varchar(100)" json:"sessionId"`
@@ -47,10 +49,6 @@ func GetImpression(id string) *Impression {
 	}
 }
 
-func HasImpression(id string) bool {
-	return GetImpression(id) != nil
-}
-
 func updateImpression(id string, impression *Impression) bool {
 	if GetImpression(id) == nil {
 		return false
@@ -68,17 +66,15 @@ func updateImpression(id string, impression *Impression) bool {
 func AddImpression(id string, sessionId string, urlPath string) bool {
 	s := Impression{Id: id, SessionId: sessionId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
 	affected, err := ormManager.engine.Insert(s)
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "Duplicate entry")  {
 		panic(err)
 	}
-
+	
 	return affected != 0
 }
 
 func StartImpression(id string, sessionId string, urlPath string) {
-	if !HasImpression(id) {
-		AddImpression(id, sessionId, urlPath)
-	}
+	AddImpression(id, sessionId, urlPath)
 }
 
 func DeleteImpression(id string) bool {
