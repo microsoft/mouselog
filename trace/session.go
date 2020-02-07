@@ -2,6 +2,7 @@ package trace
 
 import (
 	"strings"
+
 	"xorm.io/core"
 )
 
@@ -70,7 +71,7 @@ func GetSession(id string, websiteId string) *Session {
 func AddSession(id string, websiteId string, userAgent string, clientIp string) bool {
 	s := Session{Id: id, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UserAgent: userAgent, ClientIp: clientIp}
 	affected, err := ormManager.engine.Insert(s)
-	if err != nil && strings.Contains(err.Error(), "Duplicate entry") {
+	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)
 	}
 
