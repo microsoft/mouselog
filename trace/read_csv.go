@@ -65,11 +65,11 @@ func readCsvLine(ss *Session, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
 
 	t := newTrace(strconv.Itoa(i))
-	t.RequestId = row[RowRequestId]
-	t.Timestamp = row[RowTimestamp]
+	//t.RequestId = row[RowRequestId]
+	//t.Timestamp = row[RowTimestamp]
 	t.Url = row[RowUrl]
-	t.UserAgent = util.UnescapeUserAgent(row[RowUserAgent])
-	t.ClientIp = row[RowClientIp]
+	//t.UserAgent = util.UnescapeUserAgent(row[RowUserAgent])
+	//t.ClientIp = row[RowClientIp]
 
 	isBot := row[RowIsBot]
 	if isBot == "True" {
@@ -82,7 +82,7 @@ func readCsvLine(ss *Session, line string, i int) {
 	eventTypeList := strings.Split(row[RowEventTypeList], "|")
 	buttonList := strings.Split(row[RowButtonList], "|")
 	pointerTypeList := strings.Split(row[RowPointerTypeList], "|")
-	t.PointerType = getUnifiedPointerType(pointerTypeList)
+	//t.PointerType = getUnifiedPointerType(pointerTypeList)
 	xList := strings.Split(row[RowXList], "|")
 	yList := strings.Split(row[RowYList], "|")
 	minX := math.MaxInt32

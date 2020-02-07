@@ -49,9 +49,9 @@ class TraceTable extends React.Component {
         ellipsis: true,
       },
       {
-        title: 'Url',
-        dataIndex: 'url',
-        key: 'url',
+        title: 'Path',
+        dataIndex: 'path',
+        key: 'path',
         sorter: (a, b) => a.url.localeCompare(b.url),
         render: (text, trace, index) => {
           return Setting.wrapUrl(text);

@@ -95,14 +95,19 @@ class TestPage extends React.Component {
     return count;
   }
 
-  getUrl() {
+  getHostname() {
+    return window.location.hostname;
+  }
+
+  getPathname() {
     return window.location.pathname;
   }
 
   newTrace() {
     return {
       id: '0',
-      url: this.getUrl(),
+      url: this.getHostname(),
+      path: this.getPathname(),
       width: document.body.scrollWidth,
       height: document.body.scrollHeight,
       pageLoadTime: this.state.pageLoadTime,
@@ -344,7 +349,7 @@ class TestPage extends React.Component {
           <Col span={6}>
             <Row>
               {
-                !this.state.isBackground ? Shared.renderEventTable(this.getUrl(), this.events.slice(-10)) : Shared.renderEventTable('', [])
+                !this.state.isBackground ? Shared.renderEventTable(this.getPathname(), this.events.slice(-10)) : Shared.renderEventTable('', [])
               }
             </Row>
           </Col>

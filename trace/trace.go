@@ -18,12 +18,8 @@ type Trace struct {
 	Events  []Event   `json:"events"`
 	Degrees []float64 `json:"-"`
 
-	RequestId   string `json:"requestId"`
-	Timestamp   string `json:"timestamp"`
 	Url         string `json:"url"`
-	UserAgent   string `json:"userAgent"`
-	ClientIp    string `json:"clientIp"`
-	PointerType string `json:"pointerType"`
+	Path        string `json:"path"`
 }
 
 func newTrace(id string) *Trace {

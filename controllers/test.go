@@ -66,7 +66,7 @@ func (c *ApiController) UploadTrace() {
 	}
 
 	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
-	trace.StartImpression(impressionId, sessionId, t.Url)
+	trace.StartImpression(impressionId, sessionId, t.Path)
 	trace.AppendTraceToImpression(impressionId, &t)
 
 	if websiteId != "mouselog" {
