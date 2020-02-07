@@ -20,13 +20,13 @@ func init() {
 	ssm = map[string]*trace.Session{}
 }
 
-func Session(sessionId string) *trace.Session {
+func Session(sessionId string) (*trace.Session,bool) {
 	if val, ok := ssm[sessionId]; ok {
-		return val
+		return val, false
 	}
 
 	ssm[sessionId] = trace.NewSession(sessionId)
-	return ssm[sessionId]
+	return ssm[sessionId], true
 }
 
 func (c *ApiController) GetSessionId() {
@@ -71,7 +71,7 @@ func (c *ApiController) UploadTrace() {
 		return
 	}
 
-	ss := Session(sessionId)
+	ss, _ := Session(sessionId)
 	if len(t.Events) > 0 {
 		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
 	} else {
@@ -96,7 +96,7 @@ func (c *ApiController) ClearTrace() {
 		panic(err)
 	}
 
-	ss := Session(sessionId)
+	ss, _ := Session(sessionId)
 	if t2, ok := ss.TraceMap[t.Id]; ok {
 		delete(ss.TraceMap, t.Id)
 		for i, t3 := range ss.Traces {
