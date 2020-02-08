@@ -2,7 +2,7 @@ import React from "react";
 import {Button, Col, Popconfirm, Popover, Row, Table} from 'antd';
 import * as Setting from "./Setting";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
-import Config from "./Config";
+import ConfigEdit from "./ConfigEdit";
 
 class WebsitePage extends React.Component {
   constructor(props) {
@@ -96,10 +96,17 @@ class WebsitePage extends React.Component {
       });
   }
 
-  renderTable(websites) {
+  onUpdateWebsite(website, i) {
+    let websites = this.state.websites;
+    websites[i] = website;
+    this.setState({
+      websites: websites
+    });
+  }
 
-    const content = (website) => {
-      return <Config website={website} />
+  renderTable(websites) {
+    const content = (website, i) => {
+      return <ConfigEdit website={website} onUpdateWebsite={(website) => this.onUpdateWebsite.bind(this)(website, i)} />
     };
 
     const columns = [
@@ -132,7 +139,7 @@ class WebsitePage extends React.Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Popover placement="topRight" content={content(record)} title="" trigger="click">
+              <Popover placement="topRight" content={content(record, index)} title="" trigger="click">
                 <Button type="primary">View Code</Button>
               </Popover>
             </div>
