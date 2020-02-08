@@ -37,7 +37,7 @@ type response struct {
 	Data   interface{} `json:"data"`
 }
 
-func (c *APIController) GetSessionID() {
+func (c *APIController) SessionID() {
 	sessionID := c.StartSession().SessionID()
 
 	trace.AddSession(sessionID, c.Input().Get("websiteId"), c.Ctx.Input.UserAgent(), c.Ctx.Input.IP())
