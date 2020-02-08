@@ -2,12 +2,7 @@ import React from "react";
 import {Button, Col, Popconfirm, Popover, Row, Table} from 'antd';
 import * as Setting from "./Setting";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
-import copy from 'copy-to-clipboard';
-
-import {Controlled as CodeMirror} from 'react-codemirror2'
-import "codemirror/lib/codemirror.css"
-require('codemirror/theme/material-darker.css');
-require("codemirror/mode/javascript/javascript");
+import Config from "./Config";
 
 class WebsitePage extends React.Component {
   constructor(props) {
@@ -32,10 +27,42 @@ class WebsitePage extends React.Component {
       );
   }
 
+  createConfig() {
+    return {
+      uploadEndpoint: "https://mouselog.org/",
+
+      // Set upload mode: "periodic" or "event-triggered"
+      uploadMode: "periodic",
+
+      // If `uploadMode` == "periodic", data will be uploaded every `uploadPeriod` ms.
+      // If no data are collected in a period, no data will be uploaded
+      uploadPeriod: 5000,
+
+      // If `uploadMode` == "event-triggered"
+      // The website interaction data will be uploaded when every `frequency` events are captured.
+      frequency: 50,
+
+      // The website interaction data will be encoded by `encoder` before uploading to the server.
+      encoder: "JSON.stringify",
+
+      // The response data will be decoded by `decoder`
+      decoder: "x => x",
+
+      // Use GET method to upload data? (stringified data will be embedded in URI)
+      enableGet: false,
+
+      // Time interval for resending the failed trace data
+      resendInterval: 3000,
+    }
+  }
+
   newWebsite() {
     return {
       id: `website_${this.state.websites.length}`,
       name: `New Website - ${this.state.websites.length}`,
+      url: "https://example.com",
+      sessionCount: 0,
+      trackConfig: this.createConfig(),
       state: "active",
     }
   }
@@ -70,35 +97,9 @@ class WebsitePage extends React.Component {
   }
 
   renderTable(websites) {
-    const content = (serverUrl, websiteId) => {
-      const code = `<script>
-(function() {
-  var script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/mouselog@0.0.5-beta2/mouselog.js";
-  script.onload = () => {
-    mouselog.run("${serverUrl}", "${websiteId}");
-  }
-  var t = document.getElementsByTagName("script");
-  var s = t.length > 0 ? t[0].parentNode : document.body;
-  s.appendChild(script, s);
-})();
-</script>`;
 
-      return (
-        <div>
-          <CodeMirror
-            value={code}
-            options={{mode: 'javascript', theme: "material-darker"}}
-          />
-          <Button style={{marginTop: '10px'}} type="primary" onClick={() => {
-            copy(code);
-            Setting.showMessage("success", `Copied to clipboard!`);
-          }}
-          >
-            Copy to Clipboard
-          </Button>
-        </div>
-      )
+    const content = (website) => {
+      return <Config website={website} />
     };
 
     const columns = [
@@ -131,7 +132,7 @@ class WebsitePage extends React.Component {
         render: (text, record, index) => {
           return (
             <div>
-              <Popover placement="topRight" content={content("https://mouselog.org", record.id)} title="" trigger="click">
+              <Popover placement="topRight" content={content(record)} title="" trigger="click">
                 <Button type="primary">View Code</Button>
               </Popover>
             </div>
