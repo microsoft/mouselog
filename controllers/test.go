@@ -31,6 +31,12 @@ func Session(sessionId string) (*trace.Session, bool) {
 	return sessions[sessionId], true
 }
 
+type Response struct {
+	Status string      `json:"status"`
+	Msg    string      `json:"msg"`
+	Data   interface{} `json:"data"`
+}
+
 func (c *ApiController) GetSessionId() {
 	sessionId := c.StartSession().SessionID()
 
@@ -41,6 +47,8 @@ func (c *ApiController) GetSessionId() {
 }
 
 func (c *ApiController) UploadTrace() {
+	var resp Response
+
 	websiteId := c.Input().Get("websiteId")
 	sessionId := c.StartSession().SessionID()
 	impressionId := c.Input().Get("impressionId")
@@ -64,8 +72,15 @@ func (c *ApiController) UploadTrace() {
 	trace.AddImpression(impressionId, sessionId, t.Path)
 	trace.AppendTraceToImpression(impressionId, &t)
 
+	// Only return traces for test page for visualization (websiteId == "mouselog")
 	if websiteId != "mouselog" {
-		c.Data["json"] = "OK"
+		resp = Response{Status: "ok", Msg: "", Data: ""}
+		if len(t.Events) == 0 {
+			resp.Msg = "config"
+			resp.Data = trace.ParseTrackConfig(trace.GetWebsite(websiteId).TrackConfig)
+		}
+
+		c.Data["json"] = resp
 		c.ServeJSON()
 		return
 	}
