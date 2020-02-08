@@ -1,9 +1,29 @@
-Mouselog
+Mouselog 🐾
 ====
 
-Mouselog is a web-based tool to help website owners, researchers and security admins log, visualize and analyze the mouse trace data.
+[![NPM version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
+[![Codecov][codecov-image]][codecov-url]
+[![david deps][david-image]][david-url]
+[![david devDeps][david-dev-image]][david-dev-url]
+[![npm download][download-image]][download-url]
 
-## Demo
+[npm-image]: http://img.shields.io/npm/v/mouselog.svg?style=flat-square
+[npm-url]: http://npmjs.org/package/mouselog
+[travis-image]: https://img.shields.io/travis/com/microsoft/mouselog.js.svg?style=flat-square
+[travis-url]: https://travis-ci.com/microsoft/mouselog.js
+[codecov-image]: https://img.shields.io/codecov/c/github/microsoft/mouselog.js/master.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/microsoft/mouselog.js/branch/master
+[david-image]: https://david-dm.org/microsoft/mouselog.js/status.svg?style=flat-square
+[david-dev-url]: https://david-dm.org/microsoft/mouselog.js?type=dev
+[david-dev-image]: https://david-dm.org/microsoft/mouselog.js/dev-status.svg?style=flat-square
+[david-url]: https://david-dm.org/microsoft/mouselog.js
+[download-image]: https://img.shields.io/npm/dm/mouselog.svg?style=flat-square
+[download-url]: https://npmjs.org/package/mouselog
+
+Mouselog is a web-based platform for website owners to log, visualize and analyze user behaviors like mouse trace data.
+
+## Live Demo
 
 https://mouselog.org/
 
@@ -13,13 +33,15 @@ Mouselog contains 3 parts:
 
 Name | Description | Language | Source code
 ----|------|----|----
-Agent | Mouselog client-side agent that runs on end-user's browser to send mouse trace data to Mouselog server-side | Javascript | https://github.com/microsoft/mouselog.js
+Client-side Agent | Mouselog client-side agent that runs on end-user's browser to send mouse trace data to Mouselog server-side | Javascript | https://github.com/microsoft/mouselog.js
 Server-frontend | Web frontend UI for Mouselog server-side | Javascript + React + Ant Design | https://github.com/microsoft/mouselog/tree/master/web
 Server-backend | RESTful API backend for Mouselog server-side | Golang + Beego + MySQL | https://github.com/microsoft/mouselog
 
 ## Installation
 
-### Agent
+### Client-side Agent
+
+[![mouselog](https://nodei.co/npm/mouselog.png)](https://npmjs.com/package/mouselog)
 
 Please see details at: https://github.com/microsoft/mouselog.js
 
@@ -57,17 +79,3 @@ This project is licensed under the [MIT license](LICENSE).
 
 If you have any issues or feature requests, please contact us. PR is welcomed.
 - https://github.com/microsoft/mouselog/issues
-
-## Contributing
-
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
