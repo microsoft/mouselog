@@ -2,6 +2,8 @@ import React from "react";
 import {Button, Card, Col, Input, Row, Select} from 'antd';
 import * as WebsiteBackend from "./backend/WebsiteBackend";
 import * as Setting from "./Setting";
+import ConfigEdit from "./ConfigEdit";
+import {LinkOutlined} from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -46,6 +48,27 @@ class WebsiteEditPage extends React.Component {
     });
   }
 
+  onUpdateWebsite(website) {
+    this.setState({
+      website: website
+    });
+  }
+
+  renderConfigAll() {
+    return (
+      <Row style={{marginTop: '20px'}} >
+        <Col style={{marginTop: '5px'}} span={2}>
+          Tracking Config:
+        </Col>
+        <Col span={22} >
+          {
+            this.state.website.trackConfig !== undefined ? <ConfigEdit website={this.state.website} onUpdateWebsite={this.onUpdateWebsite.bind(this)} /> : null
+          }
+        </Col>
+      </Row>
+    )
+  }
+
   renderWebsite() {
     return (
       <Card size="small" title={
@@ -79,17 +102,20 @@ class WebsiteEditPage extends React.Component {
             Url:
           </Col>
           <Col span={22} >
-            <Input value={this.state.website.url} onChange={e => {
+            <Input prefix={<LinkOutlined/>} value={this.state.website.url} onChange={e => {
               this.updateWebsiteField('url', e.target.value);
             }} />
           </Col>
         </Row>
+        {
+          this.renderConfigAll()
+        }
         <Row style={{marginTop: '20px'}} >
           <Col style={{marginTop: '5px'}} span={2}>
             State:
           </Col>
           <Col span={22} >
-            <Select style={{width: '100%'}} value={this.state.website.state} onChange={(value => {this.updateWebsiteField('state', value);})}>
+            <Select style={{width: '120px'}} value={this.state.website.state} onChange={(value => {this.updateWebsiteField('state', value);})}>
               {
                 [
                   {id: 'active', name: 'Active'},

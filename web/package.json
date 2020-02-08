@@ -8,6 +8,7 @@
     "codemirror": "^5.51.0",
     "copy-to-clipboard": "^3.2.1",
     "konva": "^4.0.17",
+    "npm-latest-versions": "^0.1.1",
     "react": "^16.12.0",
     "react-codemirror2": "^6.0.0",
     "react-dom": "^16.12.0",
