@@ -32,7 +32,7 @@ func main() {
 	beego.BConfig.WebConfig.Session.SessionProviderConfig = "./tmp"
 	beego.BConfig.WebConfig.Session.SessionGCMaxLifetime = 3600 * 24 * 365
 
-	port := "9000"
+	port := beego.AppConfig.String("httpport")
 	if len(os.Args) > 1 {
 		port = os.Args[1]
 	}

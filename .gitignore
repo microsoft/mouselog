@@ -12,10 +12,12 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
 
 .idea/
 *.iml
-
+.theia/
 *.tmp
 tmp/
+go.mod
+go.sum
