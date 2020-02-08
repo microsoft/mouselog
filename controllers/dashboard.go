@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"path/filepath"
 	"strconv"
 
 	"github.com/microsoft/mouselog/detect"
@@ -37,17 +36,6 @@ func traceFiles(path string) []*trace.Session {
 	}
 
 	return res
-}
-
-func (c *APIController) ListSessions() {
-	path := filepath.Join(util.CacheDir, "mouselog")
-	res := []*trace.SessionJson{}
-	for _, ss := range traceFiles(path) {
-		res = append(res, ss.ToJson())
-	}
-
-	c.Data["json"] = res
-	c.ServeJSON()
 }
 
 func (c *APIController) ListTraces() {

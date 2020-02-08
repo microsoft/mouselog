@@ -10,18 +10,21 @@ func init() {
 	ns :=
 		beego.NewNamespace("/api",
 			beego.NSInclude(
+				&controllers.SessionController{},
 				&controllers.APIController{},
 			),
 		)
 	beego.AddNamespace(ns)
 
+	beego.Router("/api/get-session-id", &controllers.SessionController{}, "GET:SessionID")
+	beego.Router("/api/list-sessions", &controllers.SessionController{}, "GET:ListSessions")
+	beego.Router("/api/get-sessions", &controllers.SessionController{}, "GET:Sessions")
+	beego.Router("/api/get-session", &controllers.SessionController{}, "GET:Session")
+	beego.Router("/api/delete-session", &controllers.SessionController{}, "POST:DeleteSession")
+
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "POST:UploadTrace")
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "GET:UploadTrace")
-
 	beego.Router("/api/clear-trace", &controllers.APIController{}, "POST:ClearTrace")
-	beego.Router("/api/get-session-id", &controllers.APIController{}, "GET:SessionID")
-
-	beego.Router("/api/list-sessions", &controllers.APIController{}, "GET:ListSessions")
 	beego.Router("/api/list-traces", &controllers.APIController{}, "GET:ListTraces")
 	beego.Router("/api/get-trace", &controllers.APIController{}, "GET:GetTrace")
 
@@ -33,10 +36,6 @@ func init() {
 	beego.Router("/api/update-website", &controllers.APIController{}, "POST:UpdateWebsite")
 	beego.Router("/api/add-website", &controllers.APIController{}, "POST:AddWebsite")
 	beego.Router("/api/delete-website", &controllers.APIController{}, "POST:DeleteWebsite")
-
-	beego.Router("/api/get-sessions", &controllers.APIController{}, "GET:GetSessions")
-	beego.Router("/api/get-session", &controllers.APIController{}, "GET:GetSession")
-	beego.Router("/api/delete-session", &controllers.APIController{}, "POST:DeleteSession")
 
 	beego.Router("/api/get-impressions", &controllers.APIController{}, "GET:GetImpressions")
 	beego.Router("/api/get-impression", &controllers.APIController{}, "GET:GetImpression")
