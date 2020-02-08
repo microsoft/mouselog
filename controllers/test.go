@@ -32,9 +32,9 @@ func Session(sessionId string) (*trace.Session, bool) {
 }
 
 func (c *ApiController) GetSessionId() {
-	sessionId := getSessionId(c)
+	sessionId := c.StartSession().SessionID()
 
-	trace.AddSession(sessionId, c.Input().Get("websiteId"), getUserAgent(c.Ctx), getClientIp(c.Ctx))
+	trace.AddSession(sessionId, c.Input().Get("websiteId"), c.Ctx.Input.UserAgent(), c.Ctx.Input.IP())
 
 	c.Data["json"] = sessionId
 	c.ServeJSON()
@@ -42,10 +42,10 @@ func (c *ApiController) GetSessionId() {
 
 func (c *ApiController) UploadTrace() {
 	websiteId := c.Input().Get("websiteId")
-	sessionId := getSessionId(c)
+	sessionId := c.StartSession().SessionID()
 	impressionId := c.Input().Get("impressionId")
-	userAgent := getUserAgent(c.Ctx)
-	clientIp := getClientIp(c.Ctx)
+	userAgent := c.Ctx.Input.UserAgent()
+	clientIp := c.Ctx.Input.IP()
 
 	var data []byte
 	if c.Ctx.Request.Method == "GET" {
@@ -86,7 +86,7 @@ func (c *ApiController) UploadTrace() {
 }
 
 func (c *ApiController) ClearTrace() {
-	sessionId := getSessionId(c)
+	sessionId := c.StartSession().SessionID()
 	data := c.Ctx.Input.RequestBody
 
 	var t trace.Trace
