@@ -208,7 +208,7 @@ class App extends React.Component {
                 textAlign: 'center',
               }
             }>
-              Made with <span style={{color: 'rgb(255, 255, 255)'}}>❤</span> by <a target="_blank" href="https://github.com/microsoft/mouselog">Microsoft</a>
+              Made with <span style={{color: 'rgb(255, 255, 255)'}}>❤️</span> by <a style={{fontWeight: "bold", color: "black"}} target="_blank" href="https://github.com/microsoft/mouselog">Microsoft</a>
             </Footer>
         }
       </div>
