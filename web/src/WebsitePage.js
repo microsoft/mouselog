@@ -29,6 +29,10 @@ class WebsitePage extends React.Component {
 
   createConfig() {
     return {
+      // Set endpoint URL type: "absolute" or "relative"
+      endpointType: "absolute",
+
+      // The endpoint URL to upload trace to
       uploadEndpoint: "https://mouselog.org/",
 
       // Set upload mode: "periodic" or "event-triggered"

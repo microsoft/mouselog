@@ -38,9 +38,26 @@ class ConfigEdit extends React.Component {
       <div>
         <Row style={{marginTop: '20px'}} >
           <Col style={{marginTop: '5px'}} span={2}>
+            Endpoint Type:
+          </Col>
+          <Col span={3}>
+            <Select style={{width: "150px"}} value={this.props.website.trackConfig.endpointType} onChange={(value => {
+              this.updateConfigField("endpointType", value);
+            })}>
+              {
+                [
+                  {id: "absolute", name: "Absolute"},
+                  {id: "relative", name: "Relative"},
+                ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
+              }
+            </Select>
+          </Col>
+          <Col span={1} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
             Upload Endpoint:
           </Col>
-          <Col span={22} >
+          <Col span={16} >
             <Input prefix={<LinkOutlined/>} value={this.props.website.trackConfig.uploadEndpoint} onChange={e => {
               this.updateConfigField("uploadEndpoint", e.target.value);
             }}/>

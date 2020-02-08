@@ -30,6 +30,10 @@ class Config extends React.Component {
   getConfigText(website) {
     let res = "let config = {";
 
+    if (website.trackConfig.endpointType !== "absolute") {
+      res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
+    }
+
     if (website.trackConfig.uploadMode !== "periodic") {
       res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
 
@@ -71,12 +75,13 @@ class Config extends React.Component {
     const version = "latest";
     const website = this.props.website;
 
+    const configText = this.getConfigText(website);
     const code = `<script>
 (function() {
   var script = document.createElement("script");
   script.src = "https://cdn.jsdelivr.net/npm/mouselog@${version}/mouselog.js";
   script.onload = () => {
-    ${this.getConfigText(website)}mouselog.run("${website.trackConfig.uploadEndpoint}", "${website.id}");
+    ${configText}mouselog.run("${website.trackConfig.uploadEndpoint}", "${website.id}"${configText !== "" ? `, config` : ``});
   };
   var t = document.getElementsByTagName("script");
   var s = t.length > 0 ? t[0].parentNode : document.body;
