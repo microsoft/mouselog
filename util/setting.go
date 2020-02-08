@@ -1,9 +1,11 @@
 package util
 
+import "path/filepath"
+
 func GetDataPath(fileId string) string {
-	return CacheDir + "mouselog/" + fileId + ".txt"
+	return filepath.Join(CacheDir, "mouselog", fileId+".txt")
 }
 
 func GetCsvDataPath(fileId string) string {
-	return CacheDir + "mouselog/" + fileId + ".csv"
+	return filepath.Join(CacheDir, "mouselog", fileId+".csv")
 }
