@@ -39,7 +39,7 @@ func traceFiles(path string) []*trace.Session {
 	return res
 }
 
-func (c *ApiController) ListSessions() {
+func (c *APIController) ListSessions() {
 	path := filepath.Join(util.CacheDir, "mouselog")
 	res := []*trace.SessionJson{}
 	for _, ss := range traceFiles(path) {
@@ -50,7 +50,7 @@ func (c *ApiController) ListSessions() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) ListTraces() {
+func (c *APIController) ListTraces() {
 	perPage := util.ParseInt(c.Input().Get("perPage"))
 	page := util.ParseInt(c.Input().Get("page"))
 	session, isNew := Session(c.Input().Get("fileId"))
@@ -72,7 +72,7 @@ func (c *ApiController) ListTraces() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) GetTrace() {
+func (c *APIController) GetTrace() {
 	session, isNew := Session(c.Input().Get("fileId"))
 	if isNew {
 		trackNewSession(session)
@@ -82,7 +82,7 @@ func (c *ApiController) GetTrace() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) UploadFile() {
+func (c *APIController) UploadFile() {
 	fmt.Printf("[SessionId %s]\n", c.StartSession().SessionID())
 
 	fileCount := 0

@@ -6,19 +6,19 @@ import (
 	"github.com/microsoft/mouselog/trace"
 )
 
-func (c *ApiController) GetWebsites() {
+func (c *APIController) GetWebsites() {
 	c.Data["json"] = trace.GetWebsites()
 	c.ServeJSON()
 }
 
-func (c *ApiController) GetWebsite() {
+func (c *APIController) GetWebsite() {
 	id := c.Input().Get("id")
 
 	c.Data["json"] = trace.GetWebsite(id)
 	c.ServeJSON()
 }
 
-func (c *ApiController) UpdateWebsite() {
+func (c *APIController) UpdateWebsite() {
 	id := c.Input().Get("id")
 
 	var website trace.Website
@@ -31,7 +31,7 @@ func (c *ApiController) UpdateWebsite() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) AddWebsite() {
+func (c *APIController) AddWebsite() {
 	var website trace.Website
 	err := json.Unmarshal(c.Ctx.Input.RequestBody, &website)
 	if err != nil {
@@ -42,7 +42,7 @@ func (c *ApiController) AddWebsite() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) DeleteWebsite() {
+func (c *APIController) DeleteWebsite() {
 	id := c.Input().Get("id")
 
 	c.Data["json"] = trace.DeleteWebsite(id)
