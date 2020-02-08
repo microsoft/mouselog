@@ -20,8 +20,8 @@ func traceFiles(path string) []*trace.Session {
 	res := []*trace.Session{}
 
 	if util.FileExist(path) {
-		for _, fileId := range util.ListFileIds(path) {
-			if s, isNew := Session(fileId); isNew {
+		for _, fileID := range util.ListFileIds(path) {
+			if s, isNew := Session(fileID); isNew {
 				trackNewSession(s)
 			}
 		}
