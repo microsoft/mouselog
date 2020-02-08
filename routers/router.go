@@ -19,7 +19,7 @@ func init() {
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "GET:UploadTrace")
 
 	beego.Router("/api/clear-trace", &controllers.APIController{}, "POST:ClearTrace")
-	beego.Router("/api/get-session-id", &controllers.APIController{}, "GET:GetSessionId")
+	beego.Router("/api/get-session-id", &controllers.APIController{}, "GET:SessionID")
 
 	beego.Router("/api/list-sessions", &controllers.APIController{}, "GET:ListSessions")
 	beego.Router("/api/list-traces", &controllers.APIController{}, "GET:ListTraces")
