@@ -7,10 +7,6 @@ import (
 )
 
 func init() {
-	initAPI()
-}
-
-func initAPI() {
 	ns :=
 		beego.NewNamespace("/api",
 			beego.NSInclude(

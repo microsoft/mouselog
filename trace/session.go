@@ -78,10 +78,6 @@ func AddSession(id string, websiteId string, userAgent string, clientIp string) 
 	return affected != 0
 }
 
-func StartSession(id string, websiteId string, userAgent string, clientIp string) {
-	AddSession(id, websiteId, userAgent, clientIp)
-}
-
 func DeleteSession(id string, websiteId string) bool {
 	affected, err := ormManager.engine.Id(core.PK{id, websiteId}).Delete(&Session{})
 	if err != nil {

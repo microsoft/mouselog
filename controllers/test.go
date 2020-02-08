@@ -14,32 +14,27 @@ type ApiController struct {
 	beego.Controller
 }
 
-var ssm map[string]*trace.Session
+var sessions map[string]*trace.Session
 
 func init() {
-	ssm = map[string]*trace.Session{}
+	sessions = map[string]*trace.Session{}
 }
 
-func getOrCreateSs(sessionId string) *trace.Session {
-	var ss *trace.Session
-
-	if _, ok := ssm[sessionId]; ok {
-		ss = ssm[sessionId]
-	} else {
-		ss = trace.NewSession(sessionId)
-		ssm[sessionId] = ss
+// Session either returns an already existing session or creates and returns a new one.
+// If a new session has been created, the returned boolean will be true.
+func Session(sessionId string) (*trace.Session, bool) {
+	if val, ok := sessions[sessionId]; ok {
+		return val, false
 	}
 
-	return ss
+	sessions[sessionId] = trace.NewSession(sessionId)
+	return sessions[sessionId], true
 }
 
 func (c *ApiController) GetSessionId() {
-	websiteId := c.Input().Get("websiteId")
 	sessionId := getSessionId(c)
-	userAgent := getUserAgent(c.Ctx)
-	clientIp := getClientIp(c.Ctx)
 
-	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
+	trace.AddSession(sessionId, c.Input().Get("websiteId"), getUserAgent(c.Ctx), getClientIp(c.Ctx))
 
 	c.Data["json"] = sessionId
 	c.ServeJSON()
@@ -65,8 +60,8 @@ func (c *ApiController) UploadTrace() {
 		panic(err)
 	}
 
-	trace.StartSession(sessionId, websiteId, userAgent, clientIp)
-	trace.StartImpression(impressionId, sessionId, t.Path)
+	trace.AddSession(sessionId, websiteId, userAgent, clientIp)
+	trace.AddImpression(impressionId, sessionId, t.Path)
 	trace.AppendTraceToImpression(impressionId, &t)
 
 	if websiteId != "mouselog" {
@@ -75,7 +70,7 @@ func (c *ApiController) UploadTrace() {
 		return
 	}
 
-	ss := getOrCreateSs(sessionId)
+	ss, _ := Session(sessionId)
 	if len(t.Events) > 0 {
 		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
 	} else {
@@ -100,7 +95,7 @@ func (c *ApiController) ClearTrace() {
 		panic(err)
 	}
 
-	ss := getOrCreateSs(sessionId)
+	ss, _ := Session(sessionId)
 	if t2, ok := ss.TraceMap[t.Id]; ok {
 		delete(ss.TraceMap, t.Id)
 		for i, t3 := range ss.Traces {

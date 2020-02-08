@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"path/filepath"
 	"strconv"
 
 	"github.com/microsoft/mouselog/detect"
@@ -10,33 +11,24 @@ import (
 	"github.com/microsoft/mouselog/util"
 )
 
-func getOrCreateSs2(fileId string) *trace.Session {
-	var ss *trace.Session
-
-	if _, ok := ssm[fileId]; ok {
-		ss = ssm[fileId]
-	} else {
-		ss = trace.ReadTraces(fileId)
-		ssm[fileId] = ss
-
-		detect.SyncGuesses(ss)
-		ss.SyncStatistics()
-	}
-
-	return ss
+func trackNewSession(s *trace.Session) {
+	detect.SyncGuesses(s)
+	s.SyncStatistics()
 }
 
-func listTraceFiles(path string) []*trace.Session {
+func traceFiles(path string) []*trace.Session {
 	res := []*trace.Session{}
 
 	if util.FileExist(path) {
 		for _, fileId := range util.ListFileIds(path) {
-			getOrCreateSs2(fileId)
+			if s, isNew := Session(fileId); isNew {
+				trackNewSession(s)
+			}
 		}
 	}
 
 	m := map[string]interface{}{}
-	for k, v := range ssm {
+	for k, v := range sessions {
 		m[k] = v
 	}
 	kv := util.SortMapsByKey(&m)
@@ -48,9 +40,9 @@ func listTraceFiles(path string) []*trace.Session {
 }
 
 func (c *ApiController) ListSessions() {
-	sss := listTraceFiles(util.CacheDir + "mouselog/")
+	path := filepath.Join(util.CacheDir, "mouselog")
 	res := []*trace.SessionJson{}
-	for _, ss := range sss {
+	for _, ss := range traceFiles(path) {
 		res = append(res, ss.ToJson())
 	}
 
@@ -59,37 +51,39 @@ func (c *ApiController) ListSessions() {
 }
 
 func (c *ApiController) ListTraces() {
-	fileId := c.Input().Get("fileId")
 	perPage := util.ParseInt(c.Input().Get("perPage"))
 	page := util.ParseInt(c.Input().Get("page"))
-	ss := getOrCreateSs2(fileId)
+	session, isNew := Session(c.Input().Get("fileId"))
+	if isNew {
+		trackNewSession(session)
+	}
 
 	last := perPage * (page + 1)
-	if last > len(ss.Traces) {
-		last = len(ss.Traces)
+	if last > len(session.Traces) {
+		last = len(session.Traces)
 	}
-	table := ss.Traces[(perPage * page):last]
+	table := session.Traces[(perPage * page):last]
 
 	c.Data["json"] = map[string]interface{}{
 		"traces": table,
 		"page":   page,
-		"total":  len(ss.Traces),
+		"total":  len(session.Traces),
 	}
 	c.ServeJSON()
 }
 
 func (c *ApiController) GetTrace() {
-	fileId := c.Input().Get("fileId")
-	traceId := util.ParseInt(c.Input().Get("traceId"))
-	ss := getOrCreateSs2(fileId)
+	session, isNew := Session(c.Input().Get("fileId"))
+	if isNew {
+		trackNewSession(session)
+	}
 
-	c.Data["json"] = ss.Traces[traceId]
+	c.Data["json"] = session.Traces[util.ParseInt(c.Input().Get("traceId"))]
 	c.ServeJSON()
 }
 
 func (c *ApiController) UploadFile() {
-	sessionId := getSessionId(c)
-	fmt.Printf("[SessionId %s]\n", sessionId)
+	fmt.Printf("[SessionId %s]\n", getSessionId(c))
 
 	fileCount := 0
 	success := 0
@@ -114,7 +108,7 @@ func (c *ApiController) UploadFile() {
 		} else {
 			for _, trace := range traces {
 				// Use Filename as SessionId
-				ss := getOrCreateSs(header.Filename)
+				ss, _ := Session(header.Filename)
 				if len(trace.Events) != 0 {
 					ss.AddTrace(&trace)
 				}
