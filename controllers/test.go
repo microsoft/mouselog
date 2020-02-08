@@ -31,7 +31,7 @@ func Session(sessionID string) (*trace.Session, bool) {
 	return sessions[sessionID], true
 }
 
-type Response struct {
+type response struct {
 	Status string      `json:"status"`
 	Msg    string      `json:"msg"`
 	Data   interface{} `json:"data"`
@@ -47,7 +47,7 @@ func (c *APIController) GetSessionID() {
 }
 
 func (c *APIController) UploadTrace() {
-	var resp Response
+	var resp response
 
 	websiteID := c.Input().Get("websiteId")
 	sessionID := c.StartSession().SessionID()
@@ -74,7 +74,7 @@ func (c *APIController) UploadTrace() {
 
 	// Only return traces for test page for visualization (websiteId == "mouselog")
 	if websiteID != "mouselog" {
-		resp = Response{Status: "ok", Msg: "", Data: ""}
+		resp = response{Status: "ok", Msg: "", Data: ""}
 		if len(t.Events) == 0 {
 			resp.Msg = "config"
 			resp.Data = trace.ParseTrackConfig(trace.GetWebsite(websiteID).TrackConfig)
