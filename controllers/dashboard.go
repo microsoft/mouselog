@@ -83,7 +83,7 @@ func (c *ApiController) GetTrace() {
 }
 
 func (c *ApiController) UploadFile() {
-	fmt.Printf("[SessionId %s]\n", getSessionId(c))
+	fmt.Printf("[SessionId %s]\n", c.StartSession().SessionID())
 
 	fileCount := 0
 	success := 0
