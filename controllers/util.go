@@ -7,15 +7,6 @@ func getUserAgent(ctx *context.Context) string {
 	return userAgent
 }
 
-func getClientIp(ctx *context.Context) string {
-	clientIp := ctx.Input.IP()
-	if clientIp == "" {
-		clientIp = ctx.Request.Header.Get("x-forwarded-for")
-	}
-
-	return clientIp
-}
-
 func getSessionId(c *ApiController) string {
 	return c.StartSession().SessionID()
 }
