@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"path/filepath"
 	"strconv"
 
 	"github.com/microsoft/mouselog/detect"
@@ -20,8 +19,8 @@ func traceFiles(path string) []*trace.Session {
 	res := []*trace.Session{}
 
 	if util.FileExist(path) {
-		for _, fileId := range util.ListFileIds(path) {
-			if s, isNew := Session(fileId); isNew {
+		for _, fileID := range util.ListFileIds(path) {
+			if s, isNew := Session(fileID); isNew {
 				trackNewSession(s)
 			}
 		}
@@ -39,18 +38,7 @@ func traceFiles(path string) []*trace.Session {
 	return res
 }
 
-func (c *ApiController) ListSessions() {
-	path := filepath.Join(util.CacheDir, "mouselog")
-	res := []*trace.SessionJson{}
-	for _, ss := range traceFiles(path) {
-		res = append(res, ss.ToJson())
-	}
-
-	c.Data["json"] = res
-	c.ServeJSON()
-}
-
-func (c *ApiController) ListTraces() {
+func (c *APIController) ListTraces() {
 	perPage := util.ParseInt(c.Input().Get("perPage"))
 	page := util.ParseInt(c.Input().Get("page"))
 	session, isNew := Session(c.Input().Get("fileId"))
@@ -72,7 +60,7 @@ func (c *ApiController) ListTraces() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) GetTrace() {
+func (c *APIController) GetTrace() {
 	session, isNew := Session(c.Input().Get("fileId"))
 	if isNew {
 		trackNewSession(session)
@@ -82,7 +70,7 @@ func (c *ApiController) GetTrace() {
 	c.ServeJSON()
 }
 
-func (c *ApiController) UploadFile() {
+func (c *APIController) UploadFile() {
 	fmt.Printf("[SessionId %s]\n", c.StartSession().SessionID())
 
 	fileCount := 0
