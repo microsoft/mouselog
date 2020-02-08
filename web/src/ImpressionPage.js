@@ -100,13 +100,13 @@ class ImpressionPage extends React.Component {
       {
         title: 'Canvas',
         key: 'canvas',
-        width: 200,
+        width: 500,
         render: (text, record, index) => {
           if (record.events.length === 0) {
             return null;
           }
 
-          return <Canvas trace={record} size={Shared.getSize(record, 8)} isBackground={false}
+          return <Canvas trace={record} size={Shared.getSize(record, 4)} isBackground={false}
                          focusIndex={-1}/>
         }
       },
