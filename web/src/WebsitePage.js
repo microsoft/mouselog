@@ -111,7 +111,7 @@ class WebsitePage extends React.Component {
 
     const columns = [
       {
-        title: 'ID',
+        title: 'Website ID',
         dataIndex: 'id',
         key: 'id',
       },

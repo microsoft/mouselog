@@ -54,7 +54,7 @@ class ImpressionPage extends React.Component {
   renderTable(impressions) {
     const columns = [
       {
-        title: 'ID',
+        title: 'Impression ID',
         dataIndex: 'id',
         key: 'id',
       },

@@ -51,7 +51,7 @@ class SessionPage extends React.Component {
   renderTable(sessions) {
     const columns = [
       {
-        title: 'ID',
+        title: 'Session ID',
         dataIndex: 'id',
         key: 'id',
       },
