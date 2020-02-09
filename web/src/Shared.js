@@ -34,11 +34,11 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
       key: 'type',
       width: 110,
     },
-    // {
-    //   title: 'Btn',
-    //   dataIndex: 'button',
-    //   key: 'button',
-    // },
+    {
+      title: 'Btn',
+      dataIndex: 'button',
+      key: 'button',
+    },
     {
       title: 'X',
       dataIndex: 'x',
@@ -75,8 +75,8 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
   }
 
   return (
-    <div>
-      <Table columns={columns} dataSource={events} size="small" bordered pagination={{pageSize: 100}} scroll={{y: scrollY}}
+    <div style={{width: "100%"}}>
+      <Table columns={columns} dataSource={events} size="small" bordered pagination={{pageSize: 100, hideOnSinglePage: true}}
              title={() => <div><Text>Events for: </Text><Tag color="#108ee9">{title}</Tag></div>} onRow={handleRow}
              rowClassName={(record, index) => { return (record.id === clickRowIndex) ? 'bot-row' : '' }} />
     </div>

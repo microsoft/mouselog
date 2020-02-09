@@ -3,7 +3,6 @@ import {Table, Popover, Button, Tag, Typography} from 'antd';
 import Canvas from "./Canvas";
 import {getSize, renderEventTable} from "./Shared";
 import * as Backend from "./Backend";
-import {Link} from "react-router-dom";
 import * as Setting from "./Setting";
 
 const {Text} = Typography;
@@ -41,13 +40,13 @@ class TraceTable extends React.Component {
     const hasCanvas = this.props.hasCanvas || false;
 
     let columns = [
-      {
-        title: 'Id',
-        dataIndex: 'id',
-        key: 'id',
-        sorter: (a, b) => a.id - b.id,
-        ellipsis: true,
-      },
+      // {
+      //   title: 'Id',
+      //   dataIndex: 'id',
+      //   key: 'id',
+      //   sorter: (a, b) => a.id - b.id,
+      //   ellipsis: true,
+      // },
       {
         title: 'Path',
         dataIndex: 'path',
@@ -119,28 +118,33 @@ class TraceTable extends React.Component {
         key: 'guess',
         sorter: (a, b) => a.guess - b.guess,
       },
-      {
-        title: 'Reason',
-        dataIndex: 'reason',
-        key: 'reason',
-        sorter: (a, b) => a.reason.localeCompare(b.reason),
-        filters: (
-          this.state.rules.map((p, i) => {
-            return (
-              {
-                text: `${p.ruleId}. ${p.ruleName}`,
-                value: p.ruleId,
-              }
-            )
-          })
-        ),
-        // specify the condition of filtering result
-        // here is that finding the name started with `value`
-        onFilter: (value, record) => {
-          return record.ruleId === value;
-        },
-      }
     );
+
+    if (isLong) {
+      columns.push(
+        {
+          title: 'Reason',
+          dataIndex: 'reason',
+          key: 'reason',
+          sorter: (a, b) => a.reason.localeCompare(b.reason),
+          filters: (
+            this.state.rules.map((p, i) => {
+              return (
+                {
+                  text: `${p.ruleId}. ${p.ruleName}`,
+                  value: p.ruleId,
+                }
+              )
+            })
+          ),
+          // specify the condition of filtering result
+          // here is that finding the name started with `value`
+          onFilter: (value, record) => {
+            return record.ruleId === value;
+          },
+        }
+      );
+    }
 
     if (hasCanvas) {
       const content = (trace) => (
@@ -211,10 +215,10 @@ class TraceTable extends React.Component {
 
     // Dynamic height: https://github.com/ant-design/ant-design/issues/14379#issuecomment-458402994
     return (
-      <div>
+      <div style={{width: "100%"}}>
         <Table rowSelection={rowRadioSelection} columns={columns} dataSource={traces} size="small" bordered
                title={() => <div><Text>Traces for: </Text><Tag color="#108ee9">{title}</Tag></div>}
-               pagination={{pageSize: 100, hideOnSinglePage: true}} scroll={{y: scrollY}}
+               pagination={{pageSize: 100, hideOnSinglePage: true}}
                rowClassName={(record, index) => {
                  return (record.label === 1 || record.guess === 1) ? 'bot-row' : ''
                }}/>

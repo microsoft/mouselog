@@ -315,7 +315,7 @@ class TestPage extends React.Component {
                 <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80}/>
               </Col>
               <Col span={12}>
-                <div><Text>Sent payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>
+                <div><Text>Payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>
               </Col>
               <Text>&nbsp;</Text>
             </Row>
