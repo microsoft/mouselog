@@ -199,18 +199,15 @@ class App extends React.Component {
           <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions" component={ImpressionPage}/>
           <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions/:impressionId/events" component={CanvasPage}/>
         </Switch>
-        {
-          this.getUrlPath() === "/" ? null :
-            <Footer style={
-              {
-                borderTop: '1px solid #e8e8e8',
-                backgroundColor: 'white',
-                textAlign: 'center',
-              }
-            }>
-              Made with <span style={{color: 'rgb(255, 255, 255)'}}>❤️</span> by <a style={{fontWeight: "bold", color: "black"}} target="_blank" href="https://github.com/microsoft/mouselog">Microsoft</a>
-            </Footer>
-        }
+        <Footer style={
+          {
+            borderTop: '1px solid #e8e8e8',
+            backgroundColor: 'white',
+            textAlign: 'center',
+          }
+        }>
+          Made with <span style={{color: 'rgb(255, 255, 255)'}}>❤️</span> by <a style={{fontWeight: "bold", color: "black"}} target="_blank" href="https://github.com/microsoft/mouselog">Microsoft</a>
+        </Footer>
       </div>
     );
   }

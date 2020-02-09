@@ -34,11 +34,11 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
       key: 'type',
       width: 110,
     },
-    {
-      title: 'Btn',
-      dataIndex: 'button',
-      key: 'button',
-    },
+    // {
+    //   title: 'Btn',
+    //   dataIndex: 'button',
+    //   key: 'button',
+    // },
     {
       title: 'X',
       dataIndex: 'x',
