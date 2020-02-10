@@ -75,7 +75,7 @@ class Config extends React.Component {
     const code = `<script>
 (function() {
   var script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/mouselog@${version}/mouselog.js";
+  script.src = "https://cdn.jsdelivr.net/npm/mouselog@${version}/build/mouselog.min.js";
   script.onload = () => {
     ${configText}mouselog.run(config);
   };
