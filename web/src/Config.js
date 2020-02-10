@@ -46,14 +46,6 @@ class Config extends React.Component {
       }
     }
 
-    if (website.trackConfig.encoder !== "JSON.stringify") {
-      res += `\n      encoder: "${website.trackConfig.encoder}",`;
-    }
-
-    if (website.trackConfig.decoder !== "x => x") {
-      res += `\n      decoder: "${website.trackConfig.decoder}",`;
-    }
-
     if (website.trackConfig.enableGet !== false) {
       res += `\n      enableGet: ${website.trackConfig.enableGet},`;
     }
