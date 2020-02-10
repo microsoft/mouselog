@@ -112,30 +112,6 @@ class ConfigEdit extends React.Component {
         }
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
-            Encoder:
-          </Col>
-          <Col span={22}>
-            {
-              <Input value={this.props.website.trackConfig.encoder} onChange={e => {
-                this.updateConfigField("encoder", e.target.value);
-              }}/>
-            }
-          </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
-          <Col style={{marginTop: '5px'}} span={2}>
-            Decoder:
-          </Col>
-          <Col span={22}>
-            {
-              <Input value={this.props.website.trackConfig.decoder} onChange={e => {
-                this.updateConfigField("decoder", e.target.value);
-              }}/>
-            }
-          </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
-          <Col style={{marginTop: '5px'}} span={2}>
             Enable GET:
           </Col>
           <Col span={1} >

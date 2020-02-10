@@ -29,6 +29,10 @@ class Config extends React.Component {
 
   getConfigText(website) {
     let res = "let config = {";
+    
+    res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}"`;
+    
+    res += `\n      websiteId: "${website.id}"`;
 
     if (website.trackConfig.endpointType !== "absolute") {
       res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
@@ -46,14 +50,6 @@ class Config extends React.Component {
       }
     }
 
-    if (website.trackConfig.encoder !== "JSON.stringify") {
-      res += `\n      encoder: "${website.trackConfig.encoder}",`;
-    }
-
-    if (website.trackConfig.decoder !== "x => x") {
-      res += `\n      decoder: "${website.trackConfig.decoder}",`;
-    }
-
     if (website.trackConfig.enableGet !== false) {
       res += `\n      enableGet: ${website.trackConfig.enableGet},`;
     }
@@ -66,7 +62,7 @@ class Config extends React.Component {
       return "";
     }
 
-    res += `\n    };\n\n    `;
+    res += `\n    };\n    `;
 
     return res;
   }
@@ -81,7 +77,7 @@ class Config extends React.Component {
   var script = document.createElement("script");
   script.src = "https://cdn.jsdelivr.net/npm/mouselog@${version}/mouselog.js";
   script.onload = () => {
-    ${configText}mouselog.run("${website.trackConfig.uploadEndpoint}", "${website.id}"${configText !== "" ? `, config` : ``});
+    ${configText}mouselog.run(config);
   };
   var t = document.getElementsByTagName("script");
   var s = t.length > 0 ? t[0].parentNode : document.body;

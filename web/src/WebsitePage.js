@@ -46,12 +46,6 @@ class WebsitePage extends React.Component {
       // The website interaction data will be uploaded when every `frequency` events are captured.
       frequency: 50,
 
-      // The website interaction data will be encoded by `encoder` before uploading to the server.
-      encoder: "JSON.stringify",
-
-      // The response data will be decoded by `decoder`
-      decoder: "x => x",
-
       // Use GET method to upload data? (stringified data will be embedded in URI)
       enableGet: false,
 
