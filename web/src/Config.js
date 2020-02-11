@@ -30,9 +30,9 @@ class Config extends React.Component {
   getConfigText(website) {
     let res = "let config = {";
     
-    res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}"`;
+    res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
     
-    res += `\n      websiteId: "${website.id}"`;
+    res += `\n      websiteId: "${website.id}",`;
 
     if (website.trackConfig.endpointType !== "absolute") {
       res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
@@ -61,6 +61,8 @@ class Config extends React.Component {
     if (res === "let config = {") {
       return "";
     }
+
+    res = res.slice(0, res.length-1); //Remove the tailing comma
 
     res += `\n    };\n    `;
 
