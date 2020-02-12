@@ -73,6 +73,7 @@ class ConfigEdit extends React.Component {
             })}>
               {
                 [
+                  {id: "mixed", name: "Mixed"},
                   {id: "periodic", name: "Periodic"},
                   {id: "event-triggered", name: "Event Triggered"},
                 ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
@@ -81,7 +82,7 @@ class ConfigEdit extends React.Component {
           </Col>
         </Row>
         {
-          this.props.website.trackConfig.uploadMode !== "periodic" ? null :
+          !this.props.website.trackConfig.uploadMode in ["periodic", "mixed"] ? null :
             <Row style={{marginTop: '20px'}}>
               <Col style={{marginTop: '5px'}} span={2}>
                 Upload Period:
@@ -96,7 +97,7 @@ class ConfigEdit extends React.Component {
             </Row>
         }
         {
-          this.props.website.trackConfig.uploadMode !== "event-triggered" ? null :
+          !this.props.website.trackConfig.uploadMode in ["event-triggered", "mixed"] ? null :
             <Row style={{marginTop: '20px'}}>
               <Col style={{marginTop: '5px'}} span={2}>
                 Frequency:
@@ -119,18 +120,6 @@ class ConfigEdit extends React.Component {
               <Switch checked={this.props.website.trackConfig.enableGet} onChange={(checked, e) => {
                 this.updateConfigField("enableGet", checked);
               }} />
-            }
-          </Col>
-          <Col span={1} >
-          </Col>
-          <Col style={{marginTop: '5px'}} span={2}>
-            Resend Interval:
-          </Col>
-          <Col span={1}>
-            {
-              <Input style={{width: "100px"}} suffix="ms" value={this.props.website.trackConfig.resendInterval} onChange={e => {
-                this.updateConfigField("resendInterval", e.target.value);
-              }}/>
             }
           </Col>
         </Row>

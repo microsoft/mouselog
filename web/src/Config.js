@@ -38,24 +38,23 @@ class Config extends React.Component {
       res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
     }
 
-    if (website.trackConfig.uploadMode !== "periodic") {
+    if (website.trackConfig.uploadMode === "periodic") {
       res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
+      res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
+    }
 
-      if (website.trackConfig.frequency !== 50) {
-        res += `\n      frequency: ${website.trackConfig.frequency},`;
-      }
-    } else {
-      if (website.trackConfig.uploadPeriod !== 5000) {
+    if (website.trackConfig.uploadMode === "event-triggered") {
+      res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
+      res += `\n      frequency: ${website.trackConfig.frequency},`;
+    }
+
+    if (website.trackConfig.uploadMode === "mixed") {
         res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
-      }
+        res += `\n      frequency: ${website.trackConfig.frequency},`;
     }
 
     if (website.trackConfig.enableGet !== false) {
       res += `\n      enableGet: ${website.trackConfig.enableGet},`;
-    }
-
-    if (website.trackConfig.resendInterval !== 3000) {
-      res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
     }
 
     if (res === "let config = {") {
