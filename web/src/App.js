@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import * as Setting from "./Setting";
 
@@ -98,8 +97,7 @@ class App extends React.Component {
         <div id="content-wrap">
           <Layout className="layout">
             <Header style={{padding: '0', marginBottom: '3px'}}>
-              <div className="logo"/>
-
+              <a className="logo" href={"/"} />
               <Menu
                 // theme="dark"
                 mode="horizontal"
@@ -107,8 +105,6 @@ class App extends React.Component {
                 style={{lineHeight: '64px'}}
                 inlineCollapsed={false}
               >
-                <Text>Mouselog</Text>
-
                 <Menu.Item key="1">
                   <a href="/">
                     Get Started
