@@ -83,7 +83,8 @@ class Config extends React.Component {
   var script = document.createElement("script");
   script.src = "https://cdn.jsdelivr.net/npm/mouselog@${version}/build/mouselog.min.js";
   script.onload = () => {
-    ${configText}mouselog.run(config);
+    ${configText}var agent = mouselog.Mouselog();
+    agent.run(config);
   };
   var t = document.getElementsByTagName("script");
   var s = t.length > 0 ? t[0].parentNode : document.body;
