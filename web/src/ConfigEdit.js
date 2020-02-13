@@ -52,12 +52,12 @@ class ConfigEdit extends React.Component {
               }
             </Select>
           </Col>
-          <Col span={1} >
+          <Col span={2} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Upload Endpoint:
           </Col>
-          <Col span={16} >
+          <Col span={15} >
             <Input prefix={<LinkOutlined/>} value={this.props.website.trackConfig.uploadEndpoint} onChange={e => {
               this.updateConfigField("uploadEndpoint", e.target.value);
             }}/>

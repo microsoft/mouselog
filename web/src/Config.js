@@ -29,9 +29,9 @@ class Config extends React.Component {
 
   getConfigText(website) {
     let res = "let config = {";
-    
+
     res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
-    
+
     res += `\n      websiteId: "${website.id}",`;
 
     if (website.trackConfig.endpointType !== "absolute") {
@@ -98,7 +98,7 @@ class Config extends React.Component {
     // How do I crop the contents of an Iframe to show a part of a page?
     // https://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page
     return (
-      <div style={{width: "650px"}}>
+      <div style={{width: "700px"}}>
         <CodeMirror
           editorDidMount={editor => {
             this.instance = editor;
