@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license.
+ */
+
 import React from "react";
 import {Button, Col, Descriptions, Popover, Row} from "antd";
 import * as ImpressionBackend from "./backend/ImpressionBackend";

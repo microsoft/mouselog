@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license.
+ */
+
 import React from "react";
 import {Table, Row, Col} from 'antd';
 import * as Backend from "./Backend";

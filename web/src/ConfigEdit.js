@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license.
+ */
+
 import React from "react";
 import {Col, Input, Row, Select, Switch} from 'antd';
 import Config from "./Config";

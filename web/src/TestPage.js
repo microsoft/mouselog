@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license.
+ */
+
 import React from "react";
 import * as Setting from "./Setting";
 import {Alert, Button, Card, Col, Input, Progress, Row, Select, Switch, Tag, Typography} from "antd";

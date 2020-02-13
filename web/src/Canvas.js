@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license.
+ */
+
 import React from "react";
 import {Circle, Group, Image, Layer, Line, Stage} from "react-konva";
 import {getPoints} from "./Shared";
