@@ -20,6 +20,39 @@ export function getPoints(trace, scale) {
   return points;
 }
 
+export function getDragPointsList(trace, scale) {
+  if (trace === null) {
+    return [];
+  }
+
+  let pointsList = [];
+  let points = [];
+  let isDragging = false;
+  trace.events.forEach(function (event) {
+    if (event.type === "mousedown") {
+      points = [];
+      isDragging = true;
+
+      points.push(event.x * scale);
+      points.push(event.y * scale);
+    } else if (event.type === "mouseup") {
+      points.push(event.x * scale);
+      points.push(event.y * scale);
+
+      isDragging = false;
+      pointsList.push(points);
+      points = [];
+    } else {
+      if (isDragging) {
+        points.push(event.x * scale);
+        points.push(event.y * scale);
+      }
+    }
+  });
+
+  return pointsList;
+}
+
 export function renderEventTable(title, events, isLong=false, rowClickHandler=null, rowHoverHandler=null, clickRowIndex=-1) {
   const columns = [
     {

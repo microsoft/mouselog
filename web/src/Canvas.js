@@ -5,7 +5,7 @@
 
 import React from "react";
 import {Circle, Group, Image, Layer, Line, Stage} from "react-konva";
-import {getPoints} from "./Shared";
+import * as Shared from "./Shared";
 import {Text as KonvaText} from "react-konva/";
 import {Button, Col, Row, Slider, message} from "antd";
 import { CaretRightOutlined, PauseOutlined } from '@ant-design/icons';
@@ -159,6 +159,34 @@ class Canvas extends React.Component {
     return objs;
   }
 
+  renderLines(trace, scale) {
+    return (
+      <Line
+        points={Shared.getPoints(trace, scale)}
+        stroke="black"
+        strokeWidth={1}
+      />
+    )
+  }
+
+  renderDragLines(trace, scale) {
+    const pointsList = Shared.getDragPointsList(trace, scale);
+
+    let res = [];
+    pointsList.forEach(function (points, index) {
+      res.push(
+        <Line
+          points={points}
+          stroke="orange"
+          strokeWidth={8}
+          opacity={0.5}
+        />
+      );
+    });
+
+    return res;
+  }
+
   renderEvents(trace, scale, hoverIndex) {
     let objs = [];
     let radius = 2;
@@ -244,7 +272,7 @@ class Canvas extends React.Component {
     if (trace.ruleEnd !== -1) {
       return (
         <Line
-          points={getPoints(trace, scale).slice(trace.ruleStart * 2, trace.ruleEnd * 2)}
+          points={Shared.getPoints(trace, scale).slice(trace.ruleStart * 2, trace.ruleEnd * 2)}
           stroke="red"
           strokeWidth={2}
         />
@@ -271,11 +299,12 @@ class Canvas extends React.Component {
           <Stage width={width} height={height}
                  style={{border: '1px solid rgb(232,232,232)', marginLeft: '5px', marginRight: '5px'}}>
             <Layer>
-              <Line
-                  points={getPoints(trace, scale)}
-                  stroke="black"
-                  strokeWidth={1}
-              />
+              {
+                this.renderLines(trace, scale)
+              }
+              {
+                this.renderDragLines(trace, scale)
+              }
               {
                 (trace !== null) ? this.renderRuler(trace.width, trace.height, scale) : null
               }
