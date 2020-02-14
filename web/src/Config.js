@@ -68,7 +68,6 @@ class Config extends React.Component {
     
     let trimmedScope = this.trimStr(website.trackConfig.scope)
     if (trimmedScope !== "window.document") {
-      console.log(website.trackConfig);
       let lines = trimmedScope.split('\n');
       res += `\n      scope: ${lines[0]}`;
       for (let i = 1; i < lines.length; ++i) {
