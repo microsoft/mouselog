@@ -10,5 +10,4 @@ type Event struct {
 	Button    string  `json:"button"`
 	X         int     `json:"x"`
 	Y         int     `json:"y"`
-	IsTrusted bool    `json:"isTrusted"`
 }

@@ -7,33 +7,31 @@ import React from "react";
 import {Button, Col, Popconfirm, Row, Table, Tag, Tooltip} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
-import * as ImpressionBackend from "./backend/ImpressionBackend";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
-import Canvas from "./Canvas";
-import * as Shared from "./Shared";
+import * as PageBackend from "./backend/PageBackend";
+import moment from "moment";
 
-class ImpressionPage extends React.Component {
+class PagePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       classes: props,
       websiteId: props.match.params.websiteId,
-      sessionId: props.match.params.sessionId,
-      impressions: [],
+      pages: [],
       website: null,
     };
   }
 
   componentDidMount() {
-    this.getImpressions();
+    this.getPages();
     this.getWebsite();
   }
 
-  getImpressions() {
-    ImpressionBackend.getImpressions(this.state.sessionId)
+  getPages() {
+    PageBackend.getPages(this.state.websiteId)
       .then((res) => {
           this.setState({
-            impressions: res,
+            pages: res,
           });
         }
       );
@@ -49,17 +47,44 @@ class ImpressionPage extends React.Component {
       );
   }
 
-  deleteImpression(i) {
-    ImpressionBackend.deleteImpression(this.state.impressions[i].id)
+  newPage() {
+    return {
+      id: `/path${this.state.pages.length}`,
+      websiteId: this.state.websiteId,
+      urlPath: `/path${this.state.pages.length}`,
+      createdTime: moment().format(),
+      width: 0,
+      height: 0,
+      screenshotUrl: "https://upload.wikimedia.org/wikipedia/commons/8/87/United_States_Antarctic_Program_website_from_2018_02_22.png",
+    }
+  }
+
+  addPage() {
+    const newPage = this.newPage();
+    PageBackend.addPage(newPage)
       .then((res) => {
-          Setting.showMessage("success", `Deleting impression succeeded`);
+          Setting.showMessage("success", `Adding page succeeded`);
           this.setState({
-            impressions: Setting.deleteRow(this.state.impressions, i),
+            pages: Setting.addRow(this.state.pages, newPage),
           });
         }
       )
       .catch(error => {
-        Setting.showMessage("error", `Deleting impression succeeded：${error}`);
+        Setting.showMessage("error", `Adding page failed：${error}`);
+      });
+  }
+
+  deletePage(i) {
+    PageBackend.deletePage(this.state.pages[i].id)
+      .then((res) => {
+          Setting.showMessage("success", `Deleting page succeeded`);
+          this.setState({
+            pages: Setting.deleteRow(this.state.pages, i),
+          });
+        }
+      )
+      .catch(error => {
+        Setting.showMessage("error", `Deleting page succeeded：${error}`);
       });
   }
 
@@ -69,20 +94,12 @@ class ImpressionPage extends React.Component {
     return date;
   }
 
-  renderTable(impressions) {
+  renderTable(pages) {
     const columns = [
       {
-        title: 'Impression ID',
+        title: 'Page ID',
         dataIndex: 'id',
         key: 'id',
-      },
-      {
-        title: 'Created Time',
-        dataIndex: 'createdTime',
-        key: 'createdTime',
-        render: (text, record, index) => {
-          return this.getFormattedDate(text);
-        }
       },
       {
         title: 'URL Path',
@@ -97,6 +114,14 @@ class ImpressionPage extends React.Component {
         }
       },
       {
+        title: 'Created Time',
+        dataIndex: 'createdTime',
+        key: 'createdTime',
+        render: (text, record, index) => {
+          return this.getFormattedDate(text);
+        }
+      },
+      {
         title: 'Width',
         dataIndex: 'width',
         key: 'width',
@@ -106,33 +131,20 @@ class ImpressionPage extends React.Component {
         dataIndex: 'height',
         key: 'height',
       },
-      // {
-      //   title: 'Page Load Time',
-      //   dataIndex: 'pageLoadTime',
-      //   key: 'pageLoadTime',
-      // },
       {
-        title: 'Event Count',
-        key: 'eventCount',
+        title: 'Screenshot URL',
+        dataIndex: 'screenshotUrl',
+        key: 'screenshotUrl',
         render: (text, record, index) => {
-          if (record.events === null) {
-            return null;
-          }
-
-          return record.events.length;
+          return <a target="_blank" href={text}>{text}</a>
         }
       },
       {
-        title: 'Canvas',
-        key: 'canvas',
-        width: 500,
+        title: 'Image',
+        dataIndex: 'image',
+        key: 'image',
         render: (text, record, index) => {
-          if (record.events.length === 0) {
-            return null;
-          }
-
-          return <Canvas trace={record} size={Shared.getSize(record, 4)} isBackground={false}
-                         focusIndex={-1}/>
+          return <img src={record.screenshotUrl} alt="image" width={300} style={{marginBottom: '20px'}}/>
         }
       },
       {
@@ -144,16 +156,17 @@ class ImpressionPage extends React.Component {
           return (
             <div>
               <Tooltip placement="topLeft" title="View">
-                <Button style={{marginRight: "5px"}} icon={<EyeOutlined />} size="small" onClick={() => Setting.openLink(`/websites/${this.state.websiteId}/sessions/${this.state.sessionId}/impressions/${record.id}/events`)} />
+                <Button style={{marginRight: "5px"}} icon={<EyeOutlined/>} size="small"
+                        onClick={() => Setting.openLink(`/pages/${this.state.websiteId}/pages/${record.id}/impressions`)}/>
               </Tooltip>
               <Popconfirm
-                title={`Are you sure to delete impression: ${record.id} ?`}
-                onConfirm={() => this.deleteImpression(index)}
+                title={`Are you sure to delete page: ${record.id} ?`}
+                onConfirm={() => this.deletePage(index)}
                 okText="Yes"
                 cancelText="No"
               >
                 <Tooltip placement="topLeft" title="Delete">
-                  <Button icon={<MinusOutlined />} size="small" />
+                  <Button icon={<MinusOutlined/>} size="small"/>
                 </Tooltip>
               </Popconfirm>
             </div>
@@ -164,11 +177,11 @@ class ImpressionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 20}}
+        <Table columns={columns} dataSource={pages} rowKey="name" size="middle" bordered pagination={{pageSize: 100}}
                title={() => (
                  <div>
-                   Impressions for: <Tag color="#108ee9">{this.state.websiteId}</Tag> -> <Tag color="#108ee9">{this.state.sessionId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
-                   {/*<Button type="primary" size="small" onClick={this.addImpression.bind(this)}>Add</Button>*/}
+                   Pages for: <Tag color="#108ee9">{this.state.websiteId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
+                   <Button type="primary" size="small" onClick={this.addPage.bind(this)}>Add</Button>
                  </div>
                )}
         />
@@ -182,7 +195,7 @@ class ImpressionPage extends React.Component {
         <Row>
           <Col span={24}>
             {
-              this.renderTable(this.state.impressions)
+              this.renderTable(this.state.pages)
             }
           </Col>
         </Row>
@@ -191,4 +204,4 @@ class ImpressionPage extends React.Component {
   }
 }
 
-export default ImpressionPage;
+export default PagePage;

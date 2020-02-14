@@ -19,6 +19,7 @@ import WebsitePage from "./WebsitePage";
 import WebsiteEditPage from "./WebsiteEditPage";
 import SessionPage from "./SessionPage";
 import ImpressionPage from "./ImpressionPage";
+import PagePage from "./PagePage";
 
 const {Title, Paragraph, Text} = Typography;
 const {Header, Footer, Sider, Content} = Layout;
@@ -52,6 +53,8 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 4});
     } else if (path.includes('rule')) {
       this.setState({selectedMenuKey: 5});
+    } else if (path.includes('pages')) {
+      this.setState({selectedMenuKey: 9});
     } else if (path.includes('impressions')) {
       this.setState({selectedMenuKey: 8});
     } else if (path.includes('sessions')) {
@@ -136,6 +139,14 @@ class App extends React.Component {
                       </a>
                     </Menu.Item>
                 }
+                {
+                  !this.getUrlPath().includes('pages') ? null :
+                    <Menu.Item key="9">
+                      <a href="#">
+                        Pages
+                      </a>
+                    </Menu.Item>
+                }
                 <Menu.Item key="2">
                   <a href="/dashboard">
                     Dataset
@@ -199,6 +210,7 @@ class App extends React.Component {
             <Route exact path="/websites/:websiteId/sessions" component={SessionPage}/>
             <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions" component={ImpressionPage}/>
             <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions/:impressionId/events" component={CanvasPage}/>
+            <Route exact path="/websites/:websiteId/pages" component={PagePage}/>
           </Switch>
         </div>
         {/*How to keep your footer where it belongs ?*/}

@@ -150,6 +150,17 @@ class WebsitePage extends React.Component {
         }
       },
       {
+        title: 'Pages',
+        key: 'pages',
+        render: (text, record, index) => {
+          return (
+            <div>
+              <Button type="primary" onClick={() => Setting.openLink(`/websites/${record.id}/pages`)}>View Pages</Button>
+            </div>
+          )
+        }
+      },
+      {
         title: 'State',
         dataIndex: 'state',
         key: 'state',

@@ -92,4 +92,9 @@ func (a *OrmManager) createTables() {
 	if err != nil {
 		panic(err)
 	}
+
+	err = a.engine.Sync2(new(Page))
+	if err != nil {
+		panic(err)
+	}
 }
