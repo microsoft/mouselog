@@ -8,6 +8,7 @@ import {Button, Col, Popconfirm, Row, Table, Tag, Tooltip} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as ImpressionBackend from "./backend/ImpressionBackend";
+import * as WebsiteBackend from "./backend/WebsiteBackend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
 
@@ -19,11 +20,13 @@ class ImpressionPage extends React.Component {
       websiteId: props.match.params.websiteId,
       sessionId: props.match.params.sessionId,
       impressions: [],
+      website: null,
     };
   }
 
   componentDidMount() {
     this.getImpressions();
+    this.getWebsite();
   }
 
   getImpressions() {
@@ -31,6 +34,16 @@ class ImpressionPage extends React.Component {
       .then((res) => {
           this.setState({
             impressions: res,
+          });
+        }
+      );
+  }
+
+  getWebsite() {
+    WebsiteBackend.getWebsite(this.state.websiteId)
+      .then((website) => {
+          this.setState({
+            website: website,
           });
         }
       );
@@ -75,6 +88,13 @@ class ImpressionPage extends React.Component {
         title: 'Url Path',
         dataIndex: 'urlPath',
         key: 'urlPath',
+        render: (text, record, index) => {
+          if (this.state.website === null) {
+            return text;
+          }
+
+          return <a target="_blank" href={`${this.state.website.url}${text}`}>{text}</a>
+        }
       },
       {
         title: 'Width',
