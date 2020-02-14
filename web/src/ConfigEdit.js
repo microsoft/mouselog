@@ -10,6 +10,7 @@ import {LinkOutlined} from "@ant-design/icons";
 import * as Setting from "./Setting";
 
 const {Option} = Select;
+const {TextArea} = Input;
 
 class ConfigEdit extends React.Component {
   constructor(props) {
@@ -116,6 +117,17 @@ class ConfigEdit extends React.Component {
               </Col>
             </Row>
         }
+        <Row style={{marginTop: '20px'}}>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Scope:
+          </Col>
+          <Col span={20}>
+            <TextArea value={this.props.website.trackConfig.scope} onChange={(e) =>{
+              this.updateConfigField("scope", e.target.value);
+              console.log(e.target.value);
+            }} autoSize/>
+          </Col>
+        </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Enable GET:

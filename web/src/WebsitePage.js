@@ -56,6 +56,9 @@ class WebsitePage extends React.Component {
 
       // Time interval for resending the failed trace data
       resendInterval: 3000,
+
+      // Scope
+      scope: "window.document"
     }
   }
 
