@@ -47,12 +47,6 @@ class SessionPage extends React.Component {
       });
   }
 
-  getFormattedDate(date) {
-    date = date.replace('T', ' ');
-    date = date.replace('+08:00', ' ');
-    return date;
-  }
-
   renderTable(sessions) {
     const columns = [
       {
@@ -65,7 +59,7 @@ class SessionPage extends React.Component {
         dataIndex: 'createdTime',
         key: 'createdTime',
         render: (text, record, index) => {
-          return this.getFormattedDate(text);
+          return Setting.getFormattedDate(text);
         }
       },
       {
