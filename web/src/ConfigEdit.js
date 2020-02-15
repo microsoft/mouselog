@@ -88,7 +88,7 @@ class ConfigEdit extends React.Component {
           </Col>
         </Row>
         {
-          !this.props.website.trackConfig.uploadMode in ["periodic", "mixed"] ? null :
+          this.props.website.trackConfig.uploadMode === "event-triggered" ? null :
             <Row style={{marginTop: '20px'}}>
               <Col style={{marginTop: '5px'}} span={2}>
                 Upload Period:
@@ -103,7 +103,7 @@ class ConfigEdit extends React.Component {
             </Row>
         }
         {
-          !this.props.website.trackConfig.uploadMode in ["event-triggered", "mixed"] ? null :
+          this.props.website.trackConfig.uploadMode === "periodic" ? null :
             <Row style={{marginTop: '20px'}}>
               <Col style={{marginTop: '5px'}} span={2}>
                 Frequency:
