@@ -4,8 +4,10 @@
 package util
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -37,4 +39,23 @@ func FileExist(path string) bool {
 		return false
 	}
 	return true
+}
+
+func EnsureFileFolderExists(path string) {
+	p := GetPath(path)
+	if !FileExist(p) {
+		err := os.MkdirAll(p, os.ModePerm)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func GetPath(path string) string {
+	return filepath.Dir(path)
+}
+
+func JoinUrl(base string, paths ...string) string {
+	p := path.Join(paths...)
+	return fmt.Sprintf("%s/%s", strings.TrimRight(base, "/"), strings.TrimLeft(p, "/"))
 }

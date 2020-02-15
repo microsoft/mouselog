@@ -21,3 +21,5 @@ vendor/
 tmp/
 go.mod
 go.sum
+
+static/

@@ -3,7 +3,13 @@
 
 package trace
 
-import "strings"
+import (
+	"net/url"
+	"strings"
+
+	"github.com/microsoft/mouselog/screenshot"
+	"github.com/microsoft/mouselog/util"
+)
 
 type Page struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
@@ -80,4 +86,17 @@ func DeletePage(id string) bool {
 	}
 
 	return affected != 0
+}
+
+func (p *Page) takeScreenshot() {
+	website := GetWebsite(p.WebsiteId)
+	screenshotUrl := util.JoinUrl(website.Url, p.UrlPath)
+	escapedPageId := url.QueryEscape(p.Id)
+
+	filePathName := util.GetScreenshotPath(p.WebsiteId, escapedPageId)
+	util.EnsureFileFolderExists(filePathName)
+	screenshot.TakeScreenshot(screenshotUrl, filePathName)
+
+	p.ScreenshotUrl = util.GetScreenshotUrl(p.WebsiteId, escapedPageId)
+	UpdatePage(p.Id, p)
 }
