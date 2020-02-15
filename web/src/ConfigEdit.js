@@ -124,7 +124,6 @@ class ConfigEdit extends React.Component {
           <Col span={20}>
             <TextArea value={this.props.website.trackConfig.scope} onChange={(e) =>{
               this.updateConfigField("scope", e.target.value);
-              console.log(e.target.value);
             }} autoSize/>
           </Col>
         </Row>

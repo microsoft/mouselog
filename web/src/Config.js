@@ -68,7 +68,6 @@ class Config extends React.Component {
     
     let trimmedScope = this.trimStr(website.trackConfig.scope)
     if (trimmedScope !== "window.document") {
-      console.log(website.trackConfig);
       let lines = trimmedScope.split('\n');
       res += `\n      scope: ${lines[0]}`;
       for (let i = 1; i < lines.length; ++i) {
@@ -98,7 +97,7 @@ class Config extends React.Component {
   var script = document.createElement("script");
   script.src = "https://cdn.jsdelivr.net/npm/mouselog@${version}/build/mouselog.min.js";
   script.onload = () => {
-    ${configText}var agent = mouselog.Mouselog();
+    ${configText}var agent = new mouselog.Mouselog();
     agent.run(config);
   };
   var t = document.getElementsByTagName("script");
