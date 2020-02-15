@@ -15,6 +15,7 @@
     "react-konva": "^16.10.1-0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "react-viewer": "^3.1.0",
     "tasktimer": "^3.0.0",
     "uuid": "^3.4.0"
   },

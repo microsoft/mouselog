@@ -10,6 +10,7 @@ import * as Setting from "./Setting";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
 import * as PageBackend from "./backend/PageBackend";
 import moment from "moment";
+import Viewer from 'react-viewer';
 
 class PagePage extends React.Component {
   constructor(props) {
@@ -19,6 +20,8 @@ class PagePage extends React.Component {
       websiteId: props.match.params.websiteId,
       pages: [],
       website: null,
+      isImageViewerVisible: false,
+      selectedPage: null,
     };
   }
 
@@ -134,11 +137,20 @@ class PagePage extends React.Component {
         }
       },
       {
-        title: 'Image',
+        title: 'Screenshot',
         dataIndex: 'image',
         key: 'image',
         render: (text, record, index) => {
-          return <img src={record.screenshotUrl} alt="image" width={300} style={{marginBottom: '20px'}}/>
+          return (
+            <img src={record.screenshotUrl} alt="image" height={100} style={{marginBottom: '20px', cursor: 'pointer'}}
+                 onClick={() => {
+                   this.setState({
+                     isImageViewerVisible: true,
+                     selectedPage: record,
+                   })
+                 }}
+            />
+          )
         }
       },
       {
@@ -193,6 +205,27 @@ class PagePage extends React.Component {
             }
           </Col>
         </Row>
+        <Viewer
+          visible={this.state.isImageViewerVisible}
+          onClose={() => {
+            this.setState({
+              isImageViewerVisible: false,
+              selectedPage: null,
+            })
+          }}
+          onMaskClick={() => {
+            this.setState({
+              isImageViewerVisible: false,
+              selectedPage: null,
+            })
+          }}
+          zoomSpeed={1.0}
+          images={
+            [{
+              src: this.state.selectedPage === null ? null : this.state.selectedPage.screenshotUrl,
+              alt: this.state.selectedPage === null ? null : this.state.selectedPage.id
+            }]}
+        />
       </div>
     );
   }
