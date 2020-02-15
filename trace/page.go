@@ -91,12 +91,12 @@ func DeletePage(id string) bool {
 func (p *Page) takeScreenshot() {
 	website := GetWebsite(p.WebsiteId)
 	screenshotUrl := util.JoinUrl(website.Url, p.UrlPath)
-	escapedPageId := url.QueryEscape(p.Id)
+	screenshotId := url.PathEscape(p.Id)
 
-	filePathName := util.GetScreenshotPath(p.WebsiteId, escapedPageId)
+	filePathName := util.GetScreenshotPath(p.WebsiteId, screenshotId)
 	util.EnsureFileFolderExists(filePathName)
 	screenshot.TakeScreenshot(screenshotUrl, filePathName)
 
-	p.ScreenshotUrl = util.GetScreenshotUrl(p.WebsiteId, escapedPageId)
+	p.ScreenshotUrl = util.GetScreenshotUrl(p.WebsiteId, url.PathEscape(screenshotId))
 	UpdatePage(p.Id, p)
 }
