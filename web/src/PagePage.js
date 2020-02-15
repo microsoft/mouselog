@@ -97,11 +97,6 @@ class PagePage extends React.Component {
         title: 'Page ID',
         dataIndex: 'id',
         key: 'id',
-      },
-      {
-        title: 'URL Path',
-        dataIndex: 'urlPath',
-        key: 'urlPath',
         render: (text, record, index) => {
           if (this.state.website === null) {
             return text;
@@ -110,6 +105,18 @@ class PagePage extends React.Component {
           return <a target="_blank" href={`${this.state.website.url}${text}`}>{text}</a>
         }
       },
+      // {
+      //   title: 'URL Path',
+      //   dataIndex: 'urlPath',
+      //   key: 'urlPath',
+      //   render: (text, record, index) => {
+      //     if (this.state.website === null) {
+      //       return text;
+      //     }
+      //
+      //     return <a target="_blank" href={`${this.state.website.url}${text}`}>{text}</a>
+      //   }
+      // },
       {
         title: 'Created Time',
         dataIndex: 'createdTime',

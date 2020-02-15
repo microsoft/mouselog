@@ -29,3 +29,15 @@ func ParseFloat(s string) float64 {
 func UnescapeUserAgent(userAgent string) string {
 	return strings.Replace(userAgent, "#TAB#", ",", -1)
 }
+
+func UniqueStringSlice(l []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range l {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}

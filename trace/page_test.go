@@ -3,7 +3,11 @@
 
 package trace
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/microsoft/mouselog/crawler"
+)
 
 func TestPageScreenshot(t *testing.T) {
 	InitOrmManager()
@@ -11,5 +15,15 @@ func TestPageScreenshot(t *testing.T) {
 	pages := GetPages("casbin")
 	for _, page := range pages {
 		page.takeScreenshot()
+	}
+}
+
+func TestCrawl(t *testing.T) {
+	InitOrmManager()
+
+	website := GetWebsite("casbin")
+	pageIds := crawler.CrawlWebsite(website.Url)
+	for _, pageId := range pageIds {
+		addPage(pageId, website.Id, pageId)
 	}
 }

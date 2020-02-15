@@ -4,6 +4,7 @@
 package trace
 
 import (
+	"fmt"
 	"net/url"
 	"strings"
 
@@ -99,4 +100,6 @@ func (p *Page) takeScreenshot() {
 
 	p.ScreenshotUrl = util.GetScreenshotUrl(p.WebsiteId, url.PathEscape(screenshotId))
 	UpdatePage(p.Id, p)
+
+	fmt.Printf("Generate screenshot: (%s, %s) => %s\n", p.WebsiteId, p.Id, filePathName)
 }

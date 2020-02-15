@@ -13,16 +13,21 @@ import (
 	"github.com/chromedp/chromedp"
 )
 
+var browserCtx context.Context = nil
+
 // Screenshot example:
 // https://github.com/chromedp/chromedp/issues/82#issuecomment-507087234
 func TakeScreenshot(url string, filename string) {
 	// create context
-	ctx, cancel := chromedp.NewContext(context.Background())
-	defer cancel()
+	//ctx, cancel := chromedp.NewContext(context.Background())
+	//defer cancel()
+	if browserCtx == nil {
+		browserCtx, _ = chromedp.NewContext(context.Background())
+	}
 
 	// capture entire browser viewport, returning png with quality=90
 	var buf []byte
-	if err := chromedp.Run(ctx, fullScreenshot(url, 90, &buf)); err != nil {
+	if err := chromedp.Run(browserCtx, fullScreenshot(url, 90, &buf)); err != nil {
 		panic(err)
 
 	}
