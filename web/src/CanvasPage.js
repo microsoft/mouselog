@@ -6,6 +6,7 @@
 import React from "react";
 import {Button, Col, Descriptions, Popover, Row} from "antd";
 import * as ImpressionBackend from "./backend/ImpressionBackend";
+import * as WebsiteBackend from "./backend/WebsiteBackend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
 import * as Setting from "./Setting";
@@ -15,8 +16,10 @@ class CanvasPage extends React.Component {
     super(props);
     this.state = {
       classes: props,
+      websiteId: props.match.params.websiteId,
       impressionId: props.match.params.impressionId,
       trace: null,
+      website: null,
       hoverRowIndex: -1,
       clickRowIndex: -1,
     };
@@ -25,12 +28,27 @@ class CanvasPage extends React.Component {
   }
 
   componentDidMount() {
+    this.getImpression();
+    this.getWebsite();
+  }
+
+  getImpression() {
     ImpressionBackend.getImpression(this.state.impressionId)
       .then(res => {
         this.setState({
           trace: res,
         });
       });
+  }
+
+  getWebsite() {
+    WebsiteBackend.getWebsite(this.state.websiteId)
+      .then((website) => {
+          this.setState({
+            website: website,
+          });
+        }
+      );
   }
 
   getProperty(name) {
@@ -141,8 +159,11 @@ class CanvasPage extends React.Component {
             </Row>
           </Col>
           <Col span={17}>
-            <Canvas ref={this.canvas} trace={this.state.trace} size={size}
-                    clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex}/>
+            {
+              this.state.website === null ? null :
+                <Canvas ref={this.canvas} trace={this.state.trace} website={this.state.website} size={size}
+                        clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex}/>
+            }
           </Col>
         </Row>
       </div>
