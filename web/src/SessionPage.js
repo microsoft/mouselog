@@ -58,6 +58,7 @@ class SessionPage extends React.Component {
         title: 'Created Time',
         dataIndex: 'createdTime',
         key: 'createdTime',
+        sorter: (a, b) => a.createdTime.localeCompare(b.createdTime),
         render: (text, record, index) => {
           return Setting.getFormattedDate(text);
         }
@@ -66,16 +67,19 @@ class SessionPage extends React.Component {
         title: 'User Agent',
         dataIndex: 'userAgent',
         key: 'userAgent',
+        sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
       },
       {
         title: 'Client IP',
         dataIndex: 'clientIp',
         key: 'clientIp',
+        sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
       },
       {
         title: 'Impression Count',
         dataIndex: 'impressionCount',
         key: 'impressionCount',
+        sorter: (a, b) => a.impressionCount - b.impressionCount,
       },
       {
         title: 'Action',
@@ -106,7 +110,7 @@ class SessionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 20}}
+        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}}
                title={() => (
                  <div>
                    Sessions for: <Tag color="#108ee9">{this.state.websiteId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;

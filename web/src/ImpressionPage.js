@@ -74,6 +74,7 @@ class ImpressionPage extends React.Component {
         title: 'Created Time',
         dataIndex: 'createdTime',
         key: 'createdTime',
+        sorter: (a, b) => a.createdTime.localeCompare(b.createdTime),
         render: (text, record, index) => {
           return Setting.getFormattedDate(text);
         }
@@ -82,6 +83,7 @@ class ImpressionPage extends React.Component {
         title: 'URL Path',
         dataIndex: 'urlPath',
         key: 'urlPath',
+        sorter: (a, b) => a.urlPath.localeCompare(b.urlPath),
         render: (text, record, index) => {
           if (this.state.website === null) {
             return text;
@@ -94,11 +96,13 @@ class ImpressionPage extends React.Component {
         title: 'Width',
         dataIndex: 'width',
         key: 'width',
+        sorter: (a, b) => a.width - b.width,
       },
       {
         title: 'Height',
         dataIndex: 'height',
         key: 'height',
+        sorter: (a, b) => a.height - b.height,
       },
       // {
       //   title: 'Page Load Time',
@@ -108,6 +112,7 @@ class ImpressionPage extends React.Component {
       {
         title: 'Event Count',
         key: 'eventCount',
+        sorter: (a, b) => a.events.length - b.events.length,
         render: (text, record, index) => {
           if (record.events === null) {
             return null;
@@ -158,7 +163,7 @@ class ImpressionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 20}}
+        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}}
                title={() => (
                  <div>
                    Impressions for: <Tag color="#108ee9">{this.state.websiteId}</Tag> -> <Tag color="#108ee9">{this.state.sessionId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
