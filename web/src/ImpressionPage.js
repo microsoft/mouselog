@@ -130,8 +130,11 @@ class ImpressionPage extends React.Component {
             return null;
           }
 
-          return <Canvas trace={record} website={this.state.website} size={Shared.getSize(record, 4)} isBackground={false}
-                         focusIndex={-1}/>
+          return (
+            <div style={{cursor: "pointer"}} onClick={() => Setting.openLink(`/websites/${this.state.websiteId}/sessions/${this.state.sessionId}/impressions/${record.id}/events`)}>
+              <Canvas type="embed" trace={record} website={this.state.website} size={Shared.getSize(record, 4)} isBackground={false} focusIndex={-1} />
+            </div>
+          );
         }
       },
       {

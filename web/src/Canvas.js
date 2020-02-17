@@ -305,7 +305,7 @@ class Canvas extends React.Component {
             !hasIFrame ? null :
               <div style={{
                 border: '1px solid rgb(232,232,232)',
-                marginLeft: '5px',
+                marginLeft: this.props.type === "embed" ? '-3px' : '5px',
                 marginRight: '5px',
                 width: width,
                 height: height,
@@ -321,6 +321,7 @@ class Canvas extends React.Component {
                     left: 0,
                     transform: `scale(${scale})`,
                     transformOrigin: "0 0",
+                    overflow: "hidden",
                   }}
                   src={`${this.props.website.url}${this.props.trace.urlPath}`}
                   width={width}

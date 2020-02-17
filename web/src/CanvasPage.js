@@ -128,7 +128,7 @@ class CanvasPage extends React.Component {
     return (
       <div>
         <Row>
-          <Col span={7} style={{paddingLeft: '2.5px'}}>
+          <Col span={6} style={{paddingLeft: '2.5px'}}>
             <Row>
               <Col span={6}>
                 <Popover placement="topRight" content={content()} title="" trigger="click">
@@ -158,10 +158,10 @@ class CanvasPage extends React.Component {
               }
             </Row>
           </Col>
-          <Col span={17}>
+          <Col span={18}>
             {
               this.state.website === null ? null :
-                <Canvas ref={this.canvas} trace={this.state.trace} website={this.state.website} size={size}
+                <Canvas type="standalone" ref={this.canvas} trace={this.state.trace} website={this.state.website} size={size}
                         clickHandler={this.canvasClickHandler.bind(this)} hoverIndex={this.state.hoverRowIndex}/>
             }
           </Col>
