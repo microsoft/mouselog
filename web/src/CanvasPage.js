@@ -10,6 +10,7 @@ import * as WebsiteBackend from "./backend/WebsiteBackend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
 import * as Setting from "./Setting";
+import BreadcrumbBar from "./BreadcrumbBar";
 
 class CanvasPage extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class CanvasPage extends React.Component {
     this.state = {
       classes: props,
       websiteId: props.match.params.websiteId,
+      sessionId: props.match.params.sessionId,
       impressionId: props.match.params.impressionId,
       trace: null,
       website: null,
@@ -127,6 +129,9 @@ class CanvasPage extends React.Component {
 
     return (
       <div>
+        <Row>
+          <BreadcrumbBar websiteId={this.state.websiteId} sessionId={this.state.sessionId} impressionId={this.state.impressionId} />
+        </Row>
         <Row>
           <Col span={6} style={{paddingLeft: '2.5px'}}>
             <Row>

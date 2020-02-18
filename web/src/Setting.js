@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import {message} from "antd";
+import {message, Tag} from "antd";
 import { v4 as uuid } from 'uuid';
 
 export let ServerUrl = '';
@@ -118,4 +118,8 @@ export function getFormattedDate(date) {
   date = date.replace('T', ' ');
   date = date.replace('+08:00', ' ');
   return date;
+}
+
+export function getTagLink(s) {
+  return <Tag style={{cursor: "pointer"}} color="#108ee9">{s}</Tag>
 }

@@ -4,13 +4,14 @@
  */
 
 import React from "react";
-import {Button, Col, Popconfirm, Row, Table, Tag, Tooltip} from 'antd';
+import {Button, Col, Popconfirm, Row, Table, Tooltip} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as ImpressionBackend from "./backend/ImpressionBackend";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
+import BreadcrumbBar from "./BreadcrumbBar";
 
 class ImpressionPage extends React.Component {
   constructor(props) {
@@ -166,14 +167,7 @@ class ImpressionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}}
-               title={() => (
-                 <div>
-                   Impressions for: <Tag color="#108ee9">{this.state.websiteId}</Tag> -> <Tag color="#108ee9">{this.state.sessionId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
-                   {/*<Button type="primary" size="small" onClick={this.addImpression.bind(this)}>Add</Button>*/}
-                 </div>
-               )}
-        />
+        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} />
       </div>
     );
   }
@@ -181,6 +175,9 @@ class ImpressionPage extends React.Component {
   render() {
     return (
       <div>
+        <Row>
+          <BreadcrumbBar websiteId={this.state.websiteId} sessionId={this.state.sessionId} />
+        </Row>
         <Row>
           <Col span={24}>
             {

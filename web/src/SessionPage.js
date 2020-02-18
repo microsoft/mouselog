@@ -4,10 +4,11 @@
  */
 
 import React from "react";
-import {Button, Col, Popconfirm, Row, Table, Tag, Tooltip} from 'antd';
+import {Button, Col, Popconfirm, Row, Table, Tooltip} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as SessionBackend from "./backend/SessionBackend";
+import BreadcrumbBar from "./BreadcrumbBar";
 
 class SessionPage extends React.Component {
   constructor(props) {
@@ -110,14 +111,7 @@ class SessionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}}
-               title={() => (
-                 <div>
-                   Sessions for: <Tag color="#108ee9">{this.state.websiteId}</Tag>&nbsp;&nbsp;&nbsp;&nbsp;
-                   {/*<Button type="primary" size="small" onClick={this.addSession.bind(this)}>Add</Button>*/}
-                 </div>
-               )}
-        />
+        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} />
       </div>
     );
   }
@@ -125,6 +119,9 @@ class SessionPage extends React.Component {
   render() {
     return (
       <div>
+        <Row>
+          <BreadcrumbBar websiteId={this.state.websiteId} sessionId={this.state.sessionId} />
+        </Row>
         <Row>
           <Col span={24}>
             {
