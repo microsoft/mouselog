@@ -25,7 +25,7 @@ class ConfigEdit extends React.Component {
   }
 
   parseConfigField(key, value) {
-    if (["uploadPeriod", "frequency", "resendInterval"].includes(key)) {
+    if (["uploadPeriod", "frequency", "resendInterval", "sizeLimit"].includes(key)) {
       value = Setting.myParseInt(value);
     }
     return value;
@@ -33,7 +33,9 @@ class ConfigEdit extends React.Component {
 
   updateConfigField(key, value) {
     value = this.parseConfigField(key, value);
-
+    if (key == "scope" && !value) {
+      value = "window.document";
+    }
     let website = this.props.website;
     website.trackConfig[key] = value;
     this.updateWebsite(website);
@@ -117,6 +119,18 @@ class ConfigEdit extends React.Component {
               </Col>
             </Row>
         }
+        <Row style={{marginTop: '20px'}}>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Size Limit:
+          </Col>
+          <Col span={1}>
+            {
+              <Input style={{width: "120px"}} suffix="Bytes" value={this.props.website.trackConfig.sizeLimit} onChange={e => {
+                this.updateConfigField("sizeLimit", e.target.value);
+              }}/>
+            }
+          </Col>
+        </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Scope:

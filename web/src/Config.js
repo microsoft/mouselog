@@ -62,6 +62,10 @@ class Config extends React.Component {
         res += `\n      frequency: ${website.trackConfig.frequency},`;
     }
 
+    if (website.trackConfig.sizeLimit !== 4096) {
+      res += `\n      sizeLimit: ${website.trackConfig.sizeLimit},`;
+    }
+
     if (website.trackConfig.enableGet !== false) {
       res += `\n      enableGet: ${website.trackConfig.enableGet},`;
     }
