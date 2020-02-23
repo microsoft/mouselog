@@ -17,21 +17,42 @@ class SessionPage extends React.Component {
       classes: props,
       websiteId: props.match.params.websiteId,
       sessions: [],
+      loading: false,
+      pagination: {
+        current: 1,
+        defaultCurrent: 1,
+        pageSize: 5,
+        total: 100
+      }
     };
   }
 
   componentDidMount() {
-    this.getSessions();
+    this.getSessions(
+      this.state.pagination.pageSize, 
+      this.state.pagination.current,
+      "",
+      0
+    );
   }
 
-  getSessions() {
-    SessionBackend.getSessions(this.state.websiteId)
-      .then((res) => {
-          this.setState({
-            sessions: res,
-          });
-        }
-      );
+  getSessions(pageSize, current, sortField, sortOrder) {
+    this.setState({
+      loading: true
+    })
+    SessionBackend.getSessions(
+      this.state.websiteId,
+      pageSize,
+      pageSize * (current - 1),
+      sortField,
+      sortOrder == "ascend" ? 1 : 0 // "ascend": 1, "descend": 0
+    ).then((res) => {
+        this.setState({
+          sessions: res,
+          loading: false
+        });
+      }
+    );
   }
 
   deleteSession(i) {
@@ -46,6 +67,20 @@ class SessionPage extends React.Component {
       .catch(error => {
         Setting.showMessage("error", `Deleting session succeeded：${error}`);
       });
+  }
+
+  onTableChange(pagination, filters, sorter) {
+    const pager = {...this.state.pagination};
+    pager.current = pagination.current;
+    this.setState({
+      pagination: pager,
+    });
+    this.getSessions(
+      pagination.pageSize, 
+      pagination.current,
+      sorter.field ? sorter.field : "",
+      sorter.order ? sorter.order : ""
+    );
   }
 
   renderTable(sessions) {
@@ -111,7 +146,16 @@ class SessionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} />
+        <Table columns={columns} 
+          dataSource={sessions} 
+          rowKey="name" 
+          size="middle" 
+          bordered 
+          pagination={this.state.pagination} 
+          loading={this.state.loading} 
+          onChange={(pagination, filters, sorter)=>{
+            this.onTableChange.call(this, pagination, filters, sorter);
+        }}/>
       </div>
     );
   }
