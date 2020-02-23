@@ -8,6 +8,7 @@ import {Button, Col, Popconfirm, Row, Table, Tooltip} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as SessionBackend from "./backend/SessionBackend";
+import {getWebsite} from './backend/WebsiteBackend';
 import BreadcrumbBar from "./BreadcrumbBar";
 
 class SessionPage extends React.Component {
@@ -17,17 +18,23 @@ class SessionPage extends React.Component {
       classes: props,
       websiteId: props.match.params.websiteId,
       sessions: [],
-      loading: false,
+      loading: true,
       pagination: {
         current: 1,
         defaultCurrent: 1,
-        pageSize: 5,
-        total: 100
+        pageSize: 5
       }
     };
   }
 
   componentDidMount() {
+    let pager = {...this.state.pagination};
+    getWebsite(this.state.websiteId).then(res => {
+      pager.total = res.sessionCount;
+      this.setState({
+        pagination: pager
+      })
+    })
     this.getSessions(
       this.state.pagination.pageSize, 
       this.state.pagination.current,
