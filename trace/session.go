@@ -45,9 +45,18 @@ func countSessions(sessions []*Session) {
 	}
 }
 
-func GetSessions(websiteId string) []*Session {
+func GetSessions(websiteId string, resultCount int, offset int, sortField string, sortOrder string) []*Session {
 	sessions := []*Session{}
-	err := ormManager.engine.Where("website_id = ?", websiteId).Asc("created_time").Find(&sessions)
+	var err error
+	if sortField != "" {
+		if sortOrder == "1" {
+			err = ormManager.engine.Where("website_id = ?", websiteId).Asc(sortField).Limit(resultCount, offset).Find(&sessions)
+		} else {
+			err = ormManager.engine.Where("website_id = ?", websiteId).Desc(sortField).Limit(resultCount, offset).Find(&sessions)
+		}
+	} else {
+		err = ormManager.engine.Where("website_id = ?", websiteId).Asc("created_time").Limit(resultCount, offset).Find(&sessions)
+	}
 	if err != nil {
 		panic(err)
 	}

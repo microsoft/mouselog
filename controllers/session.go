@@ -41,7 +41,7 @@ func (c *SessionController) SessionID() {
 }
 
 func (c *SessionController) Sessions() {
-	c.Data["json"] = trace.GetSessions(c.Input().Get("websiteId"))
+	c.Data["json"] = trace.GetSessions(c.Input().Get("websiteId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
 	c.ServeJSON()
 }
 
