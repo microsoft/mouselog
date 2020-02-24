@@ -16,13 +16,22 @@ type Website struct {
 
 func countWebsites(websites []*Website) {
 	for _, website := range websites {
-		sessionCount, err := ormManager.engine.Where("website_id = ?", website.Id).Count(&Session{})
-		if err != nil {
-			panic(err)
-		}
-
-		website.SessionCount = int(sessionCount)
+		countWebsiteSessions(website)
 	}
+}
+
+func countWebsiteSessions(website *Website) {
+	sessionCount, err := ormManager.engine.Where("website_id = ?", website.Id).Count(&Session{})
+	if err != nil {
+		panic(err)
+	}
+
+	website.SessionCount = int(sessionCount)
+	// TODO: Do we need to update `session_count` column?
+	// _, err := ormManager.engine.Id(website.Id).Cols("session_count").Update(website)
+	// if err != nil {
+	// 	panic(err)
+	// }
 }
 
 func GetWebsites() []*Website {
@@ -45,6 +54,7 @@ func GetWebsite(id string) *Website {
 	}
 
 	if existed {
+		countWebsiteSessions(&website)
 		return &website
 	} else {
 		return nil

@@ -5,8 +5,19 @@
 
 import * as Setting from "../Setting";
 
-export function getSessions(websiteId) {
-  return fetch(`${Setting.ServerUrl}/api/get-sessions?websiteId=${websiteId}`, {
+function humpToLine(name) {
+  return name.replace(/([A-Z])/g,"_$1").toLowerCase();
+}
+
+export function getSessions(websiteId, resultCount, offset, sortField, sortOrder) {
+  let requestParams = [
+    `websiteId=${websiteId}`,
+    `resultCount=${resultCount}`,
+    `offset=${offset}`,
+    `sortField=${humpToLine(sortField)}`,
+    `sortOrder=${sortOrder}`
+  ].join('&');
+  return fetch(`${Setting.ServerUrl}/api/get-sessions?${requestParams}`, {
     method: "GET",
     credentials: "include"
   }).then(res => res.json());

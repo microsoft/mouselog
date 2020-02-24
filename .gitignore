@@ -23,3 +23,5 @@ go.mod
 go.sum
 
 static/
+
+.vscode

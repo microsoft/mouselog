@@ -4,11 +4,15 @@
  */
 
 import React from "react";
-import {Button, Col, Popconfirm, Row, Table, Tooltip} from 'antd';
+import {Button, Col, Popconfirm, Row, Table, Tooltip, Select} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as SessionBackend from "./backend/SessionBackend";
+import {getWebsite} from './backend/WebsiteBackend';
 import BreadcrumbBar from "./BreadcrumbBar";
+
+const { Option } = Select;
+const MAX_PAGE_SIZE = 1000;
 
 class SessionPage extends React.Component {
   constructor(props) {
@@ -17,21 +21,52 @@ class SessionPage extends React.Component {
       classes: props,
       websiteId: props.match.params.websiteId,
       sessions: [],
+      loading: true,
+      pagination: {
+        current: 1,
+        defaultCurrent: 1,
+        pageSize: 10
+      },
+      sorter: {
+        field: "",
+        order: "ascend"
+      }
     };
   }
 
   componentDidMount() {
-    this.getSessions();
+    let pager = {...this.state.pagination};
+    getWebsite(this.state.websiteId).then(res => {
+      pager.total = res.sessionCount;
+      this.setState({
+        pagination: pager
+      })
+    })
+    this.getSessions(
+      this.state.pagination.pageSize, 
+      this.state.pagination.current,
+      this.state.sorter.field,
+      this.state.sorter.order
+    );
   }
 
-  getSessions() {
-    SessionBackend.getSessions(this.state.websiteId)
-      .then((res) => {
-          this.setState({
-            sessions: res,
-          });
-        }
-      );
+  getSessions(pageSize, current, sortField, sortOrder) {
+    this.setState({
+      loading: true
+    })
+    SessionBackend.getSessions(
+      this.state.websiteId,
+      pageSize,
+      pageSize * (current - 1),
+      sortField,
+      sortOrder == "descend" ? 0 : 1 // "ascend": 1, "descend": 0
+    ).then((res) => {
+        this.setState({
+          sessions: res,
+          loading: false
+        });
+      }
+    );
   }
 
   deleteSession(i) {
@@ -46,6 +81,34 @@ class SessionPage extends React.Component {
       .catch(error => {
         Setting.showMessage("error", `Deleting session succeeded：${error}`);
       });
+  }
+
+  onTableChange(pagination, filters, sorter) {
+    const pager = {...this.state.pagination};
+    pager.current = pagination.current;
+    pager.pageSize = pagination.pageSize;
+    
+    const _sorter = {...this.state.sorter};
+    _sorter.field = sorter.field ? sorter.field : "";
+    _sorter.order = sorter.order ? sorter.order : "";
+
+    this.setState({
+      pagination: pager,
+      sorter: _sorter
+    });
+
+    this.getSessions(
+      pagination.pageSize, 
+      pagination.current,
+      _sorter.field,
+      _sorter.order
+    );
+  }
+
+  onPageSizeChange(value) {
+    let pager = {...this.state.pagination};
+    pager.pageSize = (value == "All" ? MAX_PAGE_SIZE : parseInt(value));
+    this.onTableChange(pager, {}, this.state.sorter)
   }
 
   renderTable(sessions) {
@@ -111,7 +174,28 @@ class SessionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={sessions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} />
+        <Table columns={columns} 
+          dataSource={sessions} 
+          rowKey="name" 
+          size="middle" 
+          bordered 
+          pagination={this.state.pagination} 
+          loading={this.state.loading} 
+          onChange={(pagination, filters, sorter)=>{
+            this.onTableChange.call(this, pagination, filters, sorter);
+        }}/>
+        <Row type="flex" justify="end" style={{marginRight: 20}}>
+          <Col>
+            <Select defaultValue="10" style={{ width: 80, marginRight: 10}} onChange={(value)=>{this.onPageSizeChange.call(this, value)}}>
+              <Option value="10">10</Option>
+              <Option value="20">20</Option>
+              <Option value="50">50</Option>
+              <Option value="100">100</Option>
+              <Option value="All">All</Option>
+            </Select>
+            sessions per page. 
+          </Col>
+        </Row>
       </div>
     );
   }
