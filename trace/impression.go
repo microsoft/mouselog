@@ -29,9 +29,19 @@ func getAllImpressions() []*Impression {
 	return impressions
 }
 
-func GetImpressions(sessionId string) []*Impression {
+func GetImpressions(websiteId string, sessionId string, resultCount int, offset int, sortField string, sortOrder string) []*Impression {
 	impressions := []*Impression{}
-	err := ormManager.engine.Where("session_id = ?", sessionId).Asc("created_time").Find(&impressions)
+	var err error
+
+	if sortField != "" {
+		if sortOrder == "1" {
+			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc(sortField).Limit(resultCount, offset).Find(&impressions)
+		} else {
+			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Desc(sortField).Limit(resultCount, offset).Find(&impressions)
+		}
+	} else {
+		err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc("created_time").Limit(resultCount, offset).Find(&impressions)
+	}
 	if err != nil {
 		panic(err)
 	}
