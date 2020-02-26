@@ -45,7 +45,7 @@ func (c *APIController) UploadTrace() {
 	}
 
 	trace.AddSession(sessionID, websiteID, userAgent, clientID)
-	trace.AddImpression(impressionID, sessionID, t.Path)
+	trace.AddImpression(impressionID, sessionID, websiteID, t.Path)
 	trace.AppendTraceToImpression(impressionID, &t)
 
 	// Only return traces for test page for visualization (websiteId == "mouselog")

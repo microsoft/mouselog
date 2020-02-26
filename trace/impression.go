@@ -8,6 +8,7 @@ import "strings"
 type Impression struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
 	SessionId   string `xorm:"varchar(100)" json:"sessionId"`
+	WebsiteId   string `xorm:"varchar(100)" json:"websiteId"`
 	CreatedTime string `xorm:"varchar(100)" json:"createdTime"`
 	UrlPath     string `xorm:"varchar(500)" json:"urlPath"`
 
@@ -66,8 +67,8 @@ func updateImpression(id string, impression *Impression) bool {
 	return true
 }
 
-func AddImpression(id string, sessionId string, urlPath string) bool {
-	s := Impression{Id: id, SessionId: sessionId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
+func AddImpression(id string, sessionId string, websiteId string, urlPath string) bool {
+	s := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
 	affected, err := ormManager.engine.Insert(s)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)
