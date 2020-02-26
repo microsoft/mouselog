@@ -4,14 +4,18 @@
  */
 
 import React from "react";
-import {Button, Col, Popconfirm, Row, Table, Tooltip} from 'antd';
+import {Button, Col, Popconfirm, Row, Table, Tooltip, Select} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as ImpressionBackend from "./backend/ImpressionBackend";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
+import * as SessionBackend from "./backend/SessionBackend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
 import BreadcrumbBar from "./BreadcrumbBar";
+
+const { Option } = Select;
+const MAX_PAGE_SIZE = 1000;
 
 class ImpressionPage extends React.Component {
   constructor(props) {
@@ -22,27 +26,61 @@ class ImpressionPage extends React.Component {
       sessionId: props.match.params.sessionId,
       impressions: [],
       website: null,
-      tableLoading: false
+      tableLoading: false,
+      pagination: {
+        current: 1,
+        defaultCurrent: 1,
+        pageSize: 10
+      },
+      sorter: {
+        field: "",
+        order: "ascend"
+      }
     };
   }
 
   componentDidMount() {
-    this.getImpressions();
+    this.getImpressions(
+      this.state.pagination.pageSize,
+      this.state.pagination.current,
+      this.state.sorter.field,
+      this.state.sorter.order
+    );
+    this.getImpressionCount();
     this.getWebsite();
   }
 
-  getImpressions() {
+  getImpressions(pageSize, current, sortField, sortOrder) {
     this.setState({
       tableLoading: true
     })
-    ImpressionBackend.getImpressions(this.state.sessionId)
-      .then((res) => {
+    ImpressionBackend.getImpressions(
+      this.state.websiteId,
+      this.state.sessionId,
+      pageSize,
+      pageSize * (current-1),
+      sortField,
+      sortOrder == "descend" ? 0 : 1 // "ascend": 1, "descend": 0
+    ).then((res) => {
           this.setState({
             impressions: res,
             tableLoading: false
           });
         }
       );
+  }
+
+  getImpressionCount() {
+    SessionBackend.getSession(
+      this.state.sessionId, 
+      this.state.websiteId
+    ).then((res) => {
+      const pager = {...this.state.pagination};
+      pager.total = res.impressionCount;
+      this.setState({
+        pagination: pager
+      });
+    })
   }
 
   getWebsite() {
@@ -67,6 +105,34 @@ class ImpressionPage extends React.Component {
       .catch(error => {
         Setting.showMessage("error", `Deleting impression succeeded：${error}`);
       });
+  }
+
+  onTableChange(pagination, filters, sorter) {
+    const pager = {...this.state.pagination};
+    pager.current = pagination.current;
+    pager.pageSize = pagination.pageSize;
+
+    const _sorter = {...this.state.sorter};
+    _sorter.field = sorter.field ? sorter.field : "";
+    _sorter.order = sorter.order ? sorter.order : "";
+
+    this.setState({
+      pagination: pager,
+      sorter: _sorter
+    });
+
+    this.getImpressions(
+      pagination.pageSize,
+      pagination.current,
+      _sorter.field,
+      _sorter.order
+    );
+  }
+
+  onPageSizeChange(value) {
+    let pager = {...this.state.pagination};
+    pager.pageSize = (value == "All" ? MAX_PAGE_SIZE : parseInt(value));
+    this.onTableChange(pager, {}, this.state.sorter);
   }
 
   renderTable(impressions) {
@@ -172,7 +238,28 @@ class ImpressionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} loading={this.state.tableLoading} />
+        <Table columns={columns} 
+          dataSource={impressions} 
+          rowKey="name" 
+          size="middle" 
+          bordered 
+          pagination={this.state.pagination}
+          loading={this.state.tableLoading} 
+          onChange={(pagination, filters, sorter)=>{
+            this.onTableChange.call(this, pagination, filters, sorter);
+          }}/>
+        <Row type="flex" justify="end" style={{marginRight: 20}}>
+          <Col>
+            <Select defaultValue="10" style={{ width: 80, marginRight: 10}} onChange={(value)=>{this.onPageSizeChange.call(this, value)}}>
+              <Option value="10">10</Option>
+              <Option value="20">20</Option>
+              <Option value="50">50</Option>
+              <Option value="100">100</Option>
+              <Option value="All">All</Option>
+            </Select>
+            sessions per page. 
+          </Col>
+        </Row>
       </div>
     );
   }

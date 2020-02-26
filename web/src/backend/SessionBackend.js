@@ -4,10 +4,7 @@
  */
 
 import * as Setting from "../Setting";
-
-function humpToLine(name) {
-  return name.replace(/([A-Z])/g,"_$1").toLowerCase();
-}
+import {humpToLine} from "../utils";
 
 export function getSessions(websiteId, resultCount, offset, sortField, sortOrder) {
   let requestParams = [
