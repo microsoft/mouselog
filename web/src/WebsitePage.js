@@ -15,6 +15,7 @@ class WebsitePage extends React.Component {
     this.state = {
       classes: props,
       websites: [],
+      tableLoading: false
     };
   }
 
@@ -23,13 +24,19 @@ class WebsitePage extends React.Component {
   }
 
   getWebsites() {
+    this.setState({
+      tableLoading: true
+    });
     WebsiteBackend.getWebsites()
       .then((res) => {
           this.setState({
             websites: res,
+            tableLoading: false
           });
         }
-      );
+      ).catch(err => {
+        console.log("Unable get websites info");
+      });
   }
 
   createConfig() {
@@ -205,7 +212,7 @@ class WebsitePage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={websites} rowKey="name" size="middle" bordered pagination={{pageSize: 100}}
+        <Table columns={columns} dataSource={websites} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} loading={this.state.tableLoading}
                title={() => (
                  <div>
                    My Websites&nbsp;&nbsp;&nbsp;&nbsp;

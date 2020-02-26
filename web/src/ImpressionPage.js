@@ -22,6 +22,7 @@ class ImpressionPage extends React.Component {
       sessionId: props.match.params.sessionId,
       impressions: [],
       website: null,
+      tableLoading: false
     };
   }
 
@@ -31,10 +32,14 @@ class ImpressionPage extends React.Component {
   }
 
   getImpressions() {
+    this.setState({
+      tableLoading: true
+    })
     ImpressionBackend.getImpressions(this.state.sessionId)
       .then((res) => {
           this.setState({
             impressions: res,
+            tableLoading: false
           });
         }
       );
@@ -167,7 +172,7 @@ class ImpressionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} />
+        <Table columns={columns} dataSource={impressions} rowKey="name" size="middle" bordered pagination={{pageSize: 100}} loading={this.state.tableLoading} />
       </div>
     );
   }
