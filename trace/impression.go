@@ -19,16 +19,6 @@ type Impression struct {
 	Events []Event `xorm:"mediumtext" json:"events"`
 }
 
-func getAllImpressions() []*Impression {
-	impressions := []*Impression{}
-	err := ormManager.engine.Cols("session_id").Find(&impressions)
-	if err != nil {
-		panic(err)
-	}
-
-	return impressions
-}
-
 func GetImpressions(websiteId string, sessionId string, resultCount int, offset int, sortField string, sortOrder string) []*Impression {
 	impressions := []*Impression{}
 	var err error

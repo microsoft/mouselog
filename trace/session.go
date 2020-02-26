@@ -28,20 +28,18 @@ type Session struct {
 	UN int `json:"un"`
 }
 
-func countSessions(sessions []*Session) {
-	allImpressions := getAllImpressions()
-
-	m := map[string]int{}
-	for _, impression := range allImpressions {
-		if v, ok := m[impression.SessionId]; ok {
-			m[impression.SessionId] = v + 1
-		} else {
-			m[impression.SessionId] = 1
-		}
+func countImpressions(session *Session) {
+	impressionCount, err := ormManager.engine.Where("session_id = ?", session.Id).And("website_id = ?", session.WebsiteId).Count(&Impression{})
+	if err != nil {
+		panic(err)
 	}
+	session.ImpressionCount = int(impressionCount)
+	// TODO: Do we need to update `impression_count` column?
+}
 
+func countImpressionsForSessions(sessions []*Session) {
 	for _, session := range sessions {
-		session.ImpressionCount = m[session.Id]
+		countImpressions(session)
 	}
 }
 
@@ -61,7 +59,7 @@ func GetSessions(websiteId string, resultCount int, offset int, sortField string
 		panic(err)
 	}
 
-	countSessions(sessions)
+	countImpressionsForSessions(sessions)
 
 	return sessions
 }
@@ -74,6 +72,7 @@ func GetSession(id string, websiteId string) *Session {
 	}
 
 	if existed {
+		countImpressions(&s)
 		return &s
 	} else {
 		return nil
