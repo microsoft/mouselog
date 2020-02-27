@@ -8,6 +8,7 @@ import "strings"
 type Impression struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
 	SessionId   string `xorm:"varchar(100)" json:"sessionId"`
+	WebsiteId   string `xorm:"varchar(100)" json:"websiteId"`
 	CreatedTime string `xorm:"varchar(100)" json:"createdTime"`
 	UrlPath     string `xorm:"varchar(500)" json:"urlPath"`
 
@@ -18,19 +19,19 @@ type Impression struct {
 	Events []Event `xorm:"mediumtext" json:"events"`
 }
 
-func getAllImpressions() []*Impression {
+func GetImpressions(websiteId string, sessionId string, resultCount int, offset int, sortField string, sortOrder string) []*Impression {
 	impressions := []*Impression{}
-	err := ormManager.engine.Cols("session_id").Find(&impressions)
-	if err != nil {
-		panic(err)
+	var err error
+
+	if sortField != "" {
+		if sortOrder == "1" {
+			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc(sortField).Limit(resultCount, offset).Find(&impressions)
+		} else {
+			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Desc(sortField).Limit(resultCount, offset).Find(&impressions)
+		}
+	} else {
+		err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc("created_time").Limit(resultCount, offset).Find(&impressions)
 	}
-
-	return impressions
-}
-
-func GetImpressions(sessionId string) []*Impression {
-	impressions := []*Impression{}
-	err := ormManager.engine.Where("session_id = ?", sessionId).Asc("created_time").Find(&impressions)
 	if err != nil {
 		panic(err)
 	}
@@ -66,8 +67,8 @@ func updateImpression(id string, impression *Impression) bool {
 	return true
 }
 
-func AddImpression(id string, sessionId string, urlPath string) bool {
-	s := Impression{Id: id, SessionId: sessionId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
+func AddImpression(id string, sessionId string, websiteId string, urlPath string) bool {
+	s := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
 	affected, err := ormManager.engine.Insert(s)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)

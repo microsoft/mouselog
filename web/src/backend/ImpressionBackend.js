@@ -4,9 +4,18 @@
  */
 
 import * as Setting from "../Setting";
+import {humpToLine} from "../utils";
 
-export function getImpressions(sessionId) {
-  return fetch(`${Setting.ServerUrl}/api/get-impressions?sessionId=${sessionId}`, {
+export function getImpressions(websiteId, sessionId, resultCount, offset, sortField, sortOrder) {
+  let requestParams = [
+    `websiteId=${websiteId}`,
+    `sessionId=${sessionId}`,
+    `resultCount=${resultCount}`,
+    `offset=${offset}`,
+    `sortField=${humpToLine(sortField)}`,
+    `sortOrder=${sortOrder}`
+  ].join('&');
+  return fetch(`${Setting.ServerUrl}/api/get-impressions?${requestParams}`, {
     method: "GET",
     credentials: "include"
   }).then(res => res.json());
