@@ -7,6 +7,7 @@ import "sort"
 
 type Trace struct {
 	Id           string `json:"id"`
+	Idx          int    `json:"idx"`
 	Width        int    `json:"width"`
 	Height       int    `json:"height"`
 	PageLoadTime string `json:"pageLoadTime"`
