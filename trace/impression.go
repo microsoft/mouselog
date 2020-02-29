@@ -87,12 +87,34 @@ func DeleteImpression(id string) bool {
 }
 
 func AppendTraceToImpression(id string, trace *Trace) {
+	impressionMapMutex.TryLock(id)
+
 	impression := GetImpression(id)
 
 	impression.Width = trace.Width
 	impression.Height = trace.Height
 	impression.PageLoadTime = trace.PageLoadTime
-	impression.Events = append(impression.Events, trace.Events...)
+
+	// Merge Sort
+	impEvtCount := len(impression.Events)
+	if impEvtCount == 0 || impression.Events[impEvtCount-1].Id < trace.Events[0].Id {
+		impression.Events = append(impression.Events, trace.Events...)
+	} else {
+		var tmp []Event
+		i := 0
+		for {
+			if impression.Events[i].Id < trace.Events[0].Id {
+				i++
+			} else {
+				break
+			}
+		}
+		tmp = append(tmp, impression.Events[:i]...)
+		tmp = append(tmp, trace.Events...)
+		impression.Events = append(tmp, impression.Events[i:]...)
+	}
 
 	updateImpression(id, impression)
+
+	impressionMapMutex.Unlock(id)
 }
