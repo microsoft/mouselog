@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-package trace
+package batch
 
 import (
 	"bufio"
@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/microsoft/mouselog/trace"
 	"github.com/microsoft/mouselog/util"
 )
 
@@ -41,7 +42,7 @@ func getCeil(i int) int {
 	return i - i%100 + 200
 }
 
-func normalizeWidthAndHeight(t *Trace, maxX int, minX int, maxY int, minY int) {
+func normalizeWidthAndHeight(t *trace.Trace, maxX int, minX int, maxY int, minY int) {
 	t.Width = getCeil(maxX)
 	t.Height = getCeil(maxY)
 
@@ -55,11 +56,11 @@ func normalizeWidthAndHeight(t *Trace, maxX int, minX int, maxY int, minY int) {
 	t.Height -= floorY
 }
 
-func ReadTraces(fileId string) *Session {
+func ReadTraces(fileId string) *trace.Session {
 	fmt.Printf("Read traces for file: [%s].\n", fileId)
 
 	var path string
-	var readLine func(*Session, string, int)
+	var readLine func(*trace.Session, string, int)
 	path = util.GetDataPath(fileId)
 	readLine = readTxtLine
 	if strings.HasPrefix(fileId, "logs_") {
@@ -67,7 +68,7 @@ func ReadTraces(fileId string) *Session {
 		readLine = readCsvLine
 	}
 
-	ss := NewSession(fileId)
+	ss := trace.NewSession(fileId)
 
 	file, err := os.Open(path)
 	if err != nil {

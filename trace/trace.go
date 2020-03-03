@@ -26,7 +26,7 @@ type Trace struct {
 	Path string `json:"path"`
 }
 
-func newTrace(id string) *Trace {
+func NewTrace(id string) *Trace {
 	t := Trace{}
 	t.Id = id
 	t.Label = -1
@@ -37,7 +37,7 @@ func newTrace(id string) *Trace {
 	return &t
 }
 
-func (t *Trace) addEvent(timestamp float64, typ string, button string, x int, y int) {
+func (t *Trace) AddEvent(timestamp float64, typ string, button string, x int, y int) {
 	e := Event{
 		Id:        len(t.Events),
 		Timestamp: timestamp,
@@ -50,7 +50,7 @@ func (t *Trace) addEvent(timestamp float64, typ string, button string, x int, y 
 	t.Events = append(t.Events, e)
 }
 
-func (t *Trace) sortEvents() {
+func (t *Trace) SortEvents() {
 	sort.Slice(t.Events, func(i, j int) bool {
 		return t.Events[i].Timestamp < t.Events[j].Timestamp
 	})

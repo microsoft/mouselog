@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-package trace
+package batch
 
 import (
 	"errors"
@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/microsoft/mouselog/trace"
 	"github.com/microsoft/mouselog/util"
 )
 
@@ -64,10 +65,10 @@ func getUnifiedPointerType(pointerTypeList []string) string {
 	return strings.Join(resList, ", ")
 }
 
-func readCsvLine(ss *Session, line string, i int) {
+func readCsvLine(ss *trace.Session, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
 
-	t := newTrace(strconv.Itoa(i))
+	t := trace.NewTrace(strconv.Itoa(i))
 	//t.RequestId = row[RowRequestId]
 	//t.Timestamp = row[RowTimestamp]
 	t.Url = row[RowUrl]
@@ -204,10 +205,10 @@ func readCsvLine(ss *Session, line string, i int) {
 			panic(errors.New(fmt.Sprintf("[%f] unknown pointer type: %s for (%s, %s)", timestamp, pointerTypeList[i], eventTypeList[i], buttonList[i])))
 		}
 
-		t.addEvent(timestamp, eventType, button, x, y)
+		t.AddEvent(timestamp, eventType, button, x, y)
 	}
 
-	t.sortEvents()
+	t.SortEvents()
 	normalizeWidthAndHeight(t, maxX, minX, maxY, minY)
 
 	ss.AddTrace(t)

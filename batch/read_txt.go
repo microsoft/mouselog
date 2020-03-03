@@ -1,13 +1,14 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-package trace
+package batch
 
 import (
 	"fmt"
 	"math"
 	"strings"
 
+	"github.com/microsoft/mouselog/trace"
 	"github.com/microsoft/mouselog/util"
 )
 
@@ -18,14 +19,14 @@ const (
 	RowLabel
 )
 
-func readTxtLine(ss *Session, line string, i int) {
+func readTxtLine(ss *trace.Session, line string, i int) {
 	row := strings.SplitN(line, " ", RowLabel+1)
 
 	no := row[RowNo]
-	trace := row[RowTrace]
+	traceStr := row[RowTrace]
 	//target := row[RowTarget]
 
-	t := newTrace(no)
+	t := trace.NewTrace(no)
 
 	if len(row) == RowLabel+1 {
 		label := row[RowLabel]
@@ -35,7 +36,7 @@ func readTxtLine(ss *Session, line string, i int) {
 			t.Label = 0
 		}
 	}
-	points := strings.Split(trace, ";")
+	points := strings.Split(traceStr, ";")
 	minX := math.MaxInt32
 	minY := math.MaxInt32
 	maxX := 0
@@ -62,7 +63,7 @@ func readTxtLine(ss *Session, line string, i int) {
 		}
 		timestamp := util.ParseFloat(tokens[2])
 
-		t.addEvent(timestamp, EventTypeMouseMove, ButtonLeft, x, y)
+		t.AddEvent(timestamp, EventTypeMouseMove, ButtonLeft, x, y)
 	}
 
 	normalizeWidthAndHeight(t, maxX, minX, maxY, minY)
