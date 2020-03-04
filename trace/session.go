@@ -89,8 +89,26 @@ func AddSession(id string, websiteId string, userAgent string, clientIp string) 
 	return affected != 0
 }
 
+func AddSessions(sessions []*Session) bool {
+	affected, err := ormManager.engine.Insert(sessions)
+	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
+		panic(err)
+	}
+
+	return affected != 0
+}
+
 func DeleteSession(id string, websiteId string) bool {
 	affected, err := ormManager.engine.Id(core.PK{id, websiteId}).Delete(&Session{})
+	if err != nil {
+		panic(err)
+	}
+
+	return affected != 0
+}
+
+func DeleteSessions(websiteId string) bool {
+	affected, err := ormManager.engine.Where("website_id = ?", websiteId).Delete(&Session{})
 	if err != nil {
 		panic(err)
 	}

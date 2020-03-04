@@ -15,13 +15,13 @@ import (
 )
 
 const (
-	RowRequestId = iota
+	RowImpressionId = iota
+	RowSessionId
 	RowTimestamp
 	RowUrl
 	RowUserAgent
 	RowClientIp
 	RowIsBot
-	RowPointCount
 	RowTimestampList
 	RowEventTypeList
 	RowButtonList
@@ -189,15 +189,11 @@ func addEventsToTrace(t *trace.Trace, timestampList []string, eventTypeList []st
 	normalizeWidthAndHeight(t, maxX, minX, maxY, minY)
 }
 
-func readCsvLine(ss *trace.Session, line string, i int) {
+func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, websiteId string, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
 
 	t := trace.NewTrace(strconv.Itoa(i))
-	//t.RequestId = row[RowRequestId]
-	//t.Timestamp = row[RowTimestamp]
 	t.Url = row[RowUrl]
-	//t.UserAgent = util.UnescapeUserAgent(row[RowUserAgent])
-	//t.ClientIp = row[RowClientIp]
 
 	isBot := row[RowIsBot]
 	if isBot == "True" {
@@ -215,7 +211,17 @@ func readCsvLine(ss *trace.Session, line string, i int) {
 	yList := strings.Split(row[RowYList], "|")
 	addEventsToTrace(t, timestampList, eventTypeList, buttonList, pointerTypeList, xList, yList)
 
-	ss.AddTrace(t)
+	//ss.AddTrace(t)
+
+	sessionId := row[RowSessionId]
+	impressionId := row[RowImpressionId]
+	timestamp := row[RowTimestamp]
+	url := row[RowUrl]
+	userAgent := util.UnescapeUserAgent(row[RowUserAgent])
+	clientIp := row[RowClientIp]
+	addSession(sessions, sessionMap, sessionId, websiteId, timestamp, userAgent, clientIp)
+	addImpression(impressions, impressionMap, impressionId, sessionId, websiteId, timestamp, url)
+	appendTraceToImpression(impressionMap, impressionId, t)
 
 	if i%1000 == 0 {
 		fmt.Printf("[%d] Read trace a line\n", i)

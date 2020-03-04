@@ -7,7 +7,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/microsoft/mouselog/trace"
 	"github.com/microsoft/mouselog/util"
@@ -56,19 +55,17 @@ func normalizeWidthAndHeight(t *trace.Trace, maxX int, minX int, maxY int, minY 
 	t.Height -= floorY
 }
 
-func ReadTraces(fileId string) *trace.Session {
+func ReadTraces(fileId string) {
 	fmt.Printf("Read traces for file: [%s].\n", fileId)
 
 	var path string
-	var readLine func(*trace.Session, string, int)
-	path = util.GetDataPath(fileId)
-	readLine = readTxtLine
-	if strings.HasPrefix(fileId, "logs_") {
-		path = util.GetCsvDataPath(fileId)
-		readLine = readCsvLine
-	}
+	path = util.GetCsvDataPath(fileId)
+	websiteId := "ysite"
 
-	ss := trace.NewSession(fileId)
+	sessions := []*trace.Session{}
+	sessionMap := map[string]*trace.Session{}
+	impressions := []*trace.Impression{}
+	impressionMap := map[string]*trace.Impression{}
 
 	file, err := os.Open(path)
 	if err != nil {
@@ -84,7 +81,7 @@ func ReadTraces(fileId string) *trace.Session {
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		readLine(ss, line, i)
+		readCsvLine(&sessions, &sessionMap, &impressions, &impressionMap, websiteId, line, i)
 
 		i += 1
 	}
@@ -93,5 +90,8 @@ func ReadTraces(fileId string) *trace.Session {
 		panic(err)
 	}
 
-	return ss
+	trace.DeleteSessions(websiteId)
+	trace.AddSessions(sessions)
+	trace.DeleteImpressions(websiteId)
+	trace.AddImpressions(impressions)
 }

@@ -72,7 +72,7 @@ class ImpressionPage extends React.Component {
 
   getImpressionCount() {
     SessionBackend.getSession(
-      this.state.sessionId, 
+      this.state.sessionId,
       this.state.websiteId
     ).then((res) => {
       const pager = {...this.state.pagination};
@@ -161,7 +161,13 @@ class ImpressionPage extends React.Component {
             return text;
           }
 
-          return <a target="_blank" href={`${this.state.website.url}${text}`}>{text}</a>
+          return (
+            <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
+              <a target="_blank" href={`${this.state.website.url}${text}`}>
+                {text}
+              </a>
+            </span>
+          )
         }
       },
       {
@@ -238,13 +244,13 @@ class ImpressionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} 
-          dataSource={impressions} 
-          rowKey="name" 
-          size="middle" 
-          bordered 
+        <Table columns={columns}
+          dataSource={impressions}
+          rowKey="name"
+          size="middle"
+          bordered
           pagination={this.state.pagination}
-          loading={this.state.tableLoading} 
+          loading={this.state.tableLoading}
           onChange={(pagination, filters, sorter)=>{
             this.onTableChange.call(this, pagination, filters, sorter);
           }}/>
@@ -257,7 +263,7 @@ class ImpressionPage extends React.Component {
               <Option value="100">100</Option>
               <Option value="All">All</Option>
             </Select>
-            sessions per page. 
+            sessions per page.
           </Col>
         </Row>
       </div>

@@ -3,10 +3,16 @@
 
 package batch
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/microsoft/mouselog/trace"
+)
 
 func TestReadTraces(t *testing.T) {
-	//ss := ReadTraces("dsjtzs_txfz_training")
-	ss := ReadTraces("logs_20200127_slapi_coupon_bot")
-	print(ss)
+	trace.InitOrmManager()
+	trace.InitMapMutexes()
+
+	//ReadTraces("dsjtzs_txfz_training")
+	ReadTraces("logs_20200127_slapi_coupon_bot")
 }

@@ -138,6 +138,10 @@ class WebsitePage extends React.Component {
         dataIndex: 'url',
         key: 'url',
         render: (text, record, index) => {
+          if (text === '') {
+            return '(empty)';
+          }
+
           return <a target="_blank" href={text}>{text}</a>
         }
       },

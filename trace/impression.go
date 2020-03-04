@@ -40,14 +40,14 @@ func GetImpressions(websiteId string, sessionId string, resultCount int, offset 
 }
 
 func GetImpression(id string) *Impression {
-	s := Impression{Id: id}
-	existed, err := ormManager.engine.Get(&s)
+	im := Impression{Id: id}
+	existed, err := ormManager.engine.Get(&im)
 	if err != nil {
 		panic(err)
 	}
 
 	if existed {
-		return &s
+		return &im
 	} else {
 		return nil
 	}
@@ -68,8 +68,17 @@ func updateImpression(id string, impression *Impression) bool {
 }
 
 func AddImpression(id string, sessionId string, websiteId string, urlPath string) bool {
-	s := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
-	affected, err := ormManager.engine.Insert(s)
+	im := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
+	affected, err := ormManager.engine.Insert(im)
+	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
+		panic(err)
+	}
+
+	return affected != 0
+}
+
+func AddImpressions(impressions[]*Impression) bool {
+	affected, err := ormManager.engine.Insert(impressions)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)
 	}
@@ -79,6 +88,15 @@ func AddImpression(id string, sessionId string, websiteId string, urlPath string
 
 func DeleteImpression(id string) bool {
 	affected, err := ormManager.engine.Id(id).Delete(&Impression{})
+	if err != nil {
+		panic(err)
+	}
+
+	return affected != 0
+}
+
+func DeleteImpressions(websiteId string) bool {
+	affected, err := ormManager.engine.Where("website_id = ?", websiteId).Delete(&Impression{})
 	if err != nil {
 		panic(err)
 	}
