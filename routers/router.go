@@ -13,17 +13,16 @@ func init() {
 	ns :=
 		beego.NewNamespace("/api",
 			beego.NSInclude(
-				&controllers.SessionController{},
 				&controllers.APIController{},
 			),
 		)
 	beego.AddNamespace(ns)
 
-	beego.Router("/api/get-session-id", &controllers.SessionController{}, "GET:SessionID")
-	beego.Router("/api/list-sessions", &controllers.SessionController{}, "GET:ListSessions")
-	beego.Router("/api/get-sessions", &controllers.SessionController{}, "GET:Sessions")
-	beego.Router("/api/get-session", &controllers.SessionController{}, "GET:Session")
-	beego.Router("/api/delete-session", &controllers.SessionController{}, "POST:DeleteSession")
+	beego.Router("/api/get-session-id", &controllers.APIController{}, "GET:GetSessionId")
+	beego.Router("/api/list-sessions", &controllers.APIController{}, "GET:ListSessions")
+	beego.Router("/api/get-sessions", &controllers.APIController{}, "GET:GetSessions")
+	beego.Router("/api/get-session", &controllers.APIController{}, "GET:GetSession")
+	beego.Router("/api/delete-session", &controllers.APIController{}, "POST:DeleteSession")
 
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "POST:UploadTrace")
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "GET:UploadTrace")

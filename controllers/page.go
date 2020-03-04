@@ -10,9 +10,9 @@ import (
 )
 
 func (c *APIController) GetPages() {
-	websiteID := c.Input().Get("websiteId")
+	websiteId := c.Input().Get("websiteId")
 
-	c.Data["json"] = trace.GetPages(websiteID)
+	c.Data["json"] = trace.GetPages(websiteId)
 	c.ServeJSON()
 }
 

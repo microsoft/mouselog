@@ -25,11 +25,11 @@ type response struct {
 func (c *APIController) UploadTrace() {
 	var resp response
 
-	websiteID := c.Input().Get("websiteId")
-	sessionID := c.StartSession().SessionID()
-	impressionID := c.Input().Get("impressionId")
-	userAgent := c.Ctx.Input.UserAgent()
-	clientID := c.Ctx.Input.IP()
+	websiteId := c.Input().Get("websiteId")
+	sessionId := c.StartSession().SessionID()
+	impressionId := c.Input().Get("impressionId")
+	userAgent := c.getUserAgent()
+	clientIp := c.getClientIp()
 
 	var data []byte
 	if c.Ctx.Request.Method == "GET" {
@@ -44,16 +44,16 @@ func (c *APIController) UploadTrace() {
 		panic(err)
 	}
 
-	trace.AddSession(sessionID, websiteID, userAgent, clientID)
-	trace.AddImpression(impressionID, sessionID, websiteID, t.Path)
-	trace.AppendTraceToImpression(impressionID, &t)
+	trace.AddSession(sessionId, websiteId, userAgent, clientIp)
+	trace.AddImpression(impressionId, sessionId, websiteId, t.Path)
+	trace.AppendTraceToImpression(impressionId, &t)
 
 	// Only return traces for test page for visualization (websiteId == "mouselog")
-	if websiteID != "mouselog" {
+	if websiteId != "mouselog" {
 		resp = response{Status: "ok", Msg: "", Data: ""}
 		if len(t.Events) == 0 {
 			resp.Msg = "config"
-			resp.Data = trace.ParseTrackConfig(trace.GetWebsite(websiteID).TrackConfig)
+			resp.Data = trace.ParseTrackConfig(trace.GetWebsite(websiteId).TrackConfig)
 		}
 
 		c.Data["json"] = resp
@@ -61,11 +61,11 @@ func (c *APIController) UploadTrace() {
 		return
 	}
 
-	ss, _ := Session(sessionID)
+	ss, _ := GetOrCreateSession(sessionId)
 	if len(t.Events) > 0 {
-		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionID, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
+		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
 	} else {
-		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionID, t.Id)
+		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, t.Id)
 	}
 
 	if len(t.Events) != 0 {
@@ -77,7 +77,7 @@ func (c *APIController) UploadTrace() {
 }
 
 func (c *APIController) ClearTrace() {
-	sessionID := c.StartSession().SessionID()
+	sessionId := c.StartSession().SessionID()
 	data := c.Ctx.Input.RequestBody
 
 	var t trace.Trace
@@ -86,7 +86,7 @@ func (c *APIController) ClearTrace() {
 		panic(err)
 	}
 
-	ss, _ := Session(sessionID)
+	ss, _ := GetOrCreateSession(sessionId)
 	if t2, ok := ss.TraceMap[t.Id]; ok {
 		delete(ss.TraceMap, t.Id)
 		for i, t3 := range ss.Traces {
@@ -96,7 +96,7 @@ func (c *APIController) ClearTrace() {
 		}
 	}
 
-	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionID, t.Id)
+	fmt.Printf("Clear event [%s]: (%s, <empty>)\n", sessionId, t.Id)
 
 	c.Data["json"] = detect.GetDetectResult(ss, t.Id)
 	c.ServeJSON()

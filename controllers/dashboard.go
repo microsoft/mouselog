@@ -22,8 +22,8 @@ func traceFiles(path string) []*trace.Session {
 	res := []*trace.Session{}
 
 	if util.FileExist(path) {
-		for _, fileID := range util.ListFileIds(path) {
-			if s, isNew := Session(fileID); isNew {
+		for _, fileId := range util.ListFileIds(path) {
+			if s, isNew := GetOrCreateSession(fileId); isNew {
 				trackNewSession(s)
 			}
 		}
@@ -44,7 +44,7 @@ func traceFiles(path string) []*trace.Session {
 func (c *APIController) ListTraces() {
 	perPage := util.ParseInt(c.Input().Get("perPage"))
 	page := util.ParseInt(c.Input().Get("page"))
-	session, isNew := Session(c.Input().Get("fileId"))
+	session, isNew := GetOrCreateSession(c.Input().Get("fileId"))
 	if isNew {
 		trackNewSession(session)
 	}
@@ -64,7 +64,7 @@ func (c *APIController) ListTraces() {
 }
 
 func (c *APIController) GetTrace() {
-	session, isNew := Session(c.Input().Get("fileId"))
+	session, isNew := GetOrCreateSession(c.Input().Get("fileId"))
 	if isNew {
 		trackNewSession(session)
 	}
@@ -99,7 +99,7 @@ func (c *APIController) UploadFile() {
 		} else {
 			for _, trace := range traces {
 				// Use Filename as SessionId
-				ss, _ := Session(header.Filename)
+				ss, _ := GetOrCreateSession(header.Filename)
 				if len(trace.Events) != 0 {
 					ss.AddTrace(&trace)
 				}
