@@ -65,30 +65,7 @@ func getUnifiedPointerType(pointerTypeList []string) string {
 	return strings.Join(resList, ", ")
 }
 
-func readCsvLine(ss *trace.Session, line string, i int) {
-	row := strings.SplitN(line, ",", RowYList+1)
-
-	t := trace.NewTrace(strconv.Itoa(i))
-	//t.RequestId = row[RowRequestId]
-	//t.Timestamp = row[RowTimestamp]
-	t.Url = row[RowUrl]
-	//t.UserAgent = util.UnescapeUserAgent(row[RowUserAgent])
-	//t.ClientIp = row[RowClientIp]
-
-	isBot := row[RowIsBot]
-	if isBot == "True" {
-		t.Label = 1
-	} else {
-		t.Label = 0
-	}
-
-	timestampList := strings.Split(row[RowTimestampList], "|")
-	eventTypeList := strings.Split(row[RowEventTypeList], "|")
-	buttonList := strings.Split(row[RowButtonList], "|")
-	pointerTypeList := strings.Split(row[RowPointerTypeList], "|")
-	//t.PointerType = getUnifiedPointerType(pointerTypeList)
-	xList := strings.Split(row[RowXList], "|")
-	yList := strings.Split(row[RowYList], "|")
+func addEventsToTrace(t *trace.Trace, timestampList []string, eventTypeList []string, buttonList []string, pointerTypeList []string, xList []string, yList []string) {
 	minX := math.MaxInt32
 	minY := math.MaxInt32
 	maxX := 0
@@ -210,6 +187,33 @@ func readCsvLine(ss *trace.Session, line string, i int) {
 
 	t.SortEvents()
 	normalizeWidthAndHeight(t, maxX, minX, maxY, minY)
+}
+
+func readCsvLine(ss *trace.Session, line string, i int) {
+	row := strings.SplitN(line, ",", RowYList+1)
+
+	t := trace.NewTrace(strconv.Itoa(i))
+	//t.RequestId = row[RowRequestId]
+	//t.Timestamp = row[RowTimestamp]
+	t.Url = row[RowUrl]
+	//t.UserAgent = util.UnescapeUserAgent(row[RowUserAgent])
+	//t.ClientIp = row[RowClientIp]
+
+	isBot := row[RowIsBot]
+	if isBot == "True" {
+		t.Label = 1
+	} else {
+		t.Label = 0
+	}
+
+	timestampList := strings.Split(row[RowTimestampList], "|")
+	eventTypeList := strings.Split(row[RowEventTypeList], "|")
+	buttonList := strings.Split(row[RowButtonList], "|")
+	pointerTypeList := strings.Split(row[RowPointerTypeList], "|")
+	//t.PointerType = getUnifiedPointerType(pointerTypeList)
+	xList := strings.Split(row[RowXList], "|")
+	yList := strings.Split(row[RowYList], "|")
+	addEventsToTrace(t, timestampList, eventTypeList, buttonList, pointerTypeList, xList, yList)
 
 	ss.AddTrace(t)
 
