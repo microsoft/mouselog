@@ -40,6 +40,7 @@ func init() {
 	beego.Router("/api/delete-website", &controllers.APIController{}, "POST:DeleteWebsite")
 
 	beego.Router("/api/get-impressions", &controllers.APIController{}, "GET:GetImpressions")
+	beego.Router("/api/get-impressions-all", &controllers.APIController{}, "GET:GetImpressionsAll")
 	beego.Router("/api/get-impression", &controllers.APIController{}, "GET:GetImpression")
 	beego.Router("/api/delete-impression", &controllers.APIController{}, "POST:DeleteImpression")
 

@@ -8,7 +8,7 @@ import {Button, Col, Popconfirm, Row, Table, Tooltip, Select} from 'antd';
 import {EyeOutlined, MinusOutlined} from '@ant-design/icons';
 import * as Setting from "./Setting";
 import * as SessionBackend from "./backend/SessionBackend";
-import {getWebsite} from './backend/WebsiteBackend';
+import * as WebsiteBackend from "./backend/WebsiteBackend";
 import BreadcrumbBar from "./BreadcrumbBar";
 
 const { Option } = Select;
@@ -35,25 +35,20 @@ class SessionPage extends React.Component {
   }
 
   componentDidMount() {
-    let pager = {...this.state.pagination};
-    getWebsite(this.state.websiteId).then(res => {
-      pager.total = res.sessionCount;
-      this.setState({
-        pagination: pager
-      })
-    })
     this.getSessions(
-      this.state.pagination.pageSize, 
+      this.state.pagination.pageSize,
       this.state.pagination.current,
       this.state.sorter.field,
       this.state.sorter.order
     );
+
+    this.getSessionCount();
   }
 
   getSessions(pageSize, current, sortField, sortOrder) {
     this.setState({
       loading: true
-    })
+    });
     SessionBackend.getSessions(
       this.state.websiteId,
       pageSize,
@@ -67,6 +62,18 @@ class SessionPage extends React.Component {
         });
       }
     );
+  }
+
+  getSessionCount() {
+    WebsiteBackend.getWebsite(
+      this.state.websiteId
+    ).then((res) => {
+      const pager = {...this.state.pagination};
+      pager.total = res.sessionCount;
+      this.setState({
+        pagination: pager
+      });
+    });
   }
 
   deleteSession(i) {
@@ -87,7 +94,7 @@ class SessionPage extends React.Component {
     const pager = {...this.state.pagination};
     pager.current = pagination.current;
     pager.pageSize = pagination.pageSize;
-    
+
     const _sorter = {...this.state.sorter};
     _sorter.field = sorter.field ? sorter.field : "";
     _sorter.order = sorter.order ? sorter.order : "";
@@ -98,7 +105,7 @@ class SessionPage extends React.Component {
     });
 
     this.getSessions(
-      pagination.pageSize, 
+      pagination.pageSize,
       pagination.current,
       _sorter.field,
       _sorter.order
@@ -174,13 +181,13 @@ class SessionPage extends React.Component {
 
     return (
       <div>
-        <Table columns={columns} 
-          dataSource={sessions} 
-          rowKey="name" 
-          size="middle" 
-          bordered 
-          pagination={this.state.pagination} 
-          loading={this.state.loading} 
+        <Table columns={columns}
+          dataSource={sessions}
+          rowKey="name"
+          size="middle"
+          bordered
+          pagination={this.state.pagination}
+          loading={this.state.loading}
           onChange={(pagination, filters, sorter)=>{
             this.onTableChange.call(this, pagination, filters, sorter);
         }}/>
@@ -193,7 +200,7 @@ class SessionPage extends React.Component {
               <Option value="100">100</Option>
               <Option value="All">All</Option>
             </Select>
-            sessions per page. 
+            sessions per page.
           </Col>
         </Row>
       </div>

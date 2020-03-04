@@ -39,6 +39,26 @@ func GetImpressions(websiteId string, sessionId string, resultCount int, offset 
 	return impressions
 }
 
+func GetImpressionsAll(websiteId string, resultCount int, offset int, sortField string, sortOrder string) []*Impression {
+	impressions := []*Impression{}
+	var err error
+
+	if sortField != "" {
+		if sortOrder == "1" {
+			err = ormManager.engine.Where("website_id = ?", websiteId).Asc(sortField).Limit(resultCount, offset).Find(&impressions)
+		} else {
+			err = ormManager.engine.Where("website_id = ?", websiteId).Desc(sortField).Limit(resultCount, offset).Find(&impressions)
+		}
+	} else {
+		err = ormManager.engine.Where("website_id = ?", websiteId).Asc("created_time").Limit(resultCount, offset).Find(&impressions)
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	return impressions
+}
+
 func GetImpression(id string) *Impression {
 	im := Impression{Id: id}
 	existed, err := ormManager.engine.Get(&im)

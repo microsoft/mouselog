@@ -163,17 +163,17 @@ class WebsitePage extends React.Component {
           )
         }
       },
-      {
-        title: 'Pages',
-        key: 'pages',
-        render: (text, record, index) => {
-          return (
-            <div>
-              <Button type="primary" onClick={() => Setting.openLink(`/websites/${record.id}/pages`)}>View Pages</Button>
-            </div>
-          )
-        }
-      },
+      // {
+      //   title: 'Pages',
+      //   key: 'pages',
+      //   render: (text, record, index) => {
+      //     return (
+      //       <div>
+      //         <Button type="primary" onClick={() => Setting.openLink(`/websites/${record.id}/pages`)}>View Pages</Button>
+      //       </div>
+      //     )
+      //   }
+      // },
       {
         title: 'State',
         dataIndex: 'state',
@@ -191,6 +191,20 @@ class WebsitePage extends React.Component {
         }
       },
       {
+        title: 'View',
+        dataIndex: '',
+        key: 'op',
+        width: '130px',
+        render: (text, record, index) => {
+          return (
+            <div>
+              <Button style={{marginTop: '10px', marginBottom: '10px'}} onClick={() => Setting.openLink(`/websites/${record.id}/sessions`)}>Sessions</Button>
+              <Button style={{marginBottom: '10px'}} type="primary" onClick={() => Setting.openLink(`/websites/${record.id}/impressions`)}>Impressions</Button>
+            </div>
+          )
+        }
+      },
+      {
         title: 'Action',
         dataIndex: '',
         key: 'op',
@@ -199,7 +213,6 @@ class WebsitePage extends React.Component {
           return (
             <div>
               <Button style={{marginTop: '10px', marginBottom: '10px'}} onClick={() => Setting.openLink(`/websites/${record.id}`)}>Edit</Button>
-              <Button style={{marginBottom: '10px'}} type="primary" onClick={() => Setting.openLink(`/websites/${record.id}/sessions`)}>View Sessions</Button>
               <Popconfirm
                 title={`Are you sure to delete website: ${record.name} ?`}
                 onConfirm={() => this.deleteWebsite(index)}

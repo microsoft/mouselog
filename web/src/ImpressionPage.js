@@ -40,27 +40,61 @@ class ImpressionPage extends React.Component {
   }
 
   componentDidMount() {
-    this.getImpressions(
-      this.state.pagination.pageSize,
-      this.state.pagination.current,
-      this.state.sorter.field,
-      this.state.sorter.order
-    );
-    this.getImpressionCount();
+    if (this.state.sessionId === undefined) {
+      this.getImpressionsAll(
+        this.state.pagination.pageSize,
+        this.state.pagination.current,
+        this.state.sorter.field,
+        this.state.sorter.order
+      );
+
+      this.getSessionCount();
+    } else {
+      this.getImpressions(
+        this.state.pagination.pageSize,
+        this.state.pagination.current,
+        this.state.sorter.field,
+        this.state.sorter.order
+      );
+
+      this.getImpressionCount();
+    }
+
     this.getWebsite();
   }
 
   getImpressions(pageSize, current, sortField, sortOrder) {
     this.setState({
       tableLoading: true
-    })
+    });
+
     ImpressionBackend.getImpressions(
       this.state.websiteId,
       this.state.sessionId,
       pageSize,
       pageSize * (current-1),
       sortField,
-      sortOrder == "descend" ? 0 : 1 // "ascend": 1, "descend": 0
+      sortOrder === "descend" ? 0 : 1 // "ascend": 1, "descend": 0
+    ).then((res) => {
+          this.setState({
+            impressions: res,
+            tableLoading: false
+          });
+        }
+      );
+  }
+
+  getImpressionsAll(pageSize, current, sortField, sortOrder) {
+    this.setState({
+      tableLoading: true
+    });
+
+    ImpressionBackend.getImpressionsAll(
+      this.state.websiteId,
+      pageSize,
+      pageSize * (current-1),
+      sortField,
+      sortOrder === "descend" ? 0 : 1 // "ascend": 1, "descend": 0
     ).then((res) => {
           this.setState({
             impressions: res,
@@ -80,7 +114,19 @@ class ImpressionPage extends React.Component {
       this.setState({
         pagination: pager
       });
-    })
+    });
+  }
+
+  getSessionCount() {
+    WebsiteBackend.getWebsite(
+      this.state.websiteId
+    ).then((res) => {
+      const pager = {...this.state.pagination};
+      pager.total = res.sessionCount;
+      this.setState({
+        pagination: pager
+      });
+    });
   }
 
   getWebsite() {
@@ -121,12 +167,21 @@ class ImpressionPage extends React.Component {
       sorter: _sorter
     });
 
-    this.getImpressions(
-      pagination.pageSize,
-      pagination.current,
-      _sorter.field,
-      _sorter.order
-    );
+    if (this.state.sessionId === undefined) {
+      this.getImpressionsAll(
+        pagination.pageSize,
+        pagination.current,
+        _sorter.field,
+        _sorter.order
+      );
+    } else {
+      this.getImpressions(
+        pagination.pageSize,
+        pagination.current,
+        _sorter.field,
+        _sorter.order
+      );
+    }
   }
 
   onPageSizeChange(value) {

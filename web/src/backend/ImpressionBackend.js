@@ -21,6 +21,20 @@ export function getImpressions(websiteId, sessionId, resultCount, offset, sortFi
   }).then(res => res.json());
 }
 
+export function getImpressionsAll(websiteId, resultCount, offset, sortField, sortOrder) {
+  let requestParams = [
+    `websiteId=${websiteId}`,
+    `resultCount=${resultCount}`,
+    `offset=${offset}`,
+    `sortField=${humpToLine(sortField)}`,
+    `sortOrder=${sortOrder}`
+  ].join('&');
+  return fetch(`${Setting.ServerUrl}/api/get-impressions-all?${requestParams}`, {
+    method: "GET",
+    credentials: "include"
+  }).then(res => res.json());
+}
+
 export function getImpression(id) {
   return fetch(`${Setting.ServerUrl}/api/get-impression?id=${id}`, {
     method: "GET",
