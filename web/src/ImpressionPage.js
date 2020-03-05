@@ -191,7 +191,7 @@ class ImpressionPage extends React.Component {
   }
 
   renderTable(impressions) {
-    const columns = [
+    let columns = [
       {
         title: 'Impression ID',
         dataIndex: 'id',
@@ -210,6 +210,7 @@ class ImpressionPage extends React.Component {
         title: 'URL Path',
         dataIndex: 'urlPath',
         key: 'urlPath',
+        width: '300px',
         sorter: (a, b) => a.urlPath.localeCompare(b.urlPath),
         render: (text, record, index) => {
           if (this.state.website === null) {
@@ -225,6 +226,33 @@ class ImpressionPage extends React.Component {
           )
         }
       },
+    ];
+
+    if (this.state.sessionId === undefined) {
+      columns.push(
+        {
+          title: 'User Agent',
+          dataIndex: 'userAgent',
+          key: 'userAgent',
+          sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
+          render: (text, record, index) => {
+            return Setting.wrapUserAgent(text);
+          }
+        },
+        {
+          title: 'Client IP',
+          dataIndex: 'clientIp',
+          key: 'clientIp',
+          width: '130px',
+          sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
+          render: (text, record, index) => {
+            return Setting.wrapClientIp(text);
+          }
+        },
+      );
+    }
+
+    columns.push(
       {
         title: 'Width',
         dataIndex: 'width',
@@ -295,7 +323,7 @@ class ImpressionPage extends React.Component {
           )
         }
       },
-    ];
+    );
 
     return (
       <div>

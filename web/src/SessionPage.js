@@ -139,12 +139,18 @@ class SessionPage extends React.Component {
         dataIndex: 'userAgent',
         key: 'userAgent',
         sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
+        render: (text, record, index) => {
+          return Setting.wrapUserAgent(text);
+        }
       },
       {
         title: 'Client IP',
         dataIndex: 'clientIp',
         key: 'clientIp',
         sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
+        render: (text, record, index) => {
+          return Setting.wrapClientIp(text);
+        }
       },
       {
         title: 'Impression Count',

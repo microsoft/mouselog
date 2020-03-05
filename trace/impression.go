@@ -16,6 +16,9 @@ type Impression struct {
 	Height       int    `json:"height"`
 	PageLoadTime string `xorm:"varchar(100)" json:"pageLoadTime"`
 
+	UserAgent string `xorm:"varchar(500)" json:"userAgent"`
+	ClientIp  string `xorm:"varchar(100)" json:"clientIp"`
+
 	Events []Event `xorm:"mediumtext" json:"events"`
 }
 
@@ -97,7 +100,7 @@ func AddImpression(id string, sessionId string, websiteId string, urlPath string
 	return affected != 0
 }
 
-func AddImpressions(impressions[]*Impression) bool {
+func AddImpressions(impressions []*Impression) bool {
 	affected, err := ormManager.engine.Insert(impressions)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)

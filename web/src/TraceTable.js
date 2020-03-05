@@ -78,20 +78,20 @@ class TraceTable extends React.Component {
     if (hasCanvas) {
       columns.push(
         {
-          title: 'UserAgent',
+          title: 'User Agent',
           dataIndex: 'userAgent',
           key: 'userAgent',
           sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
-          render: (text, trace, index) => {
+          render: (text, record, index) => {
             return Setting.wrapUserAgent(text);
           }
         },
         {
-          title: 'ClientIp',
+          title: 'Client IP',
           dataIndex: 'clientIp',
           key: 'clientIp',
           sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
-          render: (text, trace, index) => {
+          render: (text, record, index) => {
             return Setting.wrapClientIp(text);
           }
         },

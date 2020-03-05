@@ -13,8 +13,8 @@ func addSession(sessions *[]*trace.Session, sessionMap *map[string]*trace.Sessio
 	}
 }
 
-func addImpression(impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, id string, sessionId string, websiteId string, createdTime string, urlPath string) {
-	im := &trace.Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: createdTime, UrlPath: urlPath, Events: []trace.Event{}}
+func addImpression(impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, id string, sessionId string, websiteId string, createdTime string, urlPath string, userAgent string, clientIp string) {
+	im := &trace.Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: createdTime, UrlPath: urlPath, UserAgent: userAgent, ClientIp: clientIp, Events: []trace.Event{}}
 	if _, ok := (*impressionMap)[id]; !ok {
 		*impressions = append(*impressions, im)
 		(*impressionMap)[id] = im

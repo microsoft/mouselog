@@ -220,7 +220,7 @@ func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Sessi
 	userAgent := util.UnescapeUserAgent(row[RowUserAgent])
 	clientIp := row[RowClientIp]
 	addSession(sessions, sessionMap, sessionId, websiteId, timestamp, userAgent, clientIp)
-	addImpression(impressions, impressionMap, impressionId, sessionId, websiteId, timestamp, url)
+	addImpression(impressions, impressionMap, impressionId, sessionId, websiteId, timestamp, url, userAgent, clientIp)
 	appendTraceToImpression(impressionMap, impressionId, t)
 
 	if i%1000 == 0 {
