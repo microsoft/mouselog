@@ -30,6 +30,7 @@ func (c *APIController) UploadTrace() {
 	impressionId := c.Input().Get("impressionId")
 	userAgent := c.getUserAgent()
 	clientIp := c.getClientIp()
+	userId := c.Input().Get("userId")
 
 	var data []byte
 	if c.Ctx.Request.Method == "GET" {
@@ -44,8 +45,8 @@ func (c *APIController) UploadTrace() {
 		panic(err)
 	}
 
-	trace.AddSession(sessionId, websiteId, userAgent, clientIp)
-	trace.AddImpression(impressionId, sessionId, websiteId, t.Path)
+	trace.AddSession(sessionId, websiteId, userAgent, clientIp, userId)
+	trace.AddImpression(impressionId, sessionId, websiteId, userId, t.Path)
 	trace.AppendTraceToImpression(impressionId, &t)
 
 	// Only return traces for test page for visualization (websiteId == "mouselog")

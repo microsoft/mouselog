@@ -15,6 +15,7 @@ type Session struct {
 	CreatedTime string `xorm:"varchar(100)" json:"createdTime"`
 	UserAgent   string `xorm:"varchar(500)" json:"userAgent"`
 	ClientIp    string `xorm:"varchar(100)" json:"clientIp"`
+	UserId      string `xorm:"varchar(100)" json:"userId"`
 
 	ImpressionCount int `json:"impressionCount"`
 
@@ -79,8 +80,8 @@ func GetSession(id string, websiteId string) *Session {
 	}
 }
 
-func AddSession(id string, websiteId string, userAgent string, clientIp string) bool {
-	s := Session{Id: id, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UserAgent: userAgent, ClientIp: clientIp}
+func AddSession(id string, websiteId string, userAgent string, clientIp string, userId string) bool {
+	s := Session{Id: id, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UserAgent: userAgent, ClientIp: clientIp, UserId: userId}
 	affected, err := ormManager.engine.Insert(s)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)
