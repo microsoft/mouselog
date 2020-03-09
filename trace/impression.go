@@ -18,6 +18,7 @@ type Impression struct {
 
 	UserAgent string `xorm:"varchar(500)" json:"userAgent"`
 	ClientIp  string `xorm:"varchar(100)" json:"clientIp"`
+	UserId    string `xorm:"varchar(100)" json:"userId"`
 
 	Events []Event `xorm:"mediumtext" json:"events"`
 }
@@ -90,8 +91,8 @@ func updateImpression(id string, impression *Impression) bool {
 	return true
 }
 
-func AddImpression(id string, sessionId string, websiteId string, urlPath string) bool {
-	im := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
+func AddImpression(id string, sessionId string, websiteId string, userId string, urlPath string) bool {
+	im := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, UserId: userId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
 	affected, err := ormManager.engine.Insert(im)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)

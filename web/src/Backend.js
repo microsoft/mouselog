@@ -14,8 +14,8 @@ export function uploadTrace(action, websiteId, impressionId, data) {
   }).then(res => res.json());
 }
 
-export function getSessionId(websiteId) {
-  return fetch(`${Setting.ServerUrl}/api/get-session-id?websiteId=${websiteId}`, {
+export function getSessionId(websiteId, userId = "") {
+  return fetch(`${Setting.ServerUrl}/api/get-session-id?websiteId=${websiteId}&userId=${userId}`, {
     method: 'GET',
     credentials: "include"
   }).then(res => res.json());

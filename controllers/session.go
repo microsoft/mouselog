@@ -29,7 +29,7 @@ func (c *APIController) GetSession() {
 func (c *APIController) GetSessionId() {
 	sessionId := c.StartSession().SessionID()
 
-	trace.AddSession(sessionId, c.Input().Get("websiteId"), c.getUserAgent(), c.getClientIp())
+	trace.AddSession(sessionId, c.Input().Get("websiteId"), c.getUserAgent(), c.getClientIp(), c.Input().Get("userId"))
 
 	c.Data["json"] = sessionId
 	c.ServeJSON()
