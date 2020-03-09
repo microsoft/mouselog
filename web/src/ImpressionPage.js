@@ -246,7 +246,13 @@ class ImpressionPage extends React.Component {
           width: '130px',
           sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
           render: (text, record, index) => {
-            return Setting.wrapClientIp(text);
+            return (
+              <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
+                {
+                  Setting.wrapClientIp(text)
+                }
+            </span>
+            )
           }
         },
       );
