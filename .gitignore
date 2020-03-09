@@ -16,11 +16,8 @@ vendor/
 
 .idea/
 *.iml
-.theia/
 *.tmp
 tmp/
-go.mod
-go.sum
 
 static/
 
