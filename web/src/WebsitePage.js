@@ -64,6 +64,9 @@ class WebsitePage extends React.Component {
       // Time interval for resending the failed trace data
       resendInterval: 3000,
 
+      // Maximum size of a single package (byte)
+      sizeLimit: 65535,
+
       // Scope
       scope: "window.document"
     }
