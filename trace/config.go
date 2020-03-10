@@ -17,6 +17,7 @@ type TrackConfig struct {
 	Decoder        string `json:"decoder"`
 	EnableGet      bool   `json:"enableGet"`
 	ResendInterval int    `json:"resendInterval"`
+	SizeLimit      int    `json:"sizeLimit"`
 }
 
 func ParseTrackConfig(s string) TrackConfig {

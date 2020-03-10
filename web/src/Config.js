@@ -62,7 +62,7 @@ class Config extends React.Component {
         res += `\n      frequency: ${website.trackConfig.frequency},`;
     }
 
-    if (website.trackConfig.sizeLimit !== 4096) {
+    if (website.trackConfig.sizeLimit !== 65535) {
       res += `\n      sizeLimit: ${website.trackConfig.sizeLimit},`;
     }
 
