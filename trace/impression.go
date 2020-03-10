@@ -129,6 +129,9 @@ func DeleteImpressions(websiteId string) bool {
 }
 
 func AppendTraceToImpression(id string, trace *Trace) {
+	if len(trace.Events) == 0 {
+		return
+	}
 	impressionMapMutex.TryLock(id)
 
 	impression := GetImpression(id)
