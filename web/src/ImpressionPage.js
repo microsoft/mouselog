@@ -213,6 +213,8 @@ class ImpressionPage extends React.Component {
         width: '300px',
         sorter: (a, b) => a.urlPath.localeCompare(b.urlPath),
         render: (text, record, index) => {
+          text = decodeURI(text);
+
           if (this.state.website === null) {
             return text;
           }
