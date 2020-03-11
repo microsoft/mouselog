@@ -15,8 +15,8 @@ var ormManager *OrmManager
 
 func InitOrmManager() {
 	ormManager = NewOrmManager("mysql", beego.AppConfig.String("dataSourceName"))
-	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 100)
-	ormManager.engine.SetDefaultCacher(cacher)
+	//cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 100)
+	//ormManager.engine.SetDefaultCacher(cacher)
 }
 
 // OrmManager represents the MySQL ormManager for policy storage.
