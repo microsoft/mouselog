@@ -25,7 +25,7 @@ class SessionPage extends React.Component {
       pagination: {
         current: 1,
         defaultCurrent: 1,
-        pageSize: 10
+        pageSize: 100
       },
       sorter: {
         field: "",
@@ -135,6 +135,12 @@ class SessionPage extends React.Component {
         }
       },
       {
+        title: 'User Id',
+        dataIndex: 'userId',
+        key: 'userId',
+        sorter: (a, b) => a.userId.localeCompare(b.userId),
+      },
+      {
         title: 'User Agent',
         dataIndex: 'userAgent',
         key: 'userAgent',
@@ -199,7 +205,7 @@ class SessionPage extends React.Component {
         }}/>
         <Row type="flex" justify="end" style={{marginRight: 20}}>
           <Col>
-            <Select defaultValue="10" style={{ width: 80, marginRight: 10}} onChange={(value)=>{this.onPageSizeChange.call(this, value)}}>
+            <Select defaultValue="100" style={{ width: 80, marginRight: 10}} onChange={(value)=>{this.onPageSizeChange.call(this, value)}}>
               <Option value="10">10</Option>
               <Option value="20">20</Option>
               <Option value="50">50</Option>
