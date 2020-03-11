@@ -26,7 +26,12 @@ func (c *APIController) UploadTrace() {
 	var resp response
 
 	websiteId := c.Input().Get("websiteId")
-	sessionId := c.StartSession().SessionID()
+	sessionId := c.Input().Get("sessionId")
+	if sessionId == "" {
+		sessionId = c.StartSession().SessionID() // Mouselog Dashboard generate sessionID from backend
+	} else {
+		c.StartSession() // For other pages, start the session but not overwrite the sessionID
+	}
 	impressionId := c.Input().Get("impressionId")
 	userAgent := c.getUserAgent()
 	clientIp := c.getClientIp()

@@ -24,6 +24,8 @@ func init() {
 	beego.Router("/api/get-session", &controllers.APIController{}, "GET:GetSession")
 	beego.Router("/api/delete-session", &controllers.APIController{}, "POST:DeleteSession")
 
+	// For mouselog dashboard, /api/upload-trace requires websiteId, userId, impressionId
+	// For other pages, /api/upload-trace requires websiteId, userId, impressionId and sessionId
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "POST:UploadTrace")
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "GET:UploadTrace")
 	beego.Router("/api/clear-trace", &controllers.APIController{}, "POST:ClearTrace")
