@@ -32,6 +32,15 @@ func (c *APIController) UploadTrace() {
 	clientIp := c.getClientIp()
 	userId := c.Input().Get("userId")
 
+	website := trace.GetWebsite(websiteId)
+	if website == nil {
+		resp = response{Status: "ok", Msg: "this website is not monitored", Data: ""}
+
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
 	var data []byte
 	if c.Ctx.Request.Method == "GET" {
 		data = []byte(c.Input().Get("data"))
