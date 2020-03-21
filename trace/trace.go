@@ -11,6 +11,7 @@ type Trace struct {
 	Width        int    `json:"width"`
 	Height       int    `json:"height"`
 	PageLoadTime string `json:"pageLoadTime"`
+	Referrer     string `json:"referrer"`
 
 	Label     int    `json:"label"`
 	Guess     int    `json:"guess"`

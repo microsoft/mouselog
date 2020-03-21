@@ -6,6 +6,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/astaxie/beego"
 	"github.com/microsoft/mouselog/detect"
@@ -27,15 +28,16 @@ func (c *APIController) UploadTrace() {
 
 	websiteId := c.Input().Get("websiteId")
 	sessionId := c.Input().Get("sessionId")
-	if sessionId == "" {
-		sessionId = c.StartSession().SessionID() // Mouselog Dashboard generate sessionID from backend
-	} else {
-		c.StartSession() // For other pages, start the session but not overwrite the sessionID
-	}
+
 	impressionId := c.Input().Get("impressionId")
 	userAgent := c.getUserAgent()
 	clientIp := c.getClientIp()
 	userId := c.Input().Get("userId")
+
+	beegoSessionId := c.StartSession().SessionID()
+	if sessionId == "" {
+		sessionId = beegoSessionId
+	}
 
 	website := trace.GetWebsite(websiteId)
 	if website == nil {
@@ -57,6 +59,17 @@ func (c *APIController) UploadTrace() {
 	err := json.Unmarshal(data, &t)
 	if err != nil {
 		panic(err)
+	}
+
+	referrer := t.Referrer
+	isDashboardUser := strings.HasPrefix(referrer, "http://localhost") || strings.HasPrefix(referrer, "https://mouselog.org")
+	fmt.Printf("%s, %s, %s, %s, isDashboardUser=%v\n", websiteId, sessionId, impressionId, referrer, isDashboardUser)
+	if isDashboardUser {
+			resp = response{Status: "ok", Msg: "dashboard user is not monitored", Data: ""}
+
+			c.Data["json"] = resp
+			c.ServeJSON()
+			return
 	}
 
 	trace.AddSession(sessionId, websiteId, userAgent, clientIp, userId)
