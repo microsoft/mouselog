@@ -81,7 +81,7 @@ func (c *APIController) UploadTrace() {
 	}
 
 	var t trace.Trace
-	err := json.Unmarshal(data, &t)
+	err := t.UnmarshalJSON(data)
 	if err != nil {
 		panic(err)
 	}
