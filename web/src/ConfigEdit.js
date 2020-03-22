@@ -227,12 +227,12 @@ class ConfigEdit extends React.Component {
           <Col span={2} >
           </Col>
           <Col style={{marginTop: '5px'}} span={3}>
-            Disable Session Cookie:
+            Enable Session Cookie:
           </Col>
           <Col span={1} >
             {
-              <Switch checked={this.props.website.trackConfig.disableSession} onChange={(checked, e) => {
-                this.updateConfigField("disableSession", checked);
+              <Switch checked={this.props.website.trackConfig.enableSession} onChange={(checked, e) => {
+                this.updateConfigField("enableSession", checked);
               }} />
             }
           </Col>

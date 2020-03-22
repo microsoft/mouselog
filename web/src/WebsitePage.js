@@ -85,8 +85,8 @@ class WebsitePage extends React.Component {
       enableServerConfig: true,
 
       // Type: Boolean
-      // Mouselog will not generate session ID to track user cross-tabs behaviors if true
-      disableSession: false,
+      // Mouselog will generate session ID to track user cross-tabs behaviors if true
+      enableSession: true,
     }
   }
 

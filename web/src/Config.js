@@ -79,11 +79,11 @@ class Config extends React.Component {
     }
 
     if (website.trackConfig.enableServerConfig !== true) {
-      res += `\n      serverConfig: ${website.trackConfig.enableServerConfig},`;
+      res += `\n      enableServerConfig: ${website.trackConfig.enableServerConfig},`;
     }
 
-    if (website.trackConfig.disableSession !== false) {
-      res += `\n      disabledSession: ${website.trackConfig.disableSession},`;
+    if (website.trackConfig.enableSession !== true) {
+      res += `\n      enableSession: ${website.trackConfig.enableSession},`;
     }
 
     let trimmedScope = this.trimStr(website.trackConfig.scope);
