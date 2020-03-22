@@ -75,7 +75,7 @@ class Config extends React.Component {
     }
 
     if (website.trackConfig.encoder !== "") {
-      res += `\n      Encoder: "${website.trackConfig.encoder}",`;
+      res += `\n      encoder: "${website.trackConfig.encoder}",`;
     }
 
     if (website.trackConfig.enableServerConfig !== true) {
