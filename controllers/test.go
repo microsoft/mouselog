@@ -38,6 +38,7 @@ func (c *APIController) UploadTrace() {
 	userAgent := c.getUserAgent()
 	clientIp := c.getClientIp()
 	userId := c.Input().Get("userId")
+	queryConfig := c.Input().Get("queryConfig")
 
 	beegoSessionId := c.StartSession().SessionID()
 	if sessionId == "" {
@@ -54,22 +55,19 @@ func (c *APIController) UploadTrace() {
 	}
 
 	trackConfig := trace.ParseTrackConfig(website.TrackConfig)
+	if queryConfig == "1" {
+		resp = response{Status: "ok", Msg: "config", Data: trackConfig}
+
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
 
 	var data []byte
 	if c.Ctx.Request.Method == "GET" {
 		data = []byte(c.Input().Get("data"))
 	} else { // Method == "POST"
 		data = c.Ctx.Input.RequestBody
-	}
-
-	if len(data) == 0 {
-		resp = response{Status: "ok", Msg: "", Data: ""}
-		resp.Msg = "config"
-		resp.Data = trace.ParseTrackConfig(trace.GetWebsite(websiteId).TrackConfig)
-
-		c.Data["json"] = resp
-		c.ServeJSON()
-		return
 	}
 
 	if trackConfig.Encoder == "base64" {
@@ -104,10 +102,6 @@ func (c *APIController) UploadTrace() {
 	// Only return traces for test page for visualization (websiteId == "mouselog")
 	if websiteId != "mouselog" {
 		resp = response{Status: "ok", Msg: "", Data: ""}
-		if len(t.Events) == 0 {
-			resp.Msg = "config"
-			resp.Data = trace.ParseTrackConfig(trace.GetWebsite(websiteId).TrackConfig)
-		}
 
 		c.Data["json"] = resp
 		c.ServeJSON()
