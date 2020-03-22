@@ -75,7 +75,7 @@ class ConfigEdit extends React.Component {
           <Col style={{marginTop: '5px'}} span={2}>
             Upload Mode:
           </Col>
-          <Col span={1}>
+          <Col span={3}>
             <Select style={{width: "150px"}} value={this.props.website.trackConfig.uploadMode} onChange={(value => {
               this.updateConfigField("uploadMode", value);
             })}>
@@ -88,37 +88,44 @@ class ConfigEdit extends React.Component {
               }
             </Select>
           </Col>
+          <Col span={2} >
+          </Col>
+          {
+            this.props.website.trackConfig.uploadMode === "event-triggered" ? null :
+              [
+                <Col style={{marginTop: '5px'}} span={2}>
+                  Upload Period:
+                </Col>,
+                <Col span={1}>
+                  {
+                    <Input style={{width: "100px"}} suffix="ms" value={this.props.website.trackConfig.uploadPeriod} onChange={e => {
+                      this.updateConfigField("uploadPeriod", e.target.value);
+                    }}/>
+                  }
+                </Col>
+              ]
+          }
+          {
+            this.props.website.trackConfig.uploadMode !== "mixed" ? null :
+              <Col span={4} >
+              </Col>
+          }
+          {
+            this.props.website.trackConfig.uploadMode === "periodic" ? null :
+              [
+                <Col style={{marginTop: '5px'}} span={2}>
+                  Frequency:
+                </Col>,
+                <Col span={1}>
+                  {
+                    <Input style={{width: "120px"}} suffix="events/s" value={this.props.website.trackConfig.frequency} onChange={e => {
+                      this.updateConfigField("frequency", e.target.value);
+                    }}/>
+                  }
+                </Col>
+              ]
+          }
         </Row>
-        {
-          this.props.website.trackConfig.uploadMode === "event-triggered" ? null :
-            <Row style={{marginTop: '20px'}}>
-              <Col style={{marginTop: '5px'}} span={2}>
-                Upload Period:
-              </Col>
-              <Col span={1}>
-                {
-                  <Input style={{width: "100px"}} suffix="ms" value={this.props.website.trackConfig.uploadPeriod} onChange={e => {
-                    this.updateConfigField("uploadPeriod", e.target.value);
-                  }}/>
-                }
-              </Col>
-            </Row>
-        }
-        {
-          this.props.website.trackConfig.uploadMode === "periodic" ? null :
-            <Row style={{marginTop: '20px'}}>
-              <Col style={{marginTop: '5px'}} span={2}>
-                Frequency:
-              </Col>
-              <Col span={1}>
-                {
-                  <Input style={{width: "120px"}} suffix="events/s" value={this.props.website.trackConfig.frequency} onChange={e => {
-                    this.updateConfigField("frequency", e.target.value);
-                  }}/>
-                }
-              </Col>
-            </Row>
-        }
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Size Limit:
@@ -130,18 +137,18 @@ class ConfigEdit extends React.Component {
               }}/>
             }
           </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
+          <Col span={4} >
+          </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Scope:
           </Col>
-          <Col span={20}>
-            <TextArea value={this.props.website.trackConfig.scope} onChange={(e) =>{
+          <Col span={3}>
+            <TextArea style={{width: "250px"}} value={this.props.website.trackConfig.scope} onChange={(e) =>{
               this.updateConfigField("scope", e.target.value);
             }} autoSize/>
           </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
+          <Col span={2} >
+          </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Enable GET:
           </Col>
