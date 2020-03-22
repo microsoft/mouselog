@@ -22,7 +22,7 @@ class Config extends React.Component {
   }
 
   trimStr(s) {
-    return ( s || '' ).replace( /^\s+|\s+$/g, '' ); 
+    return ( s || '' ).replace( /^\s+|\s+$/g, '' );
   }
 
   setHeight(codeLinesNumber) {
@@ -69,7 +69,7 @@ class Config extends React.Component {
     if (website.trackConfig.enableGet !== false) {
       res += `\n      enableGet: ${website.trackConfig.enableGet},`;
     }
-    
+
     let trimmedScope = this.trimStr(website.trackConfig.scope)
     if (trimmedScope !== "window.document") {
       let lines = trimmedScope.split('\n');
@@ -79,7 +79,7 @@ class Config extends React.Component {
       }
       res += `,`;
     }
-    
+
     if (res === "let config = {") {
       return "";
     }
@@ -104,9 +104,9 @@ class Config extends React.Component {
     ${configText}var agent = mouselog.init();
     agent.run(config);
   };
-  var t = document.getElementsByTagName("script");
-  var s = t.length > 0 ? t[0].parentNode : document.body;
-  s.appendChild(script, s);
+  document.addEventListener('DOMContentLoaded', function () {
+    document.body.appendChild(script);
+  });
 })();
 </script>`;
 
