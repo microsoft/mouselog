@@ -75,6 +75,18 @@ class WebsitePage extends React.Component {
 
       // Script version: "latest" or a specific NPM version like "0.1.8"
       version: "latest",
+
+      // Content: "base64" or an empty string
+      // Use a encoder before uploading the data
+      encoder: "",
+
+      // Type: Boolean
+      // If true, Mouselog will fetch config from backend server during initialization
+      enableServerConfig: true,
+
+      // Type: Boolean
+      // Mouselog will not generate session ID to track user cross-tabs behaviors if true
+      disableSession: false,
     }
   }
 

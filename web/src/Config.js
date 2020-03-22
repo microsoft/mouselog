@@ -39,12 +39,16 @@ class Config extends React.Component {
   getConfigText(website) {
     let res = "let config = {";
 
-    res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
-
     res += `\n      websiteId: "${website.id}",`;
 
     if (website.trackConfig.endpointType !== "absolute") {
       res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
+    }
+
+    res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
+
+    if (website.trackConfig.resendInterval !== 20000) {
+      res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
     }
 
     res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
@@ -70,11 +74,19 @@ class Config extends React.Component {
       res += `\n      enableGet: ${website.trackConfig.enableGet},`;
     }
 
-    if (website.trackConfig.resendInterval !== 20000) {
-      res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
+    if (website.trackConfig.encoder !== "") {
+      res += `\n      Encoder: "${website.trackConfig.encoder}",`;
     }
 
-    let trimmedScope = this.trimStr(website.trackConfig.scope)
+    if (website.trackConfig.enableServerConfig !== true) {
+      res += `\n      serverConfig: ${website.trackConfig.enableServerConfig},`;
+    }
+
+    if (website.trackConfig.disableSession !== false) {
+      res += `\n      disabledSession: ${website.trackConfig.disableSession},`;
+    }
+
+    let trimmedScope = this.trimStr(website.trackConfig.scope);
     if (trimmedScope !== "window.document") {
       let lines = trimmedScope.split('\n');
       res += `\n      scope: ${lines[0]}`;

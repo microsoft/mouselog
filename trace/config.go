@@ -19,6 +19,10 @@ type TrackConfig struct {
 	Scope     string `json:"scope"`
 	EnableGet bool   `json:"enableGet"`
 	Version   string `json:"version"`
+
+	Encoder            string `json:"encoder"`
+	EnableServerConfig bool   `json:"enableServerConfig"`
+	DisableSession     bool   `json:"disableSession"`
 }
 
 func ParseTrackConfig(s string) TrackConfig {

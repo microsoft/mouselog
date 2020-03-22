@@ -198,6 +198,47 @@ class ConfigEdit extends React.Component {
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
+            Encoder:
+          </Col>
+          <Col span={3}>
+            <Select style={{width: "150px"}} value={this.props.website.trackConfig.encoder} onChange={(value => {
+              this.updateConfigField("encoder", value);
+            })}>
+              {
+                [
+                  {id: "", name: "(None)"},
+                  {id: "base64", name: "Base64"},
+                ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
+              }
+            </Select>
+          </Col>
+          <Col span={2} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={3}>
+            Enable Server Config:
+          </Col>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.enableServerConfig} onChange={(checked, e) => {
+                this.updateConfigField("enableServerConfig", checked);
+              }} />
+            }
+          </Col>
+          <Col span={2} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={3}>
+            Disable Session Cookie:
+          </Col>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.disableSession} onChange={(checked, e) => {
+                this.updateConfigField("disableSession", checked);
+              }} />
+            }
+          </Col>
+        </Row>
+        <Row style={{marginTop: '20px'}}>
+          <Col style={{marginTop: '5px'}} span={2}>
             Tracking Code:
           </Col>
           <Col span={22}>
