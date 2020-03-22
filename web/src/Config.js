@@ -47,19 +47,19 @@ class Config extends React.Component {
       res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
     }
 
+    res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
+
+    if (website.trackConfig.uploadTimes !== 0) {
+      res += `\n      uploadTimes: ${website.trackConfig.uploadTimes},`;
+    }
+
     if (website.trackConfig.uploadMode === "periodic") {
-      res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
       res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
-    }
-
-    if (website.trackConfig.uploadMode === "event-triggered") {
-      res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
+    } else if (website.trackConfig.uploadMode === "event-triggered") {
       res += `\n      frequency: ${website.trackConfig.frequency},`;
-    }
-
-    if (website.trackConfig.uploadMode === "mixed") {
-        res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
-        res += `\n      frequency: ${website.trackConfig.frequency},`;
+    } else if (website.trackConfig.uploadMode === "mixed") {
+      res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
+      res += `\n      frequency: ${website.trackConfig.frequency},`;
     }
 
     if (website.trackConfig.sizeLimit !== 65535) {
@@ -68,6 +68,10 @@ class Config extends React.Component {
 
     if (website.trackConfig.enableGet !== false) {
       res += `\n      enableGet: ${website.trackConfig.enableGet},`;
+    }
+
+    if (website.trackConfig.resendInterval !== 20000) {
+      res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
     }
 
     let trimmedScope = this.trimStr(website.trackConfig.scope)
@@ -99,7 +103,7 @@ class Config extends React.Component {
     const code = `<script>
 (function() {
   var script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/mouselog@${version}/build/mouselog.min.js";
+  script.src = "https://cdn.jsdelivr.net/npm/mouselog@${website.trackConfig.version}/build/mouselog.min.js";
   script.onload = () => {
     ${configText}var agent = mouselog.init();
     agent.run(config);
@@ -136,7 +140,15 @@ class Config extends React.Component {
           Setting.showMessage("success", `Copied to clipboard!`);
         }}
         >
-          Copy to Clipboard
+          Copy HTML Code
+        </Button>
+        <Button style={{marginTop: '10px', marginLeft: '10px'}} type="primary" onClick={() => {
+          let jsCode = code.slice(9, -10);
+          copy(jsCode);
+          Setting.showMessage("success", `Copied to clipboard!`);
+        }}
+        >
+          Copy Javascript Code
         </Button>
       </div>
     )

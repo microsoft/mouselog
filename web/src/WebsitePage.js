@@ -47,8 +47,14 @@ class WebsitePage extends React.Component {
       // The endpoint URL to upload trace to
       uploadEndpoint: "https://mouselog.org/",
 
+      // Time interval for resending the failed trace data
+      resendInterval: 20000,
+
       // Set upload mode: "periodic" or "event-triggered"
       uploadMode: "periodic",
+
+      // Mouselog will stop uploading data after uploading `uploadTimes` batch data.
+      uploadTimes: 0,
 
       // If `uploadMode` == "periodic", data will be uploaded every `uploadPeriod` ms.
       // If no data are collected in a period, no data will be uploaded
@@ -58,17 +64,17 @@ class WebsitePage extends React.Component {
       // The website interaction data will be uploaded when every `frequency` events are captured.
       frequency: 50,
 
-      // Use GET method to upload data? (stringified data will be embedded in URI)
-      enableGet: false,
-
-      // Time interval for resending the failed trace data
-      resendInterval: 3000,
-
       // Maximum size of a single package (byte)
       sizeLimit: 65535,
 
       // Scope
-      scope: "window.document"
+      scope: "window.document",
+
+      // Use GET method to upload data? (stringified data will be embedded in URI)
+      enableGet: false,
+
+      // Script version: "latest" or a specific NPM version like "0.1.8"
+      version: "latest",
     }
   }
 

@@ -25,7 +25,7 @@ class ConfigEdit extends React.Component {
   }
 
   parseConfigField(key, value) {
-    if (["uploadPeriod", "frequency", "resendInterval", "sizeLimit"].includes(key)) {
+    if (["uploadTimes", "uploadPeriod", "frequency", "resendInterval", "sizeLimit"].includes(key)) {
       value = Setting.myParseInt(value);
     }
     return value;
@@ -33,7 +33,7 @@ class ConfigEdit extends React.Component {
 
   updateConfigField(key, value) {
     value = this.parseConfigField(key, value);
-    if (key == "scope" && !value) {
+    if (key === "scope" && !value) {
       value = "window.document";
     }
     let website = this.props.website;
@@ -65,10 +65,22 @@ class ConfigEdit extends React.Component {
           <Col style={{marginTop: '5px'}} span={2}>
             Upload Endpoint:
           </Col>
-          <Col span={15} >
+          <Col span={8} >
             <Input prefix={<LinkOutlined/>} value={this.props.website.trackConfig.uploadEndpoint} onChange={e => {
               this.updateConfigField("uploadEndpoint", e.target.value);
             }}/>
+          </Col>
+          <Col span={2} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Resend Interval:
+          </Col>
+          <Col span={1}>
+            {
+              <Input style={{width: "120px"}} suffix="ms" value={this.props.website.trackConfig.resendInterval} onChange={e => {
+                this.updateConfigField("resendInterval", e.target.value);
+              }}/>
+            }
           </Col>
         </Row>
         <Row style={{marginTop: '20px'}}>
@@ -81,14 +93,26 @@ class ConfigEdit extends React.Component {
             })}>
               {
                 [
-                  {id: "mixed", name: "Mixed"},
                   {id: "periodic", name: "Periodic"},
                   {id: "event-triggered", name: "Event Triggered"},
+                  {id: "mixed", name: "Mixed"},
                 ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
               }
             </Select>
           </Col>
           <Col span={2} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Upload Times:
+          </Col>
+          <Col span={1}>
+            {
+              <Input style={{width: "100px"}} suffix="times" value={this.props.website.trackConfig.uploadTimes} onChange={e => {
+                this.updateConfigField("uploadTimes", e.target.value);
+              }}/>
+            }
+          </Col>
+          <Col span={3} >
           </Col>
           {
             this.props.website.trackConfig.uploadMode === "event-triggered" ? null :
@@ -107,7 +131,7 @@ class ConfigEdit extends React.Component {
           }
           {
             this.props.website.trackConfig.uploadMode !== "mixed" ? null :
-              <Col span={4} >
+              <Col span={3} >
               </Col>
           }
           {
@@ -147,7 +171,7 @@ class ConfigEdit extends React.Component {
               this.updateConfigField("scope", e.target.value);
             }} autoSize/>
           </Col>
-          <Col span={2} >
+          <Col span={1} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Enable GET:
@@ -157,6 +181,18 @@ class ConfigEdit extends React.Component {
               <Switch checked={this.props.website.trackConfig.enableGet} onChange={(checked, e) => {
                 this.updateConfigField("enableGet", checked);
               }} />
+            }
+          </Col>
+          <Col span={3} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Version:
+          </Col>
+          <Col span={1}>
+            {
+              <Input style={{width: "120px"}} value={this.props.website.trackConfig.version} onChange={e => {
+                this.updateConfigField("version", e.target.value);
+              }}/>
             }
           </Col>
         </Row>

@@ -8,16 +8,17 @@ import "encoding/json"
 type TrackConfig struct {
 	EndpointType   string `json:"endpointType"`
 	UploadEndpoint string `json:"uploadEndpoint"`
+	ResendInterval int    `json:"resendInterval"`
 
 	UploadMode   string `json:"uploadMode"`
+	UploadTimes  int    `json:"uploadTimes"`
 	UploadPeriod int    `json:"uploadPeriod"`
 	Frequency    int    `json:"frequency"`
 
-	Encoder        string `json:"encoder"`
-	Decoder        string `json:"decoder"`
-	EnableGet      bool   `json:"enableGet"`
-	ResendInterval int    `json:"resendInterval"`
-	SizeLimit      int    `json:"sizeLimit"`
+	SizeLimit int    `json:"sizeLimit"`
+	Scope     string `json:"scope"`
+	EnableGet bool   `json:"enableGet"`
+	Version   string `json:"version"`
 }
 
 func ParseTrackConfig(s string) TrackConfig {
