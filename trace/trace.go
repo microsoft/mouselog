@@ -6,8 +6,10 @@ package trace
 import "sort"
 
 type Trace struct {
-	Id           string `json:"id"`
-	Idx          int    `json:"idx"`
+	Id           string `json:"batchId"`
+	PacketId     int    `json:"packetId"`
+	Url          string `json:"url"`
+	Path         string `json:"path"`
 	Width        int    `json:"width"`
 	Height       int    `json:"height"`
 	PageLoadTime string `json:"pageLoadTime"`
@@ -22,9 +24,6 @@ type Trace struct {
 
 	Events  []Event   `json:"events"`
 	Degrees []float64 `json:"-"`
-
-	Url  string `json:"url"`
-	Path string `json:"path"`
 }
 
 func NewTrace(id string) *Trace {

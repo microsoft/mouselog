@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -21,6 +22,10 @@ type response struct {
 	Status string      `json:"status"`
 	Msg    string      `json:"msg"`
 	Data   interface{} `json:"data"`
+}
+
+func base64Decode(src []byte) ([]byte, error) {
+	return base64.StdEncoding.DecodeString(string(src))
 }
 
 func (c *APIController) UploadTrace() {
@@ -48,11 +53,21 @@ func (c *APIController) UploadTrace() {
 		return
 	}
 
+	trackConfig := trace.ParseTrackConfig(website.TrackConfig)
+
 	var data []byte
 	if c.Ctx.Request.Method == "GET" {
 		data = []byte(c.Input().Get("data"))
 	} else { // Method == "POST"
 		data = c.Ctx.Input.RequestBody
+	}
+
+	if trackConfig.Encoder == "base64" {
+		var err error
+		data, err = base64Decode(data)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	var t trace.Trace
