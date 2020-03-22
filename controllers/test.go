@@ -81,11 +81,8 @@ func (c *APIController) UploadTrace() {
 	}
 
 	var t trace.Trace
-	err := json.Unmarshal(data, &t)
-	if err != nil {
-		panic(err)
-	}
-
+	t.UnmarshalJSON(data)
+	
 	referrer := t.Referrer
 	isDashboardUser := strings.HasPrefix(referrer, "http://localhost") || strings.HasPrefix(referrer, "https://mouselog.org")
 	fmt.Printf("%s, %s, %s, %s, isDashboardUser=%v\n", websiteId, sessionId, impressionId, referrer, isDashboardUser)

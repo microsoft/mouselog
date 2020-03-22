@@ -3,7 +3,10 @@
 
 package trace
 
-import "sort"
+import (
+	"encoding/json"
+	"sort"
+)
 
 type Trace struct {
 	Id           int    `json:"batchId"`
@@ -57,5 +60,29 @@ func (t *Trace) SortEvents() {
 
 	for i := 0; i < len(t.Events); i++ {
 		t.Events[i].Id = i
+	}
+}
+
+func (t *Trace) UnmarshalJSON(b []byte) {
+
+	var f map[string]interface{}
+	err := json.Unmarshal(b, &f)
+	if err != nil {
+		panic(err)
+	}
+	t.Id = int(f["batchId"].(float64))
+	t.PacketId = int(f["packetId"].(float64))
+	t.Height = int(f["height"].(float64))
+	t.Width = int(f["width"].(float64))
+	t.PageLoadTime = f["pageLoadTime"].(string)
+	t.Referrer = f["referrer"].(string)
+	t.Url = f["url"].(string)
+	t.Path = f["path"].(string)
+	events := f["events"].([]interface{})
+
+	for _, evtArray := range events {
+		var evt Event
+		Array2Event(evtArray.([]interface{}), &evt)
+		t.Events = append(t.Events, evt)
 	}
 }
