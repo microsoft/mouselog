@@ -19,8 +19,8 @@ type Session struct {
 
 	ImpressionCount int `json:"impressionCount"`
 
-	Traces   []*Trace          `json:"traces"`
-	TraceMap map[string]*Trace `json:"-"`
+	Traces   []*Trace       `json:"traces"`
+	TraceMap map[int]*Trace `json:"-"`
 
 	TN int `json:"tn"`
 	FP int `json:"fp"`
@@ -122,7 +122,7 @@ func NewSession(id string) *Session {
 	ss.Id = id
 	ss.Traces = []*Trace{}
 
-	ss.TraceMap = map[string]*Trace{}
+	ss.TraceMap = map[int]*Trace{}
 	return &ss
 }
 

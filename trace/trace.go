@@ -6,7 +6,7 @@ package trace
 import "sort"
 
 type Trace struct {
-	Id           string `json:"batchId"`
+	Id           int    `json:"batchId"`
 	PacketId     int    `json:"packetId"`
 	Url          string `json:"url"`
 	Path         string `json:"path"`
@@ -26,7 +26,7 @@ type Trace struct {
 	Degrees []float64 `json:"-"`
 }
 
-func NewTrace(id string) *Trace {
+func NewTrace(id int) *Trace {
 	t := Trace{}
 	t.Id = id
 	t.Label = -1

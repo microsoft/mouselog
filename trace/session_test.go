@@ -10,8 +10,8 @@ import (
 
 func TestSessionToJson(t *testing.T) {
 	ss := NewSession("123")
-	ss.TraceMap["/"] = &Trace{
-		Id:      "/",
+	ss.TraceMap[0] = &Trace{
+		Id:      0,
 		Width:   800,
 		Height:  600,
 		Events:  nil,

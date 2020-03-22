@@ -54,9 +54,9 @@ func CheckBot(t *trace.Trace) (int, string, int, int, int) {
 	return isBot, reason, rule, start, end
 }
 
-func GetDetectResult(ss *trace.Session, traceId string) *trace.Session {
+func GetDetectResult(ss *trace.Session, traceId int) *trace.Session {
 	t, ok := ss.TraceMap[traceId]
-	if traceId != "" || ok {
+	if traceId != -1 || ok {
 		CheckBot(t)
 	}
 

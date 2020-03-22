@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"math"
-	"strconv"
 	"strings"
 
 	"github.com/microsoft/mouselog/trace"
@@ -192,7 +191,7 @@ func addEventsToTrace(t *trace.Trace, timestampList []string, eventTypeList []st
 func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, websiteId string, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
 
-	t := trace.NewTrace(strconv.Itoa(i))
+	t := trace.NewTrace(i)
 	t.Url = row[RowUrl]
 
 	isBot := row[RowIsBot]

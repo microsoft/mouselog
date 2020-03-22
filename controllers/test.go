@@ -62,6 +62,16 @@ func (c *APIController) UploadTrace() {
 		data = c.Ctx.Input.RequestBody
 	}
 
+	if len(data) == 0 {
+		resp = response{Status: "ok", Msg: "", Data: ""}
+		resp.Msg = "config"
+		resp.Data = trace.ParseTrackConfig(trace.GetWebsite(websiteId).TrackConfig)
+
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
 	if trackConfig.Encoder == "base64" {
 		var err error
 		data, err = base64Decode(data)
@@ -80,11 +90,11 @@ func (c *APIController) UploadTrace() {
 	isDashboardUser := strings.HasPrefix(referrer, "http://localhost") || strings.HasPrefix(referrer, "https://mouselog.org")
 	fmt.Printf("%s, %s, %s, %s, isDashboardUser=%v\n", websiteId, sessionId, impressionId, referrer, isDashboardUser)
 	if isDashboardUser {
-			resp = response{Status: "ok", Msg: "dashboard user is not monitored", Data: ""}
+		resp = response{Status: "ok", Msg: "dashboard user is not monitored", Data: ""}
 
-			c.Data["json"] = resp
-			c.ServeJSON()
-			return
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
 	}
 
 	trace.AddSession(sessionId, websiteId, userAgent, clientIp, userId)
@@ -106,9 +116,9 @@ func (c *APIController) UploadTrace() {
 
 	ss, _ := GetOrCreateSession(sessionId)
 	if len(t.Events) > 0 {
-		fmt.Printf("Read event [%s]: (%s, %f, %d, %d)\n", sessionId, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
+		fmt.Printf("Read event [%s]: (%d, %f, %d, %d)\n", sessionId, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
 	} else {
-		fmt.Printf("Read event [%s]: (%s, <empty>)\n", sessionId, t.Id)
+		fmt.Printf("Read event [%s]: (%d, <empty>)\n", sessionId, t.Id)
 	}
 
 	if len(t.Events) != 0 {
