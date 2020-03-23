@@ -30,8 +30,7 @@ var targetEventList = []string{
 	"resize",
 }
 
-func Array2Event(src []interface{}, dest *Event) {
-
+func array2Event(src []interface{}, dest *Event) {
 	dest.Id = int(src[0].(float64))
 	dest.Type = targetEventList[int(src[1].(float64))]
 	dest.Timestamp = src[2].(float64)

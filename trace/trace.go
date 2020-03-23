@@ -5,7 +5,6 @@ package trace
 
 import (
 	"encoding/json"
-	"errors"
 	"sort"
 )
 
@@ -64,24 +63,13 @@ func (t *Trace) SortEvents() {
 	}
 }
 
-func (t *Trace) UnmarshalJSON(b []byte) (err error) {
-
-	defer func() {
-		r := recover()
-		if r != nil {
-			switch x := r.(type) {
-			case string:
-				err = errors.New(x)
-			case error:
-				err = x
-			default:
-				err = errors.New("Unknown panic in UnmarshalJSON")
-			}
-		}
-	}()
-
+func (t *Trace) LoadFromJson(b []byte) {
 	var f map[string]interface{}
-	json.Unmarshal(b, &f)
+	err := json.Unmarshal(b, &f)
+	if err != nil {
+		panic(err)
+	}
+
 	t.Id = int(f["batchId"].(float64))
 	t.PacketId = int(f["packetId"].(float64))
 	t.Height = int(f["height"].(float64))
@@ -92,10 +80,9 @@ func (t *Trace) UnmarshalJSON(b []byte) (err error) {
 	t.Path = f["path"].(string)
 	events := f["events"].([]interface{})
 
-	for _, evtArray := range events {
-		var evt Event
-		Array2Event(evtArray.([]interface{}), &evt)
-		t.Events = append(t.Events, evt)
+	for _, arr := range events {
+		var event Event
+		array2Event(arr.([]interface{}), &event)
+		t.Events = append(t.Events, event)
 	}
-	return err
 }

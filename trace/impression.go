@@ -91,8 +91,8 @@ func updateImpression(id string, impression *Impression) bool {
 	return true
 }
 
-func AddImpression(id string, sessionId string, websiteId string, userId string, urlPath string) bool {
-	im := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, UserId: userId, CreatedTime: getCurrentTime(), UrlPath: urlPath, Events: []Event{}}
+func AddImpression(id string, sessionId string, websiteId string, userId string, trace *Trace) bool {
+	im := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, UserId: userId, CreatedTime: getCurrentTime(), UrlPath: trace.Path, Width: trace.Width, Height: trace.Height, PageLoadTime: trace.PageLoadTime, Events: []Event{}}
 	affected, err := ormManager.engine.Insert(im)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)
@@ -135,10 +135,6 @@ func AppendTraceToImpression(id string, trace *Trace) {
 	impressionMapMutex.TryLock(id)
 
 	impression := GetImpression(id)
-
-	impression.Width = trace.Width
-	impression.Height = trace.Height
-	impression.PageLoadTime = trace.PageLoadTime
 
 	// Merge Sort
 	impEvtCount := len(impression.Events)

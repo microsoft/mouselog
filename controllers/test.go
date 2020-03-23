@@ -79,10 +79,7 @@ func (c *APIController) UploadTrace() {
 	}
 
 	var t trace.Trace
-	err := t.UnmarshalJSON(data)
-	if err != nil {
-		panic(err)
-	}
+	t.LoadFromJson(data)
 
 	referrer := t.Referrer
 	isDashboardUser := strings.HasPrefix(referrer, "http://localhost") || strings.HasPrefix(referrer, "https://mouselog.org")
@@ -96,12 +93,12 @@ func (c *APIController) UploadTrace() {
 	}
 
 	trace.AddSession(sessionId, websiteId, userAgent, clientIp, userId)
-	trace.AddImpression(impressionId, sessionId, websiteId, userId, t.Path)
+	trace.AddImpression(impressionId, sessionId, websiteId, userId, &t)
 	trace.AppendTraceToImpression(impressionId, &t)
 
 	// Only return traces for test page for visualization (websiteId == "mouselog")
 	if websiteId != "mouselog" {
-		msg := fmt.Sprintf("events received: %d", len(t.Events))
+		msg := fmt.Sprintf("%d events received", len(t.Events))
 		resp = response{Status: "ok", Msg: msg, Data: ""}
 
 		c.Data["json"] = resp
