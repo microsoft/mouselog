@@ -101,7 +101,8 @@ func (c *APIController) UploadTrace() {
 
 	// Only return traces for test page for visualization (websiteId == "mouselog")
 	if websiteId != "mouselog" {
-		resp = response{Status: "ok", Msg: "", Data: ""}
+		msg := fmt.Sprintf("events received: %d", len(t.Events))
+		resp = response{Status: "ok", Msg: msg, Data: ""}
 
 		c.Data["json"] = resp
 		c.ServeJSON()

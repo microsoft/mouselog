@@ -86,6 +86,10 @@ class Config extends React.Component {
       res += `\n      enableSession: ${website.trackConfig.enableSession},`;
     }
 
+    if (website.trackConfig.enableSendEmpty !== false) {
+      res += `\n      enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
+    }
+
     let trimmedScope = this.trimStr(website.trackConfig.scope);
     if (trimmedScope !== "window.document") {
       let lines = trimmedScope.split('\n');

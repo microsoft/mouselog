@@ -45,7 +45,7 @@ class WebsitePage extends React.Component {
       endpointType: "absolute",
 
       // The endpoint URL to upload trace to
-      uploadEndpoint: "https://mouselog.org/",
+      uploadEndpoint: "https://mouselog.org/api/upload-trace",
 
       // Time interval for resending the failed trace data
       resendInterval: 20000,
@@ -87,6 +87,10 @@ class WebsitePage extends React.Component {
       // Type: Boolean
       // Mouselog will generate session ID to track user cross-tabs behaviors if true
       enableSession: true,
+
+      // Type: Boolean
+      // Allow mouselog to send data without any events
+      enableSendEmpty: false,
     }
   }
 
