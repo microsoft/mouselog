@@ -37,7 +37,7 @@ class Config extends React.Component {
   }
 
   getConfigText(website) {
-    let res = "let config = {";
+    let res = "var config = {";
 
     res += `\n      websiteId: "${website.id}",`;
 
@@ -100,7 +100,7 @@ class Config extends React.Component {
       res += `,`;
     }
 
-    if (res === "let config = {") {
+    if (res === "var config = {") {
       return "";
     }
 
@@ -127,7 +127,7 @@ class Config extends React.Component {
 (function() {
   var script = document.createElement("script");
   script.src = "${scriptUrl}";
-  script.onload = () => {
+  script.onload = function() {
     ${configText}var agent = mouselog.init();
     agent.run(config);
   };
