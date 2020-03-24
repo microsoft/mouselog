@@ -94,6 +94,10 @@ class WebsitePage extends React.Component {
       // Type: Boolean
       // Allow mouselog to send data without any events
       enableSendEmpty: false,
+
+      // Type: Boolean
+      // If not empty, Mouselog will run in debug mode and output debug logs into a HTML div tag specified by this ID
+      debugDivId: "",
     }
   }
 

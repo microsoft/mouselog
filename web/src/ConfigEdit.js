@@ -261,6 +261,18 @@ class ConfigEdit extends React.Component {
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
+            Debug DIV ID:
+          </Col>
+          <Col span={1}>
+            {
+              <Input style={{width: "120px"}} value={this.props.website.trackConfig.debugDivId} onChange={e => {
+                this.updateConfigField("debugDivId", e.target.value);
+              }}/>
+            }
+          </Col>
+        </Row>
+        <Row style={{marginTop: '20px'}}>
+          <Col style={{marginTop: '5px'}} span={2}>
             Tracking Code:
           </Col>
           <Col span={22}>

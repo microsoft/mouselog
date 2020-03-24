@@ -122,6 +122,13 @@ class Config extends React.Component {
       scriptUrl = website.trackConfig.scriptUrl;
     }
 
+    let runLine;
+    if (website.trackConfig.debugDivId === undefined || website.trackConfig.debugDivId === "") {
+      runLine = `agent.run(config);`
+    } else {
+      runLine = `agent.debug(config, "${website.trackConfig.debugDivId}");`;
+    }
+
     const configText = this.getConfigText(website);
     const code = `<script>
 (function() {
@@ -129,7 +136,7 @@ class Config extends React.Component {
   script.src = "${scriptUrl}";
   script.onload = function() {
     ${configText}var agent = mouselog.init();
-    agent.run(config);
+    ${runLine}
   };
   document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(script);
