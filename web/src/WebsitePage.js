@@ -47,6 +47,9 @@ class WebsitePage extends React.Component {
       // The endpoint URL to upload trace to
       uploadEndpoint: "https://mouselog.org/api/upload-trace",
 
+      // Custom Mouselog.js URL, empty means using official mouselog.min.js from NPM CDN
+      scriptUrl: "",
+
       // Time interval for resending the failed trace data
       resendInterval: 20000,
 

@@ -60,17 +60,27 @@ class ConfigEdit extends React.Component {
               }
             </Select>
           </Col>
-          <Col span={2} >
+          <Col span={1} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Upload Endpoint:
           </Col>
-          <Col span={8} >
+          <Col span={3} >
             <Input prefix={<LinkOutlined/>} value={this.props.website.trackConfig.uploadEndpoint} onChange={e => {
               this.updateConfigField("uploadEndpoint", e.target.value);
             }}/>
           </Col>
-          <Col span={2} >
+          <Col span={1} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Script URL:
+          </Col>
+          <Col span={3} >
+            <Input prefix={<LinkOutlined/>} value={this.props.website.trackConfig.scriptUrl} onChange={e => {
+              this.updateConfigField("scriptUrl", e.target.value);
+            }}/>
+          </Col>
+          <Col span={1} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Resend Interval:
@@ -100,7 +110,7 @@ class ConfigEdit extends React.Component {
               }
             </Select>
           </Col>
-          <Col span={2} >
+          <Col span={1} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Upload Times:
@@ -161,7 +171,7 @@ class ConfigEdit extends React.Component {
               }}/>
             }
           </Col>
-          <Col span={4} >
+          <Col span={3} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Scope:
@@ -212,7 +222,7 @@ class ConfigEdit extends React.Component {
               }
             </Select>
           </Col>
-          <Col span={2} >
+          <Col span={1} >
           </Col>
           <Col style={{marginTop: '5px'}} span={3}>
             Enable Server Config:

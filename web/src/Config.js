@@ -115,11 +115,18 @@ class Config extends React.Component {
     const version = "latest";
     const website = this.props.website;
 
+    let scriptUrl;
+    if (website.trackConfig.scriptUrl === undefined || website.trackConfig.scriptUrl === "") {
+      scriptUrl = `https://cdn.jsdelivr.net/npm/mouselog@${website.trackConfig.version}/build/mouselog.min.js`;
+    } else {
+      scriptUrl = website.trackConfig.scriptUrl;
+    }
+
     const configText = this.getConfigText(website);
     const code = `<script>
 (function() {
   var script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/mouselog@${website.trackConfig.version}/build/mouselog.min.js";
+  script.src = "${scriptUrl}";
   script.onload = () => {
     ${configText}var agent = mouselog.init();
     agent.run(config);
