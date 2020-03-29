@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/icons": "^4.0.0-rc.0",
-    "antd": "^4.0.0-rc.3",
+    "@ant-design/icons": "^4.0.5",
+    "antd": "^4.0.4",
     "codemirror": "^5.51.0",
     "copy-to-clipboard": "^3.2.1",
     "konva": "^4.0.17",
