@@ -164,14 +164,11 @@ class TestPage extends React.Component {
   }
 
   clearTrace() {
-    this.uploadTrace('clear');
-
     this.events = [];
     this.traces = [];
     this.trace = null;
 
     this.setState({
-      status: false,
       pageLoadTime: new Date(),
     });
   }
