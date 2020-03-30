@@ -64,6 +64,7 @@ class TestPage extends React.Component {
   componentDidMount() {
     Setting.setMouseHandler(this, this.mouseHandler);
 
+    // Update speed property every 0.1 s
     setInterval(() => {
       let eventBuckets = this.state.eventBuckets;
       eventBuckets = eventBuckets.slice(1);
@@ -75,19 +76,17 @@ class TestPage extends React.Component {
       })
     }, 100);
 
-    Backend.getSessionId(Setting.getWebsiteId())
-      .then(res => {
-        this.setState({
-          sessionId: res,
-          status: true
-        });
-        this.uploadTrace();
-      })
-      .catch(() => {
-        this.setState({
-          status: false
-        });
-      });
+    // Set the sessionId.
+    this.setState({
+      sessionId: Setting.getSessionId(),
+      status: true
+    })
+
+    // Load data here
+
+    this.setState({
+      onLoading: false
+    })
   }
 
   getByteCount(s) {
@@ -165,14 +164,11 @@ class TestPage extends React.Component {
   }
 
   clearTrace() {
-    this.uploadTrace('clear');
-
     this.events = [];
     this.traces = [];
     this.trace = null;
 
     this.setState({
-      status: false,
       pageLoadTime: new Date(),
     });
   }
@@ -224,11 +220,11 @@ class TestPage extends React.Component {
       return;
     }
 
-    let x = e.pageX;
-    let y = e.pageY;
+    let x = parseInt(e.pageX);
+    let y = parseInt(e.pageY);
     if (x === undefined) {
-      x = e.changedTouches[0].pageX;
-      y = e.changedTouches[0].pageY;
+      x = parseInt(e.changedTouches[0].pageX);
+      y = parseInt(e.changedTouches[0].pageY);
     }
 
     let p = {
@@ -241,11 +237,6 @@ class TestPage extends React.Component {
     };
 
     this.events.push(p);
-
-    if (this.events.length === 50) {
-      this.uploadTrace();
-    }
-
     if (this.trace === null) {
       this.trace = this.newTrace();
     }

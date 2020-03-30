@@ -65,18 +65,10 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 1});
     }
 
-    Backend.getSessionId(Setting.getWebsiteId())
-      .then(res => {
-        this.setState({
-          sessionId: res,
-          status: true
-        });
-      })
-      .catch(error => {
-        this.setState({
-          status: false
-        });
-      });
+    this.setState({
+      sessionId: Setting.getSessionId(),
+      status: true
+    });
   }
 
   onSwitchChange(checked, e) {

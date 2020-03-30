@@ -7,8 +7,21 @@ import React from "react";
 import {message, Tag} from "antd";
 import { v4 as uuid } from 'uuid';
 
+
+let isLocalStorageAvailable = (() => {
+  let testString = uuid();
+  try {
+      localStorage.setItem(testString, testString);
+      localStorage.removeItem(testString);
+      return true;
+  } catch(e) {
+      return false;
+  }
+})();
+
 export let ServerUrl = '';
 export let ImpressionId = uuid();
+let SessionId = '';
 
 export function initServerUrl() {
   const hostname = window.location.hostname;
@@ -26,6 +39,23 @@ export function getWebsiteId() {
 export function getImpressionId() {
   return ImpressionId;
 }
+
+export function getSessionId() {
+  if (SessionId) {
+    return SessionId;
+  }
+  if (!isLocalStorageAvailable) {
+      return "";
+  } 
+
+  let sessionId = localStorage.getItem('mouselogSessionID');
+  if (sessionId == null) {
+      sessionId = uuid();
+      localStorage.setItem('mouselogSessionID', sessionId);
+  }
+  return sessionId;
+}
+
 export function openLink(link) {
   const w = window.open('about:blank');
   w.location.href = link;
