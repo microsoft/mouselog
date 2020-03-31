@@ -94,21 +94,49 @@ class TestPage extends React.Component {
     })
   }
 
+  eventsEncoder(events) {
+    // Convert event object to array
+    // {id:id,timestamp:t,type:type,x:x,y:y,button:btn} => [id,type,t,x,y,btn]
+    let t = []
+    events.forEach(evt => {
+      t.push([evt.id, allTargetEvents.indexOf(evt.type), evt.timestamp, evt.x, evt.y, evt.button]);
+    })
+    return JSON.stringify(t);
+  }
+
+  eventsDecoder(str) {
+    // Convert arry to event object
+    // [id,type,t,x,y,btn]=>{id:id,timestamp:t,type:type,x:x,y:y,button:btn}
+    let t = JSON.parse(str);
+    let events = [];
+    t.forEach(item => {
+      events.push({
+        id: parseInt(item[0]),
+        timestamp: parseFloat(item[2]),
+        type: allTargetEvents[item[1]],
+        x: parseInt(item[3]),
+        y: parseInt(item[4]),
+        button: item[5]
+      })
+    })
+    return events;
+  }
+
   loadTraceFromLocal() {
     if (!isLocalStorageAvailable) {
       console.log("LocalStorage is not available!");
       return [];
     }
     let str = localStorage.getItem("traceDataCache");
-    return str ? JSON.parse(str) : [];  // Return an empty array if no cache.
+    return str ? this.eventsDecoder(str) : [];  // Return an empty array if no cache.
   }
 
   saveTraceToLocal() {
     if (!isLocalStorageAvailable) {
       return;
     }
-    let traceStr = JSON.stringify(this.trace.events);
-    localStorage.setItem("traceDataCache", traceStr);
+    let dataStr = this.eventsEncoder(this.trace.events);
+    localStorage.setItem("traceDataCache", dataStr);
   }
 
   removeTraceFromLocal() {
