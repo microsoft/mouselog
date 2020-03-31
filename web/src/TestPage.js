@@ -11,6 +11,7 @@ import Canvas from "./Canvas";
 import EventSelectionCheckBox from "./EventSelectionCheckBox"
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
+import {isLocalStorageAvailable} from "./utils";
 
 const {Text} = Typography;
 
@@ -55,8 +56,10 @@ class TestPage extends React.Component {
       sessionId: "",
       onLoading: true,
     };
+    // this.events is used as a buffer for rendering progress bar. It only contains no more than 50 events.
     this.events = [];
-    this.trace = null;
+    // this.trace indicates the information of the current page, including all the mouse events.
+    this.trace = this.newTrace();
     this.traces = [];
     this.targetEvents = defaultTargetEvents;
   }
@@ -76,6 +79,8 @@ class TestPage extends React.Component {
       })
     }, 100);
 
+    this.trace.events = this.loadTraceFromLocal();
+
     // Set the sessionId.
     this.setState({
       sessionId: Setting.getSessionId(),
@@ -87,6 +92,57 @@ class TestPage extends React.Component {
     this.setState({
       onLoading: false
     })
+  }
+
+  eventsEncoder(events) {
+    // Convert event object to array
+    // {id:id,timestamp:t,type:type,x:x,y:y,button:btn} => [id,type,t,x,y,btn]
+    let t = []
+    events.forEach(evt => {
+      t.push([evt.id, allTargetEvents.indexOf(evt.type), evt.timestamp, evt.x, evt.y, evt.button]);
+    })
+    return JSON.stringify(t);
+  }
+
+  eventsDecoder(str) {
+    // Convert arry to event object
+    // [id,type,t,x,y,btn]=>{id:id,timestamp:t,type:type,x:x,y:y,button:btn}
+    let t = JSON.parse(str);
+    let events = [];
+    t.forEach(item => {
+      events.push({
+        id: parseInt(item[0]),
+        timestamp: parseFloat(item[2]),
+        type: allTargetEvents[item[1]],
+        x: parseInt(item[3]),
+        y: parseInt(item[4]),
+        button: item[5]
+      })
+    })
+    return events;
+  }
+
+  loadTraceFromLocal() {
+    if (!isLocalStorageAvailable) {
+      console.log("LocalStorage is not available!");
+      return [];
+    }
+    let str = localStorage.getItem("traceDataCache");
+    return str ? this.eventsDecoder(str) : [];  // Return an empty array if no cache.
+  }
+
+  saveTraceToLocal() {
+    if (!isLocalStorageAvailable) {
+      return;
+    }
+    let dataStr = this.eventsEncoder(this.trace.events);
+    localStorage.setItem("traceDataCache", dataStr);
+  }
+
+  removeTraceFromLocal() {
+    if (isLocalStorageAvailable) {
+      localStorage.removeItem("traceDataCache");
+    }
   }
 
   getByteCount(s) {
@@ -166,7 +222,8 @@ class TestPage extends React.Component {
   clearTrace() {
     this.events = [];
     this.traces = [];
-    this.trace = null;
+    this.trace = this.newTrace();
+    this.removeTraceFromLocal();
 
     this.setState({
       pageLoadTime: new Date(),
@@ -236,12 +293,18 @@ class TestPage extends React.Component {
       button: this.getButton(e.button)
     };
 
+    // Push the new event info to the buffer
     this.events.push(p);
-    if (this.trace === null) {
-      this.trace = this.newTrace();
+    if (this.events.length > 50) {
+      this.events = this.events.slice(50)
+      this.events[0].id = 0;
     }
+
     this.trace.events.push(p);
     this.traces = [this.trace];
+    if (this.trace.events.length % 50 == 0) {
+      this.saveTraceToLocal();
+    }
 
     this.setState({
       status: true
@@ -340,7 +403,7 @@ class TestPage extends React.Component {
             </Row>
           </Col>
           <Col span={12}>
-            <Canvas trace={this.trace} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground}/>
+            <Canvas trace={this.trace.events.length > 0 ? this.trace : null} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground}/>
           </Col>
           <Col span={6}>
             <Row>
