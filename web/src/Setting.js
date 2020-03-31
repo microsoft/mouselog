@@ -6,18 +6,7 @@
 import React from "react";
 import {message, Tag} from "antd";
 import { v4 as uuid } from 'uuid';
-
-
-let isLocalStorageAvailable = (() => {
-  let testString = uuid();
-  try {
-      localStorage.setItem(testString, testString);
-      localStorage.removeItem(testString);
-      return true;
-  } catch(e) {
-      return false;
-  }
-})();
+import {isLocalStorageAvailable} from './utils'
 
 export let ServerUrl = '';
 export let ImpressionId = uuid();

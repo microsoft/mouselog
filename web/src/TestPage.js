@@ -11,6 +11,7 @@ import Canvas from "./Canvas";
 import EventSelectionCheckBox from "./EventSelectionCheckBox"
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
+import {isLocalStorageAvailable} from "./utils";
 
 const {Text} = Typography;
 
@@ -78,6 +79,8 @@ class TestPage extends React.Component {
       })
     }, 100);
 
+    this.trace.events = this.loadTraceFromLocal();
+
     // Set the sessionId.
     this.setState({
       sessionId: Setting.getSessionId(),
@@ -89,6 +92,29 @@ class TestPage extends React.Component {
     this.setState({
       onLoading: false
     })
+  }
+
+  loadTraceFromLocal() {
+    if (!isLocalStorageAvailable) {
+      console.log("LocalStorage is not available!");
+      return [];
+    }
+    let str = localStorage.getItem("traceDataCache");
+    return str ? JSON.parse(str) : [];  // Return an empty array if no cache.
+  }
+
+  saveTraceToLocal() {
+    if (!isLocalStorageAvailable) {
+      return;
+    }
+    let traceStr = JSON.stringify(this.trace.events);
+    localStorage.setItem("traceDataCache", traceStr);
+  }
+
+  removeTraceFromLocal() {
+    if (isLocalStorageAvailable) {
+      localStorage.removeItem("traceDataCache");
+    }
   }
 
   getByteCount(s) {
@@ -168,7 +194,8 @@ class TestPage extends React.Component {
   clearTrace() {
     this.events = [];
     this.traces = [];
-    this.trace = null;
+    this.trace = this.newTrace();
+    this.removeTraceFromLocal();
 
     this.setState({
       pageLoadTime: new Date(),
@@ -247,6 +274,9 @@ class TestPage extends React.Component {
 
     this.trace.events.push(p);
     this.traces = [this.trace];
+    if (this.trace.events.length % 50 == 0) {
+      this.saveTraceToLocal();
+    }
 
     this.setState({
       status: true
