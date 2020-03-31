@@ -55,8 +55,10 @@ class TestPage extends React.Component {
       sessionId: "",
       onLoading: true,
     };
+    // this.events is used as a buffer for rendering progress bar. It only contains no more than 50 events.
     this.events = [];
-    this.trace = null;
+    // this.trace indicates the information of the current page, including all the mouse events.
+    this.trace = this.newTrace();
     this.traces = [];
     this.targetEvents = defaultTargetEvents;
   }
@@ -236,10 +238,13 @@ class TestPage extends React.Component {
       button: this.getButton(e.button)
     };
 
+    // Push the new event info to the buffer
     this.events.push(p);
-    if (this.trace === null) {
-      this.trace = this.newTrace();
+    if (this.events.length > 50) {
+      this.events = this.events.slice(50)
+      this.events[0].id = 0;
     }
+
     this.trace.events.push(p);
     this.traces = [this.trace];
 
@@ -340,7 +345,7 @@ class TestPage extends React.Component {
             </Row>
           </Col>
           <Col span={12}>
-            <Canvas trace={this.trace} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground}/>
+            <Canvas trace={this.trace.events.length > 0 ? this.trace : null} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground}/>
           </Col>
           <Col span={6}>
             <Row>
