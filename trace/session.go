@@ -80,11 +80,24 @@ func GetSession(id string, websiteId string) *Session {
 	}
 }
 
+func updateSession(id string, websiteId string, session *Session) bool {
+	affected, err := ormManager.engine.Id(core.PK{id, websiteId}).Cols("user_id").Update(session)
+	if err != nil {
+		panic(err)
+	}
+
+	return affected != 0
+}
+
 func AddSession(id string, websiteId string, userAgent string, clientIp string, userId string) bool {
 	s := Session{Id: id, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UserAgent: userAgent, ClientIp: clientIp, UserId: userId}
 	affected, err := ormManager.engine.Insert(s)
-	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
-		panic(err)
+	if err != nil {
+		if strings.Contains(err.Error(), "Duplicate entry") && userId != "" {
+			updateSession(id, websiteId, &s)
+		} else {
+			panic(err)
+		}
 	}
 
 	return affected != 0
