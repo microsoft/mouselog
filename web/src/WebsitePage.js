@@ -98,6 +98,17 @@ class WebsitePage extends React.Component {
       // Type: Boolean
       // If not empty, Mouselog will run in debug mode and output debug logs into a HTML div tag specified by this ID
       debugDivId: "",
+
+      // Type: string
+      // A global predefined variable for setting the session ID.
+      // When initializing the session ID, mouselog will try to call `eval(this.sessionIdVariable)`.
+      sessionIdVariable: null,
+
+      // Type: string
+      // A global predefined variable for setting the impression ID.
+      // When initializing the impression ID, mouselog will try to call `eval(this.impIdVariable)`.
+      // Warning: Please don't set the same impression ID variable in two different mouselog instances.
+      impIdVariable: null,
     }
   }
 

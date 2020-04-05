@@ -270,6 +270,26 @@ class ConfigEdit extends React.Component {
               }}/>
             }
           </Col>
+          <Col span={3} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Session ID Var:
+          </Col>
+          <Col span={3}>
+            <TextArea style={{width: "250px"}} value={this.props.website.trackConfig.sessionIdVariable} onChange={(e) =>{
+              this.updateConfigField("sessionIdVariable", e.target.value);
+            }} autoSize/>
+          </Col>
+          <Col span={1} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Imp ID Var:
+          </Col>
+          <Col span={3}>
+            <TextArea style={{width: "250px"}} value={this.props.website.trackConfig.impIdVariable} onChange={(e) =>{
+              this.updateConfigField("impIdVariable", e.target.value);
+            }} autoSize/>
+          </Col>
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
