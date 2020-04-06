@@ -93,8 +93,10 @@ func AddSession(id string, websiteId string, userAgent string, clientIp string, 
 	s := Session{Id: id, WebsiteId: websiteId, CreatedTime: getCurrentTime(), UserAgent: userAgent, ClientIp: clientIp, UserId: userId}
 	affected, err := ormManager.engine.Insert(s)
 	if err != nil {
-		if strings.Contains(err.Error(), "Duplicate entry") && userId != "" {
-			updateSession(id, websiteId, &s)
+		if strings.Contains(err.Error(), "Duplicate entry") {
+			if userId != "" {
+				updateSession(id, websiteId, &s)
+			}
 		} else {
 			panic(err)
 		}
