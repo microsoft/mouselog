@@ -119,9 +119,8 @@ class Config extends React.Component {
     return res;
   }
 
-  getCode() {
+  getCode(website) {
     const version = "latest";
-    const website = this.props.website;
 
     let scriptUrl;
     if (website.trackConfig.scriptUrl === undefined || website.trackConfig.scriptUrl === "") {
@@ -138,7 +137,10 @@ class Config extends React.Component {
     }
 
     const configText = this.getConfigText(website);
-    const code = `<script>
+
+    let code;
+    if (!website.trackConfig.htmlOnly) {
+      code = `<script>
 (function() {
   var script = document.createElement("script");
   script.src = "${scriptUrl}";
@@ -151,6 +153,15 @@ class Config extends React.Component {
   });
 })();
 </script>`;
+    } else {
+      code = `<script src="${scriptUrl}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    ${configText}var agent = mouselog.init();
+    ${runLine}
+  });
+</script>`;
+    }
 
     const lineCount = code.split(`\n`).length - 1;
     this.setHeight(lineCount);
@@ -159,7 +170,8 @@ class Config extends React.Component {
   }
 
   render() {
-    const code = this.getCode();
+    const website = this.props.website;
+    const code = this.getCode(website);
 
     // How do I crop the contents of an Iframe to show a part of a page?
     // https://stackoverflow.com/questions/5676672/how-do-i-crop-the-contents-of-an-iframe-to-show-a-part-of-a-page
@@ -168,7 +180,7 @@ class Config extends React.Component {
         <CodeMirror
           editorDidMount={editor => {
             this.instance = editor;
-            this.getCode();
+            this.getCode(website);
           }}
           value={code}
           options={{mode: 'javascript', theme: "material-darker"}}
@@ -180,14 +192,17 @@ class Config extends React.Component {
         >
           Copy HTML Code
         </Button>
-        <Button style={{marginTop: '10px', marginLeft: '10px'}} type="primary" onClick={() => {
-          let jsCode = code.slice(9, -10);
-          copy(jsCode);
-          Setting.showMessage("success", `Copied to clipboard!`);
-        }}
-        >
-          Copy Javascript Code
-        </Button>
+        {
+          website.trackConfig.htmlOnly ? null :
+            <Button style={{marginTop: '10px', marginLeft: '10px'}} type="primary" onClick={() => {
+              let jsCode = code.slice(9, -10);
+              copy(jsCode);
+              Setting.showMessage("success", `Copied to clipboard!`);
+            }}
+            >
+              Copy Javascript Code
+            </Button>
+        }
       </div>
     )
   }

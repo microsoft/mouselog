@@ -290,6 +290,18 @@ class ConfigEdit extends React.Component {
               this.updateConfigField("impIdVariable", e.target.value);
             }} autoSize/>
           </Col>
+          <Col span={1} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            HTML Only:
+          </Col>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.htmlOnly} onChange={(checked, e) => {
+                this.updateConfigField("htmlOnly", checked);
+              }} />
+            }
+          </Col>
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>

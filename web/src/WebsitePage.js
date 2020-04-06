@@ -109,6 +109,11 @@ class WebsitePage extends React.Component {
       // When initializing the impression ID, mouselog will try to call `eval(this.impIdVariable)`.
       // Warning: Please don't set the same impression ID variable in two different mouselog instances.
       impIdVariable: null,
+
+      // Type: Boolean
+      // If true, Mouselog will load statically from HTML.
+      // If false, Mouselog will load dynamically from HTML or Javascript.
+      htmlOnly: false,
     }
   }
 
