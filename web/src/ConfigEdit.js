@@ -305,6 +305,18 @@ class ConfigEdit extends React.Component {
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
+            Disable Exception:
+          </Col>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.disableException} onChange={(checked, e) => {
+                this.updateConfigField("disableException", checked);
+              }} />
+            }
+          </Col>
+        </Row>
+        <Row style={{marginTop: '20px'}}>
+          <Col style={{marginTop: '5px'}} span={2}>
             Tracking Code:
           </Col>
           <Col span={22}>

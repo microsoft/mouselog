@@ -114,6 +114,10 @@ class WebsitePage extends React.Component {
       // If true, Mouselog will load statically from HTML.
       // If false, Mouselog will load dynamically from HTML or Javascript.
       htmlOnly: false,
+
+      // Type: Boolean
+      // Not allow internal exceptions to be raised in browser's console
+      disableException: false,
     }
   }
 

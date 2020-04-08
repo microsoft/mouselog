@@ -98,6 +98,10 @@ class Config extends React.Component {
       res += `\n      impIdVariable: "${website.trackConfig.impIdVariable}",`;
     }
 
+    if (website.trackConfig.disableException !== false) {
+      res += `\n      disableException: ${website.trackConfig.disableException},`;
+    }
+
     let trimmedScope = this.trimStr(website.trackConfig.scope);
     if (trimmedScope !== "window.document") {
       let lines = trimmedScope.split('\n');
