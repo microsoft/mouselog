@@ -299,6 +299,11 @@ class Canvas extends React.Component {
     // how to zoom content in iframe to fit my page size
     // https://stackoverflow.com/questions/36728497/how-to-zoom-content-in-iframe-to-fit-my-page-size
     if (!isBackground) {
+      let url = `${this.props.website.url}${this.props.trace.urlPath}`;
+      if (this.props.trace.urlPath.startsWith("http://") || this.props.trace.urlPath.startsWith("https://")) {
+        url = this.props.trace.urlPath;
+      }
+
       return (
         <div>
           {
@@ -323,7 +328,7 @@ class Canvas extends React.Component {
                     transformOrigin: "0 0",
                     overflow: "hidden",
                   }}
-                  src={`${this.props.website.url}${this.props.trace.urlPath}`}
+                  src={url}
                   width={width}
                   height={height}
                 >

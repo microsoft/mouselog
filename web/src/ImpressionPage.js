@@ -219,9 +219,14 @@ class ImpressionPage extends React.Component {
             return text;
           }
 
+          let url = `${this.state.website.url}${text}`;
+          if (text.startsWith("http://") || text.startsWith("https://")) {
+            url = text;
+          }
+
           return (
             <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
-              <a target="_blank" href={`${this.state.website.url}${text}`}>
+              <a target="_blank" href={url}>
                 {text}
               </a>
             </span>
