@@ -92,8 +92,12 @@ func ReadTraces(fileId string) {
 		panic(err)
 	}
 
+	fmt.Printf("Delete sessions for file: [%s].\n", fileId)
 	trace.DeleteSessions(websiteId)
+	fmt.Printf("Add sessions for file: [%s].\n", fileId)
 	trace.AddSessionsSafe(sessions)
+	fmt.Printf("Delete impressions for file: [%s].\n", fileId)
 	trace.DeleteImpressions(websiteId)
+	fmt.Printf("Add impressions for file: [%s].\n", fileId)
 	trace.AddImpressionsSafe(impressions)
 }

@@ -3,7 +3,10 @@
 
 package trace
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Impression struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
@@ -111,7 +114,7 @@ func AddImpressions(impressions []*Impression) bool {
 }
 
 func AddImpressionsSafe(impressions []*Impression) bool {
-	batchSize := 5000
+	batchSize := 1000
 
 	if len(impressions) == 0 {
 		return false
@@ -119,12 +122,14 @@ func AddImpressionsSafe(impressions []*Impression) bool {
 
 	affected := false
 	for i := 0; i < (len(impressions)-1)/batchSize+1; i++ {
-		ceil := (i + 1) * batchSize
-		if ceil > len(impressions) {
-			ceil = len(impressions)
+		start := i * batchSize
+		end := (i + 1) * batchSize
+		if end > len(impressions) {
+			end = len(impressions)
 		}
 
-		tmp := impressions[i*batchSize : ceil]
+		tmp := impressions[start : end]
+		fmt.Printf("Add impressions: [%d - %d].\n", start, end)
 		if AddImpressions(tmp) {
 			affected = true
 		}

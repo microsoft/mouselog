@@ -4,6 +4,7 @@
 package trace
 
 import (
+	"fmt"
 	"strings"
 
 	"xorm.io/core"
@@ -123,12 +124,14 @@ func AddSessionsSafe(sessions []*Session) bool {
 
 	affected := false
 	for i := 0; i < (len(sessions)-1)/batchSize+1; i++ {
-		ceil := (i + 1) * batchSize
-		if ceil > len(sessions) {
-			ceil = len(sessions)
+		start := i * batchSize
+		end := (i + 1) * batchSize
+		if end > len(sessions) {
+			end = len(sessions)
 		}
 
-		tmp := sessions[i*batchSize : ceil]
+		tmp := sessions[start : end]
+		fmt.Printf("Add sessions: [%d - %d].\n", start, end)
 		if AddSessions(tmp) {
 			affected = true
 		}
