@@ -13,6 +13,10 @@ func GetCsvDataPath(fileId string) string {
 	return CacheDir + "mouselog/" + fileId + ".csv"
 }
 
+func GetTsvDataPath(fileId string) string {
+	return CacheDir + "mouselog/" + fileId + ".tsv"
+}
+
 func GetScreenshotPath(websiteId string, screenshotId string) string {
 	return fmt.Sprintf("../static/screenshots/%s/%s.png", websiteId, screenshotId)
 }

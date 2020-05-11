@@ -114,6 +114,29 @@ func AddSessions(sessions []*Session) bool {
 	return affected != 0
 }
 
+func AddSessionsSafe(sessions []*Session) bool {
+	batchSize := 1000
+
+	if len(sessions) == 0 {
+		return false
+	}
+
+	affected := false
+	for i := 0; i < (len(sessions)-1)/batchSize+1; i++ {
+		ceil := (i + 1) * batchSize
+		if ceil > len(sessions) {
+			ceil = len(sessions)
+		}
+
+		tmp := sessions[i*batchSize : ceil]
+		if AddSessions(tmp) {
+			affected = true
+		}
+	}
+
+	return affected
+}
+
 func DeleteSession(id string, websiteId string) bool {
 	affected, err := ormManager.engine.Id(core.PK{id, websiteId}).Delete(&Session{})
 	if err != nil {

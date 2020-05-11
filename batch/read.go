@@ -59,8 +59,9 @@ func ReadTraces(fileId string) {
 	fmt.Printf("Read traces for file: [%s].\n", fileId)
 
 	var path string
-	path = util.GetCsvDataPath(fileId)
-	websiteId := "ysite"
+	//path = util.GetCsvDataPath(fileId)
+	path = util.GetTsvDataPath(fileId)
+	websiteId := "zsite"
 
 	sessions := []*trace.Session{}
 	sessionMap := map[string]*trace.Session{}
@@ -81,7 +82,8 @@ func ReadTraces(fileId string) {
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		readCsvLine(&sessions, &sessionMap, &impressions, &impressionMap, websiteId, line, i)
+		//readCsvLine(&sessions, &sessionMap, &impressions, &impressionMap, websiteId, line, i)
+		readTsvLine(&sessions, &sessionMap, &impressions, &impressionMap, websiteId, line, i)
 
 		i += 1
 	}
@@ -91,7 +93,7 @@ func ReadTraces(fileId string) {
 	}
 
 	trace.DeleteSessions(websiteId)
-	trace.AddSessions(sessions)
+	trace.AddSessionsSafe(sessions)
 	trace.DeleteImpressions(websiteId)
-	trace.AddImpressions(impressions)
+	trace.AddImpressionsSafe(impressions)
 }

@@ -110,6 +110,29 @@ func AddImpressions(impressions []*Impression) bool {
 	return affected != 0
 }
 
+func AddImpressionsSafe(impressions []*Impression) bool {
+	batchSize := 5000
+
+	if len(impressions) == 0 {
+		return false
+	}
+
+	affected := false
+	for i := 0; i < (len(impressions)-1)/batchSize+1; i++ {
+		ceil := (i + 1) * batchSize
+		if ceil > len(impressions) {
+			ceil = len(impressions)
+		}
+
+		tmp := impressions[i*batchSize : ceil]
+		if AddImpressions(tmp) {
+			affected = true
+		}
+	}
+
+	return affected
+}
+
 func DeleteImpression(id string) bool {
 	affected, err := ormManager.engine.Id(id).Delete(&Impression{})
 	if err != nil {
