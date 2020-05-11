@@ -294,91 +294,94 @@ class Canvas extends React.Component {
     const width = size.width;
     const height = size.height;
 
-    const hasIFrame = !(this.props.website === undefined || this.props.trace == null);
+    if (isBackground) {
+      return (
+        <Stage width={width} height={height}
+               style={{
+                 border: '1px solid rgb(232,232,232)',
+                 marginLeft: '5px',
+                 marginRight: '5px',
+                 background: 'rgb(245,245,245)'
+               }}>
+        </Stage>
+      )
+    }
 
     // how to zoom content in iframe to fit my page size
     // https://stackoverflow.com/questions/36728497/how-to-zoom-content-in-iframe-to-fit-my-page-size
-    if (!isBackground) {
-      let url = `${this.props.website.url}${this.props.trace.urlPath}`;
+    const hasIFrame = !(this.props.website === undefined || this.props.trace == null);
+
+    let url = undefined;
+    if (hasIFrame) {
+      url = `${this.props.website.url}${this.props.trace.urlPath}`;
       if (this.props.trace.urlPath.startsWith("http://") || this.props.trace.urlPath.startsWith("https://")) {
         url = this.props.trace.urlPath;
       }
-
-      return (
-        <div>
-          {
-            !hasIFrame ? null :
-              <div style={{
-                border: '1px solid rgb(232,232,232)',
-                marginLeft: this.props.type === "embed" ? '-3px' : '5px',
-                marginRight: '5px',
-                width: width,
-                height: height,
-                padding: 0,
-                overflow: "hidden",
-              }}>
-                <iframe
-                  style={{
-                    width: width / scale,
-                    height: height / scale,
-                    border: 0,
-                    top: 0,
-                    left: 0,
-                    transform: `scale(${scale})`,
-                    transformOrigin: "0 0",
-                    overflow: "hidden",
-                  }}
-                  src={url}
-                  width={width}
-                  height={height}
-                >
-                </iframe>
-              </div>
-          }
-          <Stage width={width} height={height}
-                 style={{
-                   border: '1px solid rgb(232,232,232)',
-                   marginLeft: '5px',
-                   marginRight: '5px',
-                   position: hasIFrame ? "absolute" : "relative",
-                   top: 0,
-                   left: 0,
-                 }}>
-            <Layer>
-              {
-                this.renderLines(trace, scale)
-              }
-              {
-                this.renderDragLines(trace, scale)
-              }
-              {
-                (trace !== null) ? this.renderRuler(trace.width, trace.height, scale) : null
-              }
-              {
-                (trace !== null) ? this.renderEvents(trace, scale, this.props.hoverIndex) : null
-              }
-              {
-                (trace !== null) ? this.renderReason(trace, scale) : null
-              }
-              {
-                this.renderPointer(trace, scale)
-              }
-            </Layer>
-          </Stage>
-        </div>
-      )
-    } else {
-      return (
-          <Stage width={width} height={height}
-                 style={{
-                   border: '1px solid rgb(232,232,232)',
-                   marginLeft: '5px',
-                   marginRight: '5px',
-                   background: 'rgb(245,245,245)'
-                 }}>
-          </Stage>
-      )
     }
+
+    return (
+      <div>
+        {
+          !hasIFrame ? null :
+            <div style={{
+              border: '1px solid rgb(232,232,232)',
+              marginLeft: this.props.type === "embed" ? '-3px' : '5px',
+              marginRight: '5px',
+              width: width,
+              height: height,
+              padding: 0,
+              overflow: "hidden",
+            }}>
+              <iframe
+                style={{
+                  width: width / scale,
+                  height: height / scale,
+                  border: 0,
+                  top: 0,
+                  left: 0,
+                  transform: `scale(${scale})`,
+                  transformOrigin: "0 0",
+                  overflow: "hidden",
+                }}
+                src={url}
+                width={width}
+                height={height}
+              >
+              </iframe>
+            </div>
+        }
+        <Stage width={width} height={height}
+               style={{
+                 border: '1px solid rgb(232,232,232)',
+                 marginLeft: '5px',
+                 marginRight: '5px',
+                 position: hasIFrame ? "absolute" : "relative",
+                 top: 0,
+                 left: 0,
+               }}>
+          <Layer>
+            {
+              this.renderLines(trace, scale)
+            }
+            {
+              this.renderDragLines(trace, scale)
+            }
+            {
+              (trace !== null) ? this.renderRuler(trace.width, trace.height, scale) : null
+            }
+            {
+              (trace !== null) ? this.renderEvents(trace, scale, this.props.hoverIndex) : null
+            }
+            {
+              (trace !== null) ? this.renderReason(trace, scale) : null
+            }
+            {
+              this.renderPointer(trace, scale)
+            }
+          </Layer>
+        </Stage>
+      </div>
+    )
   }
 
   onSliderChange(value) {
