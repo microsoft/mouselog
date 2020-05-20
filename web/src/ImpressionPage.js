@@ -193,10 +193,16 @@ class ImpressionPage extends React.Component {
   renderTable(impressions) {
     let columns = [
       {
-        title: 'Impression ID',
-        dataIndex: 'id',
-        key: 'id',
+        title: 'Session ID',
+        dataIndex: 'sessionId',
+        key: 'sessionId',
+        sorter: (a, b) => a.sessionId.localeCompare(b.sessionId),
       },
+      // {
+      //   title: 'Impression ID',
+      //   dataIndex: 'id',
+      //   key: 'id',
+      // },
       {
         title: 'Created Time',
         dataIndex: 'createdTime',
@@ -311,7 +317,7 @@ class ImpressionPage extends React.Component {
           }
 
           return (
-            <div style={{cursor: "pointer"}} onClick={() => Setting.openLink(`/websites/${this.state.websiteId}/sessions/${this.state.sessionId}/impressions/${record.id}/events`)}>
+            <div style={{cursor: "pointer"}} onClick={() => Setting.openLink(`/websites/${this.state.websiteId}/sessions/${record.sessionId}/impressions/${record.id}/events`)}>
               <Canvas type="embed" trace={record} website={this.state.website} size={Shared.getSize(record, 4)} isBackground={false} focusIndex={-1} />
             </div>
           );
