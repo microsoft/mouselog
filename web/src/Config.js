@@ -102,6 +102,10 @@ class Config extends React.Component {
       res += `\n      disableException: ${website.trackConfig.disableException},`;
     }
 
+    if (website.trackConfig.enablePingMessage !== false) {
+      res += `\n      enablePingMessage: ${website.trackConfig.enablePingMessage},`;
+    }
+
     let trimmedScope = this.trimStr(website.trackConfig.scope);
     if (trimmedScope !== "window.document") {
       let lines = trimmedScope.split('\n');

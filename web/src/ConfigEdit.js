@@ -314,6 +314,18 @@ class ConfigEdit extends React.Component {
               }} />
             }
           </Col>
+          <Col span={3} >
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Enable Ping Message:
+          </Col>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.enablePingMessage} onChange={(checked, e) => {
+                this.updateConfigField("enablePingMessage", checked);
+              }} />
+            }
+          </Col>
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>

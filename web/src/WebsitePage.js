@@ -118,6 +118,10 @@ class WebsitePage extends React.Component {
       // Type: Boolean
       // Not allow internal exceptions to be raised in browser's console
       disableException: false,
+
+      // Type: Boolean
+      // Not allow internal exceptions to be raised in browser's console
+      enablePingMessage: false,
     }
   }
 
