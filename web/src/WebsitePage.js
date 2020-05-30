@@ -120,7 +120,7 @@ class WebsitePage extends React.Component {
       disableException: false,
 
       // Type: Boolean
-      // Not allow internal exceptions to be raised in browser's console
+      // If `enablePingMessage`, Mouselog will send a ping message with empty trace immediately after initialization
       enablePingMessage: false,
     }
   }
