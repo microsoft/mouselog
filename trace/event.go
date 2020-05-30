@@ -49,7 +49,9 @@ func array2Event(src []interface{}, dest *Event) {
 		dest.Y = int(src[4].(float64))
 		dest.Button = src[5].(string)
 	case "resize": // (width,height)
-		dest.Width = int(src[3].(float64))
-		dest.Height = int(src[4].(float64))
+		//dest.Width = int(src[3].(float64))
+		//dest.Height = int(src[4].(float64))
+		dest.Width = -1
+		dest.Height = -1
 	}
 }

@@ -28,6 +28,8 @@ const (
 
 func addJsonToTrace(t *trace.Trace, data string) {
 	if data != "" {
+		data = strings.Trim(data, "\"")
+		data = strings.ReplaceAll(data, "\"\"", "\"")
 		t.LoadFromJson([]byte(data))
 	}
 }

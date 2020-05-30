@@ -14,13 +14,17 @@ import (
 )
 
 const (
-	RowImpressionId = iota
-	RowSessionId
+	RowSessionId = iota
+	RowImpressionId
+	RowVertical
 	RowTimestamp
-	RowUrl
-	RowUserAgent
+	RowPageName
 	RowClientIp
+	RowUserAgent
 	RowIsBot
+	RowPageClickCount
+	RowDwellTime
+	RowUrl
 	RowTimestampList
 	RowEventTypeList
 	RowButtonList
@@ -189,7 +193,7 @@ func addEventsToTrace(t *trace.Trace, timestampList []string, eventTypeList []st
 }
 
 func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, websiteId string, line string, i int) {
-	row := strings.SplitN(line, ",", RowYList+1)
+	row := strings.SplitN(line, "\t", RowYList+1)
 
 	t := trace.NewTrace(i)
 	t.Url = row[RowUrl]
