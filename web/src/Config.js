@@ -105,6 +105,9 @@ class Config extends React.Component {
     if (website.trackConfig.enablePingMessage !== false) {
       res += `\n      enablePingMessage: ${website.trackConfig.enablePingMessage},`;
     }
+    if (website.trackConfig.recordKeyboardEvent !== true) {
+      res += `\n      recordKeyboardEvent: false,`;
+    }
 
     let trimmedScope = this.trimStr(website.trackConfig.scope);
     if (trimmedScope !== "window.document") {
