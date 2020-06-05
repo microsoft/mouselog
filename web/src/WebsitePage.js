@@ -122,6 +122,10 @@ class WebsitePage extends React.Component {
       // Type: Boolean
       // If `enablePingMessage`, Mouselog will send a ping message with empty trace immediately after initialization
       enablePingMessage: false,
+
+      // Type: Boolean
+      // If `recordKeyboardEvent`, Mouselog will record masked keyboard event
+      recordKeyboardEvent: true
     }
   }
 

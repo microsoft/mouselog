@@ -326,6 +326,16 @@ class ConfigEdit extends React.Component {
               }} />
             }
           </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Record Keyboard event:
+          </Col>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.recordKeyboardEvent} onChange={(checked, e) => {
+                this.updateConfigField("recordKeyboardEvent", checked);
+              }} />
+            }
+          </Col>
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
