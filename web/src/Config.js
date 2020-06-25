@@ -102,9 +102,7 @@ class Config extends React.Component {
       res += `\n      disableException: ${website.trackConfig.disableException},`;
     }
 
-    if (website.trackConfig.enablePingMessage !== false) {
-      res += `\n      enablePingMessage: ${website.trackConfig.enablePingMessage},`;
-    }
+
     if (website.trackConfig.recordKeyboardEvent !== true) {
       res += `\n      recordKeyboardEvent: false,`;
     }
@@ -126,6 +124,9 @@ class Config extends React.Component {
     res = res.slice(0, res.length-1); //Remove the tailing comma
 
     res += `\n    };\n    `;
+    if (website.trackConfig.enablePingMessage !== false) {
+        res += `(new Image()).src= "${website.trackConfig.uploadEndpoint}?websiteId=${website.id}&sessionId='" + ${website.trackConfig.sessionIdVariable} + "impressionId=" + ${website.trackConfig.impIdVariable} + "&type=ping";\n    `;
+    }
 
     return res;
   }
