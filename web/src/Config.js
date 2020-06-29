@@ -125,20 +125,24 @@ class Config extends React.Component {
 
     res += `\n    };\n    `;
     if (website.trackConfig.enablePingMessage !== false) {
-      res += `var sessionId = "Err_fail_to_get_${website.trackConfig.sessionIdVariable}";\n    `;
+      res += 'var sessionId = "";\n    ';
       res += 'try {\n        ';
-      res += `sessionId = eval("${website.trackConfig.sessionIdVariable}");\n        `;
-      res += `if (sessionId == undefined || sessionId == null) {\n            `;
-      res += `sessionId = "Err_${website.trackConfig.sessionIdVariable}_is_" + sessionId;\n        `;
+      res += 'sessionId = eval(config.sessionIdVariable);\n        ';
+      res += 'if (sessionId == undefined || sessionId == null) {\n            ';
+      res += 'sessionId = "Err_"+ config.sessionIdVariable +"_is_" + sessionId;\n        ';
       res += '}\n    ';
-      res += '} catch(e) {}\n    ';
-      res += `var impressionId = "Err_fail_to_get_${website.trackConfig.impIdVariable}";\n    `;
-      res += 'try {\n        '
-      res += `impressionId = eval("${website.trackConfig.impIdVariable}");\n        `
-      res += `if (impressionId === null || impressionId === undefined) {\n        `
-      res += `impressionId = "Err_${website.trackConfig.impIdVariable}_is_" + impressionId;\n        `;
+      res += '} catch(e) {\n        ';
+      res += 'sessionId = "Err_fail_to_get_" + config.sessionIdVariable;\n    '
+      res += '}\n    ';
+      res += 'var impressionId = "";\n    ';
+      res += 'try {\n        ';
+      res += 'impressionId = eval(config.impIdVariable);\n        ';
+      res += 'if (impressionId === null || impressionId === undefined) {\n        ';
+      res += 'impressionId = "Err_" + config.impIdVariable + "_is_" + impressionId;\n        ';
+      res += '}\n    ';
+      res += '} catch(e) {\n        ';
+      res += 'impressionId = "Err_fail_to_get_" + config.impIdVariable;\n    ';
       res += '}\n    '
-      res += '} catch(e) {}\n    '
       res += `(new Image()).src= "${website.trackConfig.uploadEndpoint}?websiteId=${website.id}&sessionId=" + sessionId + "&impressionId=" + impressionId + "&type=ping";\n    `;
     }
 
