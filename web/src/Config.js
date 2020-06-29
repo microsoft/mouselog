@@ -125,7 +125,21 @@ class Config extends React.Component {
 
     res += `\n    };\n    `;
     if (website.trackConfig.enablePingMessage !== false) {
-        res += `(new Image()).src= "${website.trackConfig.uploadEndpoint}?websiteId=${website.id}&sessionId='" + ${website.trackConfig.sessionIdVariable} + "impressionId=" + ${website.trackConfig.impIdVariable} + "&type=ping";\n    `;
+      res += `var sessionId = "Err_fail_to_get_${website.trackConfig.sessionIdVariable}";\n    `;
+      res += 'try {\n        ';
+      res += `sessionId = eval("${website.trackConfig.sessionIdVariable}");\n        `;
+      res += `if (sessionId == undefined || sessionId == null) {\n            `;
+      res += `sessionId = "Err_${website.trackConfig.sessionIdVariable}_is_" + sessionId;\n        `;
+      res += '}\n    ';
+      res += '} catch(e) {}\n    ';
+      res += `var impressionId = "Err_fail_to_get_${website.trackConfig.impIdVariable}";\n    `;
+      res += 'try {\n        '
+      res += `impressionId = eval("${website.trackConfig.impIdVariable}");\n        `
+      res += `if (impressionId === null || impressionId === undefined) {\n        `
+      res += `impressionId = "Err_${website.trackConfig.impIdVariable}_is_" + impressionId;\n        `;
+      res += '}\n    '
+      res += '} catch(e) {}\n    '
+      res += `(new Image()).src= "${website.trackConfig.uploadEndpoint}?websiteId=${website.id}&sessionId=" + sessionId + "&impressionId=" + impressionId + "&type=ping";\n    `;
     }
 
     return res;
