@@ -184,34 +184,20 @@ class ConfigEdit extends React.Component {
           <Col span={1} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
-            Enable GET:
-          </Col>
-          <Col span={1} >
-            {
-              <Switch checked={this.props.website.trackConfig.enableGet} onChange={(checked, e) => {
-                this.updateConfigField("enableGet", checked);
-              }} />
-            }
-          </Col>
-          <Col span={3} >
-          </Col>
-          <Col style={{marginTop: '5px'}} span={2}>
             Version:
           </Col>
-          <Col span={1}>
+          <Col span={4}>
             {
               <Input style={{width: "120px"}} value={this.props.website.trackConfig.version} onChange={e => {
                 this.updateConfigField("version", e.target.value);
               }}/>
             }
           </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Encoder:
           </Col>
           <Col span={3}>
-            <Select style={{width: "150px"}} value={this.props.website.trackConfig.encoder} onChange={(value => {
+            <Select style={{width: "120px"}} value={this.props.website.trackConfig.encoder} onChange={(value => {
               this.updateConfigField("encoder", value);
             })}>
               {
@@ -222,20 +208,8 @@ class ConfigEdit extends React.Component {
               }
             </Select>
           </Col>
-          <Col span={1} >
-          </Col>
-          <Col style={{marginTop: '5px'}} span={3}>
-            Enable Server Config:
-          </Col>
-          <Col span={1} >
-            {
-              <Switch checked={this.props.website.trackConfig.enableServerConfig} onChange={(checked, e) => {
-                this.updateConfigField("enableServerConfig", checked);
-              }} />
-            }
-          </Col>
-          <Col span={2} >
-          </Col>
+        </Row>
+        <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={3}>
             Enable Session Cookie:
           </Col>
@@ -248,29 +222,26 @@ class ConfigEdit extends React.Component {
           </Col>
           <Col span={2} >
           </Col>
-          <Col style={{marginTop: '5px'}} span={3}>
+          <Col style={{marginTop: '5px'}} span={2}>
             Enable Send Empty:
           </Col>
-          <Col span={1} >
+          <Col span={ 1 } ></Col>
+          <Col span={ 3 } >
             {
               <Switch checked={this.props.website.trackConfig.enableSendEmpty} onChange={(checked, e) => {
                 this.updateConfigField("enableSendEmpty", checked);
               }} />
             }
           </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Debug DIV ID:
           </Col>
-          <Col span={1}>
+          <Col span={4}>
             {
               <Input style={{width: "120px"}} value={this.props.website.trackConfig.debugDivId} onChange={e => {
                 this.updateConfigField("debugDivId", e.target.value);
               }}/>
             }
-          </Col>
-          <Col span={3} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Session ID Var:
@@ -280,8 +251,8 @@ class ConfigEdit extends React.Component {
               this.updateConfigField("sessionIdVariable", e.target.value);
             }} autoSize/>
           </Col>
-          <Col span={1} >
-          </Col>
+        </Row>
+        <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Imp ID Var:
           </Col>
@@ -296,25 +267,23 @@ class ConfigEdit extends React.Component {
             HTML Only:
           </Col>
           <Col span={1} >
+          </Col>
+          <Col span={3} >
             {
               <Switch checked={this.props.website.trackConfig.htmlOnly} onChange={(checked, e) => {
                 this.updateConfigField("htmlOnly", checked);
               }} />
             }
           </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Disable Exception:
           </Col>
-          <Col span={1} >
+          <Col span={4} >
             {
               <Switch checked={this.props.website.trackConfig.disableException} onChange={(checked, e) => {
                 this.updateConfigField("disableException", checked);
               }} />
             }
-          </Col>
-          <Col span={3} >
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Enable Ping Message:
@@ -326,6 +295,8 @@ class ConfigEdit extends React.Component {
               }} />
             }
           </Col>
+        </Row>
+        <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
             Record Keyboard event:
           </Col>

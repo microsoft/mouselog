@@ -70,16 +70,10 @@ class Config extends React.Component {
       res += `\n      sizeLimit: ${website.trackConfig.sizeLimit},`;
     }
 
-    if (website.trackConfig.enableGet !== false) {
-      res += `\n      enableGet: ${website.trackConfig.enableGet},`;
-    }
+
 
     if (website.trackConfig.encoder !== "") {
       res += `\n      encoder: "${website.trackConfig.encoder}",`;
-    }
-
-    if (website.trackConfig.enableServerConfig !== true) {
-      res += `\n      enableServerConfig: ${website.trackConfig.enableServerConfig},`;
     }
 
     if (website.trackConfig.enableSession !== true) {
