@@ -53,7 +53,7 @@ class Config extends React.Component {
       res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
     }
 
-    if (website.trackConfig.uploadTimes !== 0) {
+    if (website.trackConfig.uploadTimes !== 1) {
       res += `\n      uploadTimes: ${website.trackConfig.uploadTimes},`;
     }
 
@@ -62,17 +62,21 @@ class Config extends React.Component {
     } else if (website.trackConfig.uploadMode === "event-triggered") {
       res += `\n      frequency: ${website.trackConfig.frequency},`;
     } else if (website.trackConfig.uploadMode === "mixed") {
-      res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
-      res += `\n      frequency: ${website.trackConfig.frequency},`;
+      if (website.trackConfig.uploadPeriod !== 30000) {
+        res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
+      }
+      if (website.trackConfig.frequency !== 50) {
+        res += `\n      frequency: ${website.trackConfig.frequency},`;
+      }
     }
 
-    if (website.trackConfig.sizeLimit !== 65535) {
+    if (website.trackConfig.sizeLimit !== 7000) {
       res += `\n      sizeLimit: ${website.trackConfig.sizeLimit},`;
     }
 
 
 
-    if (website.trackConfig.encoder !== "") {
+    if (website.trackConfig.encoder !== "base64") {
       res += `\n      encoder: "${website.trackConfig.encoder}",`;
     }
 
@@ -80,7 +84,7 @@ class Config extends React.Component {
       res += `\n      enableSession: ${website.trackConfig.enableSession},`;
     }
 
-    if (website.trackConfig.enableSendEmpty !== false) {
+    if (website.trackConfig.enableSendEmpty !== true) {
       res += `\n      enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
     }
 
@@ -92,7 +96,7 @@ class Config extends React.Component {
       res += `\n      impIdVariable: "${website.trackConfig.impIdVariable}",`;
     }
 
-    if (website.trackConfig.disableException !== false) {
+    if (website.trackConfig.disableException !== true) {
       res += `\n      disableException: ${website.trackConfig.disableException},`;
     }
 
