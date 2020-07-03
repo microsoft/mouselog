@@ -39,7 +39,6 @@ class Config extends React.Component {
   getConfigText(website) {
     let res = "var config = {";
 
-    res += `\n      websiteId: "${website.id}",`;
 
     if (website.trackConfig.endpointType !== "absolute") {
       res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
@@ -50,8 +49,9 @@ class Config extends React.Component {
     if (website.trackConfig.resendInterval !== 20000) {
       res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
     }
-
-    res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
+    if (website.trackConfig.uploadMode !== "mixed") {
+      res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
+    }
 
     if (website.trackConfig.uploadTimes !== 0) {
       res += `\n      uploadTimes: ${website.trackConfig.uploadTimes},`;
