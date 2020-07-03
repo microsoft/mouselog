@@ -126,7 +126,7 @@ class Config extends React.Component {
       res += 'var sessionId = "";\n    ';
       res += 'try {\n        ';
       res += 'sessionId = eval(config.sessionIdVariable);\n        ';
-      res += 'if (sessionId == undefined || sessionId == null) {\n            ';
+      res += 'if (sessionId === undefined || sessionId === null) {\n            ';
       res += 'sessionId = "Err_"+ config.sessionIdVariable +"_is_" + sessionId;\n        ';
       res += '}\n    ';
       res += '} catch(e) {\n        ';
@@ -135,7 +135,7 @@ class Config extends React.Component {
       res += 'var impressionId = "";\n    ';
       res += 'try {\n        ';
       res += 'impressionId = eval(config.impIdVariable);\n        ';
-      res += 'if (impressionId === null || impressionId === undefined) {\n        ';
+      res += 'if (impressionId === undefined || impressionId === null) {\n        ';
       res += 'impressionId = "Err_" + config.impIdVariable + "_is_" + impressionId;\n        ';
       res += '}\n    ';
       res += '} catch(e) {\n        ';
