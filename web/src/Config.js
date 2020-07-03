@@ -141,7 +141,7 @@ class Config extends React.Component {
       res += '} catch(e) {\n        ';
       res += 'impressionId = "Err_fail_to_get_" + config.impIdVariable;\n    ';
       res += '}\n    '
-      res += '(new Image).src= config.uploadEndpoint + "?websiteId=" + config.websiteId + "&sessionId=" + sessionId + "&impressionId=" + impressionId + "&type=ping";\n    ';
+      res += '(new Image).src= config.uploadEndpoint + "?sessionId=" + sessionId + "&impressionId=" + impressionId + "&type=ping";\n    ';
     }
 
     return res;
