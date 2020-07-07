@@ -39,11 +39,6 @@ class Config extends React.Component {
   getConfigText(website) {
     let res = "var config = {";
 
-
-    if (website.trackConfig.endpointType !== "absolute") {
-      res += `\n      endpointType: "${website.trackConfig.endpointType}",`;
-    }
-
     res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
 
     if (website.trackConfig.resendInterval !== 20000) {
