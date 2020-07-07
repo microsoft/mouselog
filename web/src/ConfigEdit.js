@@ -46,16 +46,17 @@ class ConfigEdit extends React.Component {
       <div>
         <Row style={{marginTop: '20px'}} >
           <Col style={{marginTop: '5px'}} span={2}>
-            Endpoint Type:
+              Upload Mode:
           </Col>
           <Col span={3}>
-            <Select style={{width: "150px"}} value={this.props.website.trackConfig.endpointType} onChange={(value => {
-              this.updateConfigField("endpointType", value);
+            <Select style={{width: "150px"}} value={this.props.website.trackConfig.uploadMode} onChange={(value => {
+              this.updateConfigField("uploadMode", value);
             })}>
               {
                 [
-                  {id: "absolute", name: "Absolute"},
-                  {id: "relative", name: "Relative"},
+                  {id: "periodic", name: "Periodic"},
+                  {id: "event-triggered", name: "Event Triggered"},
+                  {id: "mixed", name: "Mixed"},
                 ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
               }
             </Select>
@@ -95,24 +96,6 @@ class ConfigEdit extends React.Component {
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
-            Upload Mode:
-          </Col>
-          <Col span={3}>
-            <Select style={{width: "150px"}} value={this.props.website.trackConfig.uploadMode} onChange={(value => {
-              this.updateConfigField("uploadMode", value);
-            })}>
-              {
-                [
-                  {id: "periodic", name: "Periodic"},
-                  {id: "event-triggered", name: "Event Triggered"},
-                  {id: "mixed", name: "Mixed"},
-                ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
-              }
-            </Select>
-          </Col>
-          <Col span={1} >
-          </Col>
-          <Col style={{marginTop: '5px'}} span={2}>
             Upload Times:
           </Col>
           <Col span={1}>
@@ -130,7 +113,7 @@ class ConfigEdit extends React.Component {
                 <Col style={{marginTop: '5px'}} span={2}>
                   Upload Period:
                 </Col>,
-                <Col span={1}>
+                <Col span={4}>
                   {
                     <Input style={{width: "100px"}} suffix="ms" value={this.props.website.trackConfig.uploadPeriod} onChange={e => {
                       this.updateConfigField("uploadPeriod", e.target.value);
@@ -140,17 +123,12 @@ class ConfigEdit extends React.Component {
               ]
           }
           {
-            this.props.website.trackConfig.uploadMode !== "mixed" ? null :
-              <Col span={3} >
-              </Col>
-          }
-          {
             this.props.website.trackConfig.uploadMode === "periodic" ? null :
               [
                 <Col style={{marginTop: '5px'}} span={2}>
                   Frequency:
                 </Col>,
-                <Col span={1}>
+                <Col span={4}>
                   {
                     <Input style={{width: "120px"}} suffix="events/s" value={this.props.website.trackConfig.frequency} onChange={e => {
                       this.updateConfigField("frequency", e.target.value);
@@ -159,6 +137,14 @@ class ConfigEdit extends React.Component {
                 </Col>
               ]
           }
+          <Col style={{marginTop: '5px'}} span={2}>
+              Imp ID Var:
+          </Col>
+          <Col span={3}>
+              <TextArea style={{width: "250px"}} value={this.props.website.trackConfig.impIdVariable} onChange={(e) =>{
+                  this.updateConfigField("impIdVariable", e.target.value);
+              }} autoSize/>
+          </Col>
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
@@ -211,6 +197,16 @@ class ConfigEdit extends React.Component {
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
+            Debug DIV ID:
+          </Col>
+          <Col span={4}>
+            {
+              <Input style={{width: "120px"}} value={this.props.website.trackConfig.debugDivId} onChange={e => {
+                this.updateConfigField("debugDivId", e.target.value);
+              }}/>
+            }
+          </Col>
+          <Col style={{marginTop: '5px'}} span={2}>
             Enable Send Empty:
           </Col>
           <Col span={ 1 } ></Col>
@@ -219,16 +215,6 @@ class ConfigEdit extends React.Component {
               <Switch checked={this.props.website.trackConfig.enableSendEmpty} onChange={(checked, e) => {
                 this.updateConfigField("enableSendEmpty", checked);
               }} />
-            }
-          </Col>
-          <Col style={{marginTop: '5px'}} span={2}>
-            Debug DIV ID:
-          </Col>
-          <Col span={4}>
-            {
-              <Input style={{width: "120px"}} value={this.props.website.trackConfig.debugDivId} onChange={e => {
-                this.updateConfigField("debugDivId", e.target.value);
-              }}/>
             }
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
@@ -255,16 +241,6 @@ class ConfigEdit extends React.Component {
 
         </Row>
         <Row style={{marginTop: '20px'}}>
-          <Col style={{marginTop: '5px'}} span={2}>
-            Imp ID Var:
-          </Col>
-          <Col span={3}>
-            <TextArea style={{width: "250px"}} value={this.props.website.trackConfig.impIdVariable} onChange={(e) =>{
-              this.updateConfigField("impIdVariable", e.target.value);
-            }} autoSize/>
-          </Col>
-          <Col span={1} >
-          </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             HTML Only:
           </Col>
