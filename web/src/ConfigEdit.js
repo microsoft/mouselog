@@ -47,18 +47,18 @@ class ConfigEdit extends React.Component {
         <Row style={{marginTop: '20px'}} >
           <Col style={{marginTop: '5px'}} span={2}>
               Upload Mode:
-              </Col>
+          </Col>
           <Col span={3}>
-              <Select style={{width: "150px"}} value={this.props.website.trackConfig.uploadMode} onChange={(value => {
-                this.updateConfigField("uploadMode", value);
-              })}>
-                {
-                    [
-                        {id: "periodic", name: "Periodic"},
-                        {id: "event-triggered", name: "Event Triggered"},
-                        {id: "mixed", name: "Mixed"},
-                    ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
-                }
+            <Select style={{width: "150px"}} value={this.props.website.trackConfig.uploadMode} onChange={(value => {
+              this.updateConfigField("uploadMode", value);
+            })}>
+              {
+                [
+                  {id: "periodic", name: "Periodic"},
+                  {id: "event-triggered", name: "Event Triggered"},
+                  {id: "mixed", name: "Mixed"},
+                ].map((item, index) => <Option key={index} value={item.id}>{item.name}</Option>)
+              }
             </Select>
           </Col>
           <Col span={1} >
