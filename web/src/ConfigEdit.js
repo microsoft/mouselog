@@ -210,18 +210,6 @@ class ConfigEdit extends React.Component {
           </Col>
         </Row>
         <Row style={{marginTop: '20px'}}>
-          <Col style={{marginTop: '5px'}} span={3}>
-            Enable Session Cookie:
-          </Col>
-          <Col span={1} >
-            {
-              <Switch checked={this.props.website.trackConfig.enableSession} onChange={(checked, e) => {
-                this.updateConfigField("enableSession", checked);
-              }} />
-            }
-          </Col>
-          <Col span={2} >
-          </Col>
           <Col style={{marginTop: '5px'}} span={2}>
             Enable Send Empty:
           </Col>
@@ -244,13 +232,27 @@ class ConfigEdit extends React.Component {
             }
           </Col>
           <Col style={{marginTop: '5px'}} span={2}>
-            Session ID Var:
+            Record Keyboard event:
           </Col>
-          <Col span={3}>
-            <TextArea style={{width: "250px"}} value={this.props.website.trackConfig.sessionIdVariable} onChange={(e) =>{
-              this.updateConfigField("sessionIdVariable", e.target.value);
-            }} autoSize/>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.recordKeyboardEvent} onChange={(checked, e) => {
+                this.updateConfigField("recordKeyboardEvent", checked);
+              }} />
+            }
           </Col>
+          <Col span={3} ></Col>
+          <Col style={{marginTop: '5px'}} span={2}>
+            Enable Ping Message:
+          </Col>
+          <Col span={1} >
+            {
+              <Switch checked={this.props.website.trackConfig.enablePingMessage} onChange={(checked, e) => {
+                this.updateConfigField("enablePingMessage", checked);
+              }} />
+            }
+          </Col>
+
         </Row>
         <Row style={{marginTop: '20px'}}>
           <Col style={{marginTop: '5px'}} span={2}>
@@ -282,28 +284,6 @@ class ConfigEdit extends React.Component {
             {
               <Switch checked={this.props.website.trackConfig.disableException} onChange={(checked, e) => {
                 this.updateConfigField("disableException", checked);
-              }} />
-            }
-          </Col>
-          <Col style={{marginTop: '5px'}} span={2}>
-            Enable Ping Message:
-          </Col>
-          <Col span={1} >
-            {
-              <Switch checked={this.props.website.trackConfig.enablePingMessage} onChange={(checked, e) => {
-                this.updateConfigField("enablePingMessage", checked);
-              }} />
-            }
-          </Col>
-        </Row>
-        <Row style={{marginTop: '20px'}}>
-          <Col style={{marginTop: '5px'}} span={2}>
-            Record Keyboard event:
-          </Col>
-          <Col span={1} >
-            {
-              <Switch checked={this.props.website.trackConfig.recordKeyboardEvent} onChange={(checked, e) => {
-                this.updateConfigField("recordKeyboardEvent", checked);
               }} />
             }
           </Col>

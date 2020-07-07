@@ -74,22 +74,12 @@ class Config extends React.Component {
       res += `\n      sizeLimit: ${website.trackConfig.sizeLimit},`;
     }
 
-
-
     if (website.trackConfig.encoder !== "base64") {
       res += `\n      encoder: "${website.trackConfig.encoder}",`;
     }
 
-    if (website.trackConfig.enableSession !== true) {
-      res += `\n      enableSession: ${website.trackConfig.enableSession},`;
-    }
-
     if (website.trackConfig.enableSendEmpty !== true) {
       res += `\n      enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
-    }
-
-    if (website.trackConfig.sessionIdVariable !== "") {
-      res += `\n      sessionIdVariable: "${website.trackConfig.sessionIdVariable}",`;
     }
 
     if (website.trackConfig.impIdVariable !== "") {
@@ -123,15 +113,6 @@ class Config extends React.Component {
 
     res += `\n    };\n    `;
     if (website.trackConfig.enablePingMessage !== false) {
-      res += 'var sessionId = "";\n    ';
-      res += 'try {\n        ';
-      res += 'sessionId = eval(config.sessionIdVariable);\n        ';
-      res += 'if (sessionId === undefined || sessionId === null) {\n            ';
-      res += 'sessionId = "Err_"+ config.sessionIdVariable +"_is_" + sessionId;\n        ';
-      res += '}\n    ';
-      res += '} catch(e) {\n        ';
-      res += 'sessionId = "Err_fail_to_get_" + config.sessionIdVariable;\n    '
-      res += '}\n    ';
       res += 'var impressionId = "";\n    ';
       res += 'try {\n        ';
       res += 'impressionId = eval(config.impIdVariable);\n        ';
@@ -141,7 +122,7 @@ class Config extends React.Component {
       res += '} catch(e) {\n        ';
       res += 'impressionId = "Err_fail_to_get_" + config.impIdVariable;\n    ';
       res += '}\n    '
-      res += '(new Image).src= config.uploadEndpoint + "?sessionId=" + sessionId + "&impressionId=" + impressionId + "&type=ping";\n    ';
+      res += '(new Image).src= config.uploadEndpoint + "?impressionId=" + impressionId + "&type=ping";\n    ';
     }
 
     return res;
