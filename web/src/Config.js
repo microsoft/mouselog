@@ -39,8 +39,9 @@ class Config extends React.Component {
   getConfigText(website) {
     let res = "var config = {";
 
-    res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
-
+    if (website.trackConfig.uploadEndpoint !== "/afdml072020") {
+      res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
+    }
     if (website.trackConfig.resendInterval !== 20000) {
       res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
     }
