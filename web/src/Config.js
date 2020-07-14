@@ -37,95 +37,87 @@ class Config extends React.Component {
   }
 
   getConfigText(website) {
-    let res = "var config = {";
+    let res = "{";
 
     if (website.trackConfig.uploadEndpoint !== "/afdml072020") {
-      res += `\n    uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
+      res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
     }
     if (website.trackConfig.resendInterval !== 20000) {
-      res += `\n    resendInterval: ${website.trackConfig.resendInterval},`;
+      res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
     }
     if (website.trackConfig.uploadMode !== "mixed") {
-      res += `\n    uploadMode: "${website.trackConfig.uploadMode}",`;
+      res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
     }
 
     if (website.trackConfig.uploadTimes !== 1) {
-      res += `\n    uploadTimes: ${website.trackConfig.uploadTimes},`;
+      res += `\n      uploadTimes: ${website.trackConfig.uploadTimes},`;
     }
 
     if (website.trackConfig.uploadMode === "periodic") {
-      res += `\n    uploadPeriod: ${website.trackConfig.uploadPeriod},`;
+      res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
     } else if (website.trackConfig.uploadMode === "event-triggered") {
-      res += `\n    frequency: ${website.trackConfig.frequency},`;
+      res += `\n      frequency: ${website.trackConfig.frequency},`;
     } else if (website.trackConfig.uploadMode === "mixed") {
       if (website.trackConfig.uploadPeriod !== 30000) {
-        res += `\n    uploadPeriod: ${website.trackConfig.uploadPeriod},`;
+        res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
       }
       if (website.trackConfig.frequency !== 50) {
-        res += `\n    frequency: ${website.trackConfig.frequency},`;
+        res += `\n      frequency: ${website.trackConfig.frequency},`;
       }
     }
 
     if (website.trackConfig.sizeLimit !== 7000) {
-      res += `\n    sizeLimit: ${website.trackConfig.sizeLimit},`;
+      res += `\n      sizeLimit: ${website.trackConfig.sizeLimit},`;
     }
 
     if (website.trackConfig.encoder !== "base64") {
-      res += `\n    encoder: "${website.trackConfig.encoder}",`;
+      res += `\n      encoder: "${website.trackConfig.encoder}",`;
     }
 
     if (website.trackConfig.enableSendEmpty !== true) {
-      res += `\n    enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
+      res += `\n      enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
     }
 
-    if (website.trackConfig.impIdVariable !== "") {
-      res += `\n    impIdVariable: "${website.trackConfig.impIdVariable}",`;
+    if (website.trackConfig.impIdVariable !== "_G.IG") {
+      res += `\n      impIdVariable: "${website.trackConfig.impIdVariable}",`;
     }
 
     if (website.trackConfig.disableException !== true) {
-      res += `\n    disableException: ${website.trackConfig.disableException},`;
+      res += `\n      disableException: ${website.trackConfig.disableException},`;
     }
 
 
     if (website.trackConfig.recordKeyboardEvent !== true) {
-      res += `\n    recordKeyboardEvent: false,`;
+      res += `\n      recordKeyboardEvent: false,`;
     }
 
     let trimmedScope = this.trimStr(website.trackConfig.scope);
     if (trimmedScope !== "window.document") {
       let lines = trimmedScope.split('\n');
-      res += `\n      scope: ${lines[0]}`;
+      res += `\n        scope: ${lines[0]}`;
       for (let i = 1; i < lines.length; ++i) {
         res += `\n      ${lines[i]}`;
       }
       res += `,`;
     }
 
-    if (res === "var config = {") {
+    if (res === "{") {
       return "";
     }
 
     res = res.slice(0, res.length-1); //Remove the tailing comma
 
-    res += `\n  };\n  `;
-    if (website.trackConfig.enablePingMessage !== false) {
-      res += 'var impressionId = "";\n  ';
-      res += 'try {\n    ';
-      res += `impressionId = ${website.trackConfig.impIdVariable};\n    `;
-      res += 'if (impressionId === undefined || impressionId === null) {\n      ';
-      res += 'impressionId = "Err_" + config.impIdVariable + "_is_" + impressionId;\n    ';
-      res += '}\n  ';
-      res += '} catch(e) {\n    ';
-      res += 'impressionId = "Err_fail_to_get_" + config.impIdVariable;\n  ';
-      res += '}\n  '
-      res += `(new Image).src= "${website.trackConfig.uploadEndpoint}?impressionId=" + impressionId + "&type=ping";\n  `;
-    }
+    res += `}`;
 
     return res;
   }
 
   getCode(website) {
     const version = "latest";
+    let pingCode = "";
+    if (website.trackConfig.enablePingMessage !== false) {
+      pingCode += `(new Image).src= "${website.trackConfig.uploadEndpoint}?impressionId=" + ${website.trackConfig.impIdVariable} + "&type=ping";\n  `;
+    }
 
     let scriptUrl;
     if (website.trackConfig.scriptUrl === undefined || website.trackConfig.scriptUrl === "") {
@@ -134,24 +126,16 @@ class Config extends React.Component {
       scriptUrl = website.trackConfig.scriptUrl;
     }
 
-    let runLine;
-    if (website.trackConfig.debugDivId === undefined || website.trackConfig.debugDivId === "") {
-      runLine = `agent.run(config);`
-    } else {
-      runLine = `agent.debug(config, "${website.trackConfig.debugDivId}");`;
-    }
-
     const configText = this.getConfigText(website);
 
     let code;
     if (!website.trackConfig.htmlOnly) {
       code = `<script>
 (function() {
-  ${configText}var script = document.createElement("script");
+  ${pingCode}var script = document.createElement("script");
   script.src = "${scriptUrl}";
   script.onload = function() {
-    var agent = mouselog.init();
-    ${runLine}
+    mouselog.init(${configText});
   };
   document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(script);
@@ -161,9 +145,8 @@ class Config extends React.Component {
     } else {
       code = `<script src="${scriptUrl}"></script>
 <script>
-  ${configText}document.addEventListener('DOMContentLoaded', function() {
-    var agent = mouselog.init();
-    ${runLine}
+  ${pingCode}document.addEventListener('DOMContentLoaded', function() {
+    mouselog.init(${configText});
   });
 </script>`;
     }
