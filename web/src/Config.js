@@ -40,55 +40,55 @@ class Config extends React.Component {
     let res = "var config = {";
 
     if (website.trackConfig.uploadEndpoint !== "/afdml072020") {
-      res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
+      res += `\n    uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
     }
     if (website.trackConfig.resendInterval !== 20000) {
-      res += `\n      resendInterval: ${website.trackConfig.resendInterval},`;
+      res += `\n    resendInterval: ${website.trackConfig.resendInterval},`;
     }
     if (website.trackConfig.uploadMode !== "mixed") {
-      res += `\n      uploadMode: "${website.trackConfig.uploadMode}",`;
+      res += `\n    uploadMode: "${website.trackConfig.uploadMode}",`;
     }
 
     if (website.trackConfig.uploadTimes !== 1) {
-      res += `\n      uploadTimes: ${website.trackConfig.uploadTimes},`;
+      res += `\n    uploadTimes: ${website.trackConfig.uploadTimes},`;
     }
 
     if (website.trackConfig.uploadMode === "periodic") {
-      res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
+      res += `\n    uploadPeriod: ${website.trackConfig.uploadPeriod},`;
     } else if (website.trackConfig.uploadMode === "event-triggered") {
-      res += `\n      frequency: ${website.trackConfig.frequency},`;
+      res += `\n    frequency: ${website.trackConfig.frequency},`;
     } else if (website.trackConfig.uploadMode === "mixed") {
       if (website.trackConfig.uploadPeriod !== 30000) {
-        res += `\n      uploadPeriod: ${website.trackConfig.uploadPeriod},`;
+        res += `\n    uploadPeriod: ${website.trackConfig.uploadPeriod},`;
       }
       if (website.trackConfig.frequency !== 50) {
-        res += `\n      frequency: ${website.trackConfig.frequency},`;
+        res += `\n    frequency: ${website.trackConfig.frequency},`;
       }
     }
 
     if (website.trackConfig.sizeLimit !== 7000) {
-      res += `\n      sizeLimit: ${website.trackConfig.sizeLimit},`;
+      res += `\n    sizeLimit: ${website.trackConfig.sizeLimit},`;
     }
 
     if (website.trackConfig.encoder !== "base64") {
-      res += `\n      encoder: "${website.trackConfig.encoder}",`;
+      res += `\n    encoder: "${website.trackConfig.encoder}",`;
     }
 
     if (website.trackConfig.enableSendEmpty !== true) {
-      res += `\n      enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
+      res += `\n    enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
     }
 
     if (website.trackConfig.impIdVariable !== "") {
-      res += `\n      impIdVariable: "${website.trackConfig.impIdVariable}",`;
+      res += `\n    impIdVariable: "${website.trackConfig.impIdVariable}",`;
     }
 
     if (website.trackConfig.disableException !== true) {
-      res += `\n      disableException: ${website.trackConfig.disableException},`;
+      res += `\n    disableException: ${website.trackConfig.disableException},`;
     }
 
 
     if (website.trackConfig.recordKeyboardEvent !== true) {
-      res += `\n      recordKeyboardEvent: false,`;
+      res += `\n    recordKeyboardEvent: false,`;
     }
 
     let trimmedScope = this.trimStr(website.trackConfig.scope);
@@ -107,18 +107,18 @@ class Config extends React.Component {
 
     res = res.slice(0, res.length-1); //Remove the tailing comma
 
-    res += `\n    };\n    `;
+    res += `\n  };\n  `;
     if (website.trackConfig.enablePingMessage !== false) {
-      res += 'var impressionId = "";\n    ';
-      res += 'try {\n        ';
-      res += 'impressionId = eval(config.impIdVariable);\n        ';
-      res += 'if (impressionId === undefined || impressionId === null) {\n        ';
-      res += 'impressionId = "Err_" + config.impIdVariable + "_is_" + impressionId;\n        ';
-      res += '}\n    ';
-      res += '} catch(e) {\n        ';
-      res += 'impressionId = "Err_fail_to_get_" + config.impIdVariable;\n    ';
-      res += '}\n    '
-      res += '(new Image).src= config.uploadEndpoint + "?impressionId=" + impressionId + "&type=ping";\n    ';
+      res += 'var impressionId = "";\n  ';
+      res += 'try {\n    ';
+      res += `impressionId = ${website.trackConfig.impIdVariable};\n    `;
+      res += 'if (impressionId === undefined || impressionId === null) {\n      ';
+      res += 'impressionId = "Err_" + config.impIdVariable + "_is_" + impressionId;\n    ';
+      res += '}\n  ';
+      res += '} catch(e) {\n    ';
+      res += 'impressionId = "Err_fail_to_get_" + config.impIdVariable;\n  ';
+      res += '}\n  '
+      res += `(new Image).src= "${website.trackConfig.uploadEndpoint}?impressionId=" + impressionId + "&type=ping";\n  `;
     }
 
     return res;
@@ -147,10 +147,10 @@ class Config extends React.Component {
     if (!website.trackConfig.htmlOnly) {
       code = `<script>
 (function() {
-  var script = document.createElement("script");
+  ${configText}var script = document.createElement("script");
   script.src = "${scriptUrl}";
   script.onload = function() {
-    ${configText}var agent = mouselog.init();
+    var agent = mouselog.init();
     ${runLine}
   };
   document.addEventListener('DOMContentLoaded', function () {
@@ -161,8 +161,8 @@ class Config extends React.Component {
     } else {
       code = `<script src="${scriptUrl}"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    ${configText}var agent = mouselog.init();
+  ${configText}document.addEventListener('DOMContentLoaded', function() {
+    var agent = mouselog.init();
     ${runLine}
   });
 </script>`;
