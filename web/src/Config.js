@@ -37,7 +37,7 @@ class Config extends React.Component {
   }
 
   getConfigText(website) {
-    let res = "var config = {";
+    let res = "{";
 
     if (website.trackConfig.uploadEndpoint !== "/afdml072020") {
       res += `\n      uploadEndpoint: "${website.trackConfig.uploadEndpoint}",`;
@@ -78,7 +78,7 @@ class Config extends React.Component {
       res += `\n      enableSendEmpty: ${website.trackConfig.enableSendEmpty},`;
     }
 
-    if (website.trackConfig.impIdVariable !== "") {
+    if (website.trackConfig.impIdVariable !== "_G.IG") {
       res += `\n      impIdVariable: "${website.trackConfig.impIdVariable}",`;
     }
 
@@ -94,38 +94,30 @@ class Config extends React.Component {
     let trimmedScope = this.trimStr(website.trackConfig.scope);
     if (trimmedScope !== "window.document") {
       let lines = trimmedScope.split('\n');
-      res += `\n      scope: ${lines[0]}`;
+      res += `\n        scope: ${lines[0]}`;
       for (let i = 1; i < lines.length; ++i) {
         res += `\n      ${lines[i]}`;
       }
       res += `,`;
     }
 
-    if (res === "var config = {") {
+    if (res === "{") {
       return "";
     }
 
     res = res.slice(0, res.length-1); //Remove the tailing comma
 
-    res += `\n    };\n    `;
-    if (website.trackConfig.enablePingMessage !== false) {
-      res += 'var impressionId = "";\n    ';
-      res += 'try {\n        ';
-      res += 'impressionId = eval(config.impIdVariable);\n        ';
-      res += 'if (impressionId === undefined || impressionId === null) {\n        ';
-      res += 'impressionId = "Err_" + config.impIdVariable + "_is_" + impressionId;\n        ';
-      res += '}\n    ';
-      res += '} catch(e) {\n        ';
-      res += 'impressionId = "Err_fail_to_get_" + config.impIdVariable;\n    ';
-      res += '}\n    '
-      res += '(new Image).src= config.uploadEndpoint + "?impressionId=" + impressionId + "&type=ping";\n    ';
-    }
+    res += `}`;
 
     return res;
   }
 
   getCode(website) {
     const version = "latest";
+    let pingCode = "";
+    if (website.trackConfig.enablePingMessage !== false) {
+      pingCode += `(new Image).src= "${website.trackConfig.uploadEndpoint}?impressionId=" + ${website.trackConfig.impIdVariable} + "&type=ping";\n  `;
+    }
 
     let scriptUrl;
     if (website.trackConfig.scriptUrl === undefined || website.trackConfig.scriptUrl === "") {
@@ -134,24 +126,16 @@ class Config extends React.Component {
       scriptUrl = website.trackConfig.scriptUrl;
     }
 
-    let runLine;
-    if (website.trackConfig.debugDivId === undefined || website.trackConfig.debugDivId === "") {
-      runLine = `agent.run(config);`
-    } else {
-      runLine = `agent.debug(config, "${website.trackConfig.debugDivId}");`;
-    }
-
     const configText = this.getConfigText(website);
 
     let code;
     if (!website.trackConfig.htmlOnly) {
       code = `<script>
 (function() {
-  var script = document.createElement("script");
+  ${pingCode}var script = document.createElement("script");
   script.src = "${scriptUrl}";
   script.onload = function() {
-    ${configText}var agent = mouselog.init();
-    ${runLine}
+    mouselog.init(${configText});
   };
   document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(script);
@@ -161,9 +145,8 @@ class Config extends React.Component {
     } else {
       code = `<script src="${scriptUrl}"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    ${configText}var agent = mouselog.init();
-    ${runLine}
+  ${pingCode}document.addEventListener('DOMContentLoaded', function() {
+    mouselog.init(${configText});
   });
 </script>`;
     }
