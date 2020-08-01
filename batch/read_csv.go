@@ -16,6 +16,7 @@ import (
 const (
 	RowSessionId = iota
 	RowImpressionId
+	RowUnifiedId
 	RowVertical
 	RowTimestamp
 	RowPageName
@@ -24,6 +25,7 @@ const (
 	RowIsBot
 	RowPageClickCount
 	RowDwellTime
+	RowHasPerfPing
 	RowUrl
 	RowTimestampList
 	RowEventTypeList
@@ -193,7 +195,7 @@ func addEventsToTrace(t *trace.Trace, timestampList []string, eventTypeList []st
 }
 
 func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, websiteId string, line string, i int) {
-	row := strings.SplitN(line, "\t", RowYList+1)
+	row := strings.SplitN(line, ",", RowYList+1)
 
 	t := trace.NewTrace(i)
 	t.Url = row[RowUrl]
@@ -203,6 +205,10 @@ func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Sessi
 		t.Label = 1
 	} else {
 		t.Label = 0
+	}
+
+	if row[RowTimestampList] == "" {
+		return
 	}
 
 	timestampList := strings.Split(row[RowTimestampList], "|")

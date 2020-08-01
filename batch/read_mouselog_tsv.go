@@ -14,6 +14,7 @@ import (
 const (
 	TRowSessionId = iota
 	TRowImpressionId
+	TRowUnifiedId
 	TRowVertical
 	TRowTimestamp
 	TRowPageName
@@ -22,6 +23,7 @@ const (
 	TRowIsBot
 	TRowPageClickCount
 	TRowDwellTime
+	TRowHasPerfPing
 	TRowUrl
 	TRowMouselogData
 )
