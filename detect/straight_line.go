@@ -11,28 +11,30 @@ import (
 )
 
 func checkStraightLine(t *trace.Trace) (int, string, int, int, int) {
-	m := 10
-	for i := len(t.Degrees); i < len(t.Events)-m*2; i++ {
-		x1 := t.Events[i+m].X - t.Events[i].X
-		y1 := t.Events[i+m].Y - t.Events[i].Y
-		x2 := t.Events[i+2*m].X - t.Events[i+m].X
-		y2 := t.Events[i+2*m].Y - t.Events[i+m].Y
+	boxLen := 10
+	lineLimit := 30
+	distLimit := 400
+
+	degrees := []float64{}
+	for i := 0; i < len(t.Events)-boxLen*2; i++ {
+		x1 := t.Events[i+boxLen].X - t.Events[i].X
+		y1 := t.Events[i+boxLen].Y - t.Events[i].Y
+		x2 := t.Events[i+2*boxLen].X - t.Events[i+boxLen].X
+		y2 := t.Events[i+2*boxLen].Y - t.Events[i+boxLen].Y
 		degree := getDegree(x1, y1, x2, y2)
 
-		t.Degrees = append(t.Degrees, degree)
+		degrees = append(degrees, degree)
 	}
 
-	lineLen := 0
-	th := 30
-	pixelTh := 400
-	for i := 0; i < len(t.Degrees)-1; i++ {
-		if math.Abs(t.Degrees[i]-t.Degrees[i+1]) < math.Pi/72 {
-			lineLen += 1
-			if lineLen >= th && isDistanceLargerThan(t.Events[i - lineLen].X, t.Events[i - lineLen].Y, t.Events[i].X, t.Events[i].Y, pixelTh) {
-				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", th, pixelTh, i - lineLen, i), RuleStraightLine, i - lineLen, i
+	l := 0
+	for i := 0; i < len(degrees)-1; i++ {
+		if math.Abs(degrees[i]-degrees[i+1]) < math.Pi/72 {
+			l += 1
+			if l >= lineLimit && isDistanceLargerThan(t.Events[i -l].X, t.Events[i -l].Y, t.Events[i].X, t.Events[i].Y, distLimit) {
+				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", lineLimit, distLimit, i -l, i), RuleStraightLine, i - l, i
 			}
 		} else {
-			lineLen = 0
+			l = 0
 		}
 	}
 
