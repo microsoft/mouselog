@@ -5,16 +5,11 @@ package detect
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/microsoft/mouselog/trace"
 )
 
 var SpeedLimit = 500.0
-
-func getDistance(x1 int, y1 int, x2 int, y2 int) float64 {
-	return math.Sqrt(float64((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
-}
 
 func checkOverspeed(t *trace.Trace) (int, string, int, int, int) {
 	dist := 0.0
