@@ -23,7 +23,7 @@ type Impression struct {
 	ClientIp  string `xorm:"varchar(100)" json:"clientIp"`
 	UserId    string `xorm:"varchar(100)" json:"userId"`
 
-	Events []Event `xorm:"mediumtext" json:"events"`
+	Events []*Event `xorm:"mediumtext" json:"events"`
 }
 
 func GetImpressions(websiteId string, sessionId string, resultCount int, offset int, sortField string, sortOrder string) []*Impression {
@@ -95,7 +95,7 @@ func updateImpression(id string, impression *Impression) bool {
 }
 
 func AddImpression(id string, sessionId string, websiteId string, userId string, trace *Trace) bool {
-	im := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, UserId: userId, CreatedTime: getCurrentTime(), UrlPath: trace.Path, Width: trace.Width, Height: trace.Height, PageLoadTime: trace.PageLoadTime, Events: []Event{}}
+	im := Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, UserId: userId, CreatedTime: getCurrentTime(), UrlPath: trace.Path, Width: trace.Width, Height: trace.Height, PageLoadTime: trace.PageLoadTime, Events: []*Event{}}
 	affected, err := ormManager.engine.Insert(im)
 	if err != nil && !strings.Contains(err.Error(), "Duplicate entry") {
 		panic(err)
@@ -128,7 +128,7 @@ func AddImpressionsSafe(impressions []*Impression) bool {
 			end = len(impressions)
 		}
 
-		tmp := impressions[start : end]
+		tmp := impressions[start:end]
 		fmt.Printf("Add impressions: [%d - %d].\n", start, end)
 		if AddImpressions(tmp) {
 			affected = true
@@ -169,7 +169,7 @@ func AppendTraceToImpression(id string, trace *Trace) {
 	if impEvtCount == 0 || impression.Events[impEvtCount-1].Id < trace.Events[0].Id {
 		impression.Events = append(impression.Events, trace.Events...)
 	} else {
-		var tmp []Event
+		var tmp []*Event
 		i := 0
 		for {
 			if impression.Events[i].Id < trace.Events[0].Id {

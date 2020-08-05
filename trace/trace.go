@@ -25,7 +25,7 @@ type Trace struct {
 	RuleStart int    `json:"ruleStart"`
 	RuleEnd   int    `json:"ruleEnd"`
 
-	Events  []Event   `json:"events"`
+	Events  []*Event   `json:"events"`
 }
 
 func NewTrace(id int) *Trace {
@@ -35,12 +35,12 @@ func NewTrace(id int) *Trace {
 	t.Guess = -1
 	t.RuleStart = -1
 	t.RuleEnd = -1
-	t.Events = []Event{}
+	t.Events = []*Event{}
 	return &t
 }
 
 func (t *Trace) AddEvent(timestamp float64, typ string, button string, x int, y int) {
-	e := Event{
+	e := &Event{
 		Id:        len(t.Events),
 		Timestamp: timestamp,
 		Type:      typ,
@@ -80,8 +80,8 @@ func (t *Trace) LoadFromJson(b []byte) {
 	events := f["events"].([]interface{})
 
 	for _, arr := range events {
-		var event Event
-		array2Event(arr.([]interface{}), &event)
+		var event *Event
+		array2Event(arr.([]interface{}), event)
 		t.Events = append(t.Events, event)
 	}
 }
