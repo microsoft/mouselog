@@ -23,7 +23,7 @@ func isDistanceLargerThan(x1 int, y1 int, x2 int, y2 int, dist int) bool {
 	return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2) > dist*dist
 }
 
-func isLineDistanceSumLargerThan(events []*trace.Event, start int, end int, dist int) bool {
+func isLineDistanceSumSmallerThan(events []*trace.Event, start int, end int, dist int) (bool, int) {
 	sum := 0
 
 	x1, y1 := events[start].X, events[start].Y
@@ -39,5 +39,5 @@ func isLineDistanceSumLargerThan(events []*trace.Event, start int, end int, dist
 		sum += int(math.Abs(float64(a*x+b*y+c)) / denominator)
 	}
 
-	return sum > dist
+	return sum < dist, sum
 }

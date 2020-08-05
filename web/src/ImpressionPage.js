@@ -13,6 +13,7 @@ import * as SessionBackend from "./backend/SessionBackend";
 import Canvas from "./Canvas";
 import * as Shared from "./Shared";
 import BreadcrumbBar from "./BreadcrumbBar";
+import * as Backend from "./Backend";
 
 const { Option } = Select;
 const MAX_PAGE_SIZE = 1000;
@@ -35,8 +36,22 @@ class ImpressionPage extends React.Component {
       sorter: {
         field: "",
         order: "ascend"
-      }
+      },
+      rules: [],
     };
+  }
+
+  componentWillMount() {
+    this.listRules();
+  }
+
+  listRules() {
+    Backend.listRules()
+      .then(res => {
+        this.setState({
+          rules: res
+        });
+      });
   }
 
   componentDidMount() {
@@ -308,6 +323,39 @@ class ImpressionPage extends React.Component {
         }
       },
       {
+        title: 'Label',
+        dataIndex: 'label',
+        key: 'label',
+        sorter: (a, b) => a.label - b.label,
+      },
+      {
+        title: 'Guess',
+        dataIndex: 'guess',
+        key: 'guess',
+        sorter: (a, b) => a.guess - b.guess,
+      },
+      {
+        title: 'Reason',
+        dataIndex: 'reason',
+        key: 'reason',
+        sorter: (a, b) => a.reason.localeCompare(b.reason),
+        filters: (
+          this.state.rules.map((p, i) => {
+            return (
+              {
+                text: `${p.ruleId}. ${p.ruleName}`,
+                value: p.ruleId,
+              }
+            )
+          })
+        ),
+        // specify the condition of filtering result
+        // here is that finding the name started with `value`
+        onFilter: (value, record) => {
+          return record.ruleId === value;
+        },
+      },
+      {
         title: 'Canvas',
         key: 'canvas',
         width: 500,
@@ -361,7 +409,11 @@ class ImpressionPage extends React.Component {
           loading={this.state.tableLoading}
           onChange={(pagination, filters, sorter)=>{
             this.onTableChange.call(this, pagination, filters, sorter);
-          }}/>
+          }}
+           rowClassName={(record, index) => {
+             return (record.label === 1 || record.guess === 1) ? 'bot-row' : ''
+           }}/>
+        />
         <Row type="flex" justify="end" style={{marginRight: 20}}>
           <Col>
             <Select defaultValue="100" style={{ width: 80, marginRight: 10}} onChange={(value)=>{this.onPageSizeChange.call(this, value)}}>

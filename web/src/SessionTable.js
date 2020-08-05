@@ -21,7 +21,11 @@ class SessionTable extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    this.listRules();
+  }
+
+  listRules() {
     Backend.listRules()
       .then(res => {
         this.setState({
