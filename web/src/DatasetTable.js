@@ -12,7 +12,7 @@ import {Link} from "react-router-dom";
 import * as Setting from "./Setting";
 import UploadFile from "./UploadFile";
 
-class SessionTable extends React.Component {
+class DatasetTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,7 +91,7 @@ class SessionTable extends React.Component {
   render() {
     const columns = [
       {
-        title: 'Session ID (dataset)',
+        title: 'Dataset',
         dataIndex: 'id',
         key: 'id',
         render: (text, record, index) => {
@@ -106,22 +106,22 @@ class SessionTable extends React.Component {
       {
         title: 'Confusing Matrix',
         key: 'cm',
-        render: (text, session, index) => {
-          return this.renderCM(session.tn, session.fp, session.fn, session.tp);
+        render: (text, dataset, index) => {
+          return this.renderCM(dataset.tn, dataset.fp, dataset.fn, dataset.tp);
         }
       },
       {
         title: 'Precision (%)',
         key: 'precision',
-        render: (text, session, index) => {
-          return (session.tp * 100.0 / (session.tp + session.fp)).toFixed(2)
+        render: (text, dataset, index) => {
+          return (dataset.tp * 100.0 / (dataset.tp + dataset.fp)).toFixed(2)
         }
       },
       {
         title: 'Recall (%)',
         key: 'recall',
-        render: (text, session, index) => {
-          return (session.tp * 100.0 / (session.tp + session.fn)).toFixed(2)
+        render: (text, dataset, index) => {
+          return (dataset.tp * 100.0 / (dataset.tp + dataset.fn)).toFixed(2)
         }
       },
       // {
@@ -136,8 +136,8 @@ class SessionTable extends React.Component {
         {
           title: `${p.ruleId}. ${p.ruleName}`,
           key: `${p.ruleId}. ${p.ruleName}`,
-          render: (text, session, index) => {
-            return session.ruleCounts[i];
+          render: (text, dataset, index) => {
+            return dataset.ruleCounts[i];
           }
         }
       );
@@ -145,8 +145,8 @@ class SessionTable extends React.Component {
 
     return (
       <div>
-        <Table rowSelection={this.props.rowRadioSelection} columns={columns} dataSource={this.props.sessions} size="small"
-               bordered title={() => 'Sessions'} pagination={{pageSize: 100}} scroll={{y: 'calc(90vh - 200px)'}}/>
+        <Table rowSelection={this.props.rowRadioSelection} columns={columns} dataSource={this.props.datasets} size="small"
+               bordered title={() => 'Datasets'} pagination={{pageSize: 100}} scroll={{y: 'calc(90vh - 200px)'}}/>
         <UploadFile/>
       </div>
     );
@@ -154,4 +154,4 @@ class SessionTable extends React.Component {
 
 }
 
-export default SessionTable;
+export default DatasetTable;

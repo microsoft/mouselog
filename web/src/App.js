@@ -9,7 +9,7 @@ import * as Setting from "./Setting";
 
 import {Switch, Route} from 'react-router-dom'
 import TestPage from "./TestPage";
-import DashboardPage from "./DashboardPage";
+import DatasetPage from "./DatasetPage";
 import {Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
 import TracePage from "./TracePage";
 import RulePage from "./RulePage";
@@ -44,7 +44,7 @@ class App extends React.Component {
 
   componentWillMount() {
     const path = this.getUrlPath();
-    if (path.includes('dashboard')) {
+    if (path.includes('datasets')) {
       this.setState({selectedMenuKey: 2});
     } else if (path.includes('trace')) {
       this.setState({selectedMenuKey: 3});
@@ -139,7 +139,7 @@ class App extends React.Component {
                     </Menu.Item>
                 }
                 <Menu.Item key="2">
-                  <a href="/dashboard">
+                  <a href="/datasets">
                     Dataset
                   </a>
                 </Menu.Item>
@@ -192,7 +192,7 @@ class App extends React.Component {
           </Layout>
           <Switch>
             <Route exact path="/" component={TestPage}/>
-            <Route path="/dashboard/" component={DashboardPage}/>
+            <Route path="/datasets/" component={DatasetPage}/>
             <Route path="/trace/:sessionId" component={TracePage}/>
             <Route path="/canvas/:sessionId/:traceId" component={CanvasPage}/>
             <Route path="/rule/" component={RulePage}/>

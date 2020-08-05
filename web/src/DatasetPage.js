@@ -9,9 +9,9 @@ import {Row, Col} from 'antd';
 import Canvas from "./Canvas";
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
-import SessionTable from "./SessionTable";
+import DatasetTable from "./DatasetTable";
 
-class DashboardPage extends React.Component {
+class DatasetPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,7 +61,7 @@ class DashboardPage extends React.Component {
         <div>
           <Row>
             {
-              <SessionTable sessions={this.state.sessions} rowRadioSelection={rowRadioSelection}/>
+              <DatasetTable datasets={this.state.sessions} rowRadioSelection={rowRadioSelection}/>
             }
           </Row>
           <Row>
@@ -76,7 +76,7 @@ class DashboardPage extends React.Component {
         <Row>
           <Col span={12}>
             {
-              <SessionTable sessions={this.state.sessions} rowRadioSelection={rowRadioSelection}/>
+              <DatasetTable datasets={this.state.sessions} rowRadioSelection={rowRadioSelection}/>
             }
             <Row>
               <Col span={12} style={{paddingRight: '2.5px'}}>
@@ -102,4 +102,4 @@ class DashboardPage extends React.Component {
 
 }
 
-export default DashboardPage;
+export default DatasetPage;
