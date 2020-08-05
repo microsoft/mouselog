@@ -18,7 +18,8 @@ type Session struct {
 	ClientIp    string `xorm:"varchar(100)" json:"clientIp"`
 	UserId      string `xorm:"varchar(100)" json:"userId"`
 
-	ImpressionCount int `json:"impressionCount"`
+	ImpressionCount int           `json:"impressionCount"`
+	Impressions     []*Impression `json:"-"`
 
 	Traces   []*Trace       `json:"traces"`
 	TraceMap map[int]*Trace `json:"-"`
@@ -130,7 +131,7 @@ func AddSessionsSafe(sessions []*Session) bool {
 			end = len(sessions)
 		}
 
-		tmp := sessions[start : end]
+		tmp := sessions[start:end]
 		fmt.Printf("Add sessions: [%d - %d].\n", start, end)
 		if AddSessions(tmp) {
 			affected = true
@@ -179,16 +180,16 @@ func (ss *Session) AddTrace(t *Trace) {
 
 func (ss *Session) ToJson() *SessionJson {
 	ruleCounts := []int{}
-	for i := 0; i < 8; i++ {
+	for i := 0; i < 9; i++ {
 		ruleCounts = append(ruleCounts, 0)
 	}
-	for _, t := range ss.Traces {
-		ruleCounts[t.RuleId] += 1
+	for _, impression := range ss.Impressions {
+		ruleCounts[impression.RuleId] += 1
 	}
 
 	sj := SessionJson{
 		Id:         ss.Id,
-		TraceSize:  len(ss.Traces),
+		TraceSize:  len(ss.Impressions),
 		TN:         ss.TN,
 		FP:         ss.FP,
 		FN:         ss.FN,

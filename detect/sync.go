@@ -6,7 +6,8 @@ package detect
 import "github.com/microsoft/mouselog/trace"
 
 func SyncGuesses(ss *trace.Session) {
-	for _, t := range ss.Traces {
-		CheckBotForTrace(t)
+	ss.Impressions = trace.GetImpressionsAll(ss.Id, 10000000, 0, "", "")
+	for _, impression := range ss.Impressions {
+		CheckBotForImpression(impression)
 	}
 }
