@@ -63,6 +63,8 @@ func ReadTraces(fileId string) {
 	//path = util.GetTsvDataPath(fileId)
 	websiteId := fileId
 
+	addWebsite(websiteId)
+
 	sessions := []*trace.Session{}
 	sessionMap := map[string]*trace.Session{}
 	impressions := []*trace.Impression{}

@@ -5,6 +5,20 @@ package batch
 
 import "github.com/microsoft/mouselog/trace"
 
+func addWebsite(websiteId string) {
+	w := &trace.Website{
+		Id:           websiteId,
+		Name:         websiteId,
+		Url:          "",
+		TrackConfig:  "{}",
+		State:        "active",
+	}
+
+	if trace.GetWebsite(websiteId) == nil {
+		trace.AddWebsite(w)
+	}
+}
+
 func addSession(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, id string, websiteId string, createdTime string, userAgent string, clientIp string) {
 	s := &trace.Session{Id: id, WebsiteId: websiteId, CreatedTime: createdTime, UserAgent: userAgent, ClientIp: clientIp}
 	if _, ok := (*sessionMap)[id]; !ok {
