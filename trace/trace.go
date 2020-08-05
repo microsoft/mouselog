@@ -26,7 +26,6 @@ type Trace struct {
 	RuleEnd   int    `json:"ruleEnd"`
 
 	Events  []Event   `json:"events"`
-	Degrees []float64 `json:"-"`
 }
 
 func NewTrace(id int) *Trace {

@@ -103,7 +103,7 @@ class App extends React.Component {
                 mode="horizontal"
                 defaultSelectedKeys={[`${this.state.selectedMenuKey}`]}
                 style={{lineHeight: '64px'}}
-                inlineCollapsed={false}
+                // inlineCollapsed={false}
               >
                 <Menu.Item key="1">
                   <a href="/">
@@ -165,7 +165,7 @@ class App extends React.Component {
                     Rule
                   </a>
                 </Menu.Item>
-                <Menu.Item key='5' style={{float: 'right'}}>
+                <Menu.Item key="100" style={{float: 'right'}}>
                   <a target="_blank" href="https://github.com/microsoft/mouselog">
                     <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />
                   </a>

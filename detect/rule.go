@@ -6,6 +6,7 @@ package detect
 const (
 	RuleNone = iota
 	RuleStraightLine
+	RuleNearStraightLine
 	RuleEquallySpacedPoints
 	RuleSinglePoint
 	RuleOverspeed
@@ -23,6 +24,8 @@ func GetRuleName(rule int) string {
 		return "Human"
 	case RuleStraightLine:
 		return "Straight line found"
+	case RuleNearStraightLine:
+		return "Near straight line found"
 	case RuleEquallySpacedPoints:
 		return "Multiple equally spaced points found"
 	case RuleSinglePoint:

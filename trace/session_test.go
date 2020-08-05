@@ -15,7 +15,6 @@ func TestSessionToJson(t *testing.T) {
 		Width:   800,
 		Height:  600,
 		Events:  nil,
-		Degrees: nil,
 	}
 
 	res, err := json.Marshal(ss)

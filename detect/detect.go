@@ -11,7 +11,12 @@ func checkBot(t *trace.Trace) (int, string, int, int, int) {
 	//	return isBot, reason, rule, start, end
 	//}
 
-	isBot, reason, rule, start, end := checkSinglePoint(t)
+	isBot, reason, rule, start, end := checkNearStraightLine(t)
+	if isBot != 0 {
+		return isBot, reason, rule, start, end
+	}
+
+	isBot, reason, rule, start, end = checkSinglePoint(t)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
