@@ -106,7 +106,7 @@ func (c *APIController) UploadTrace() {
 		return
 	}
 
-	ss, _ := GetOrCreateSession(sessionId)
+	ss, _ := GetOrCreateDataset(sessionId)
 	if len(t.Events) > 0 {
 		fmt.Printf("Read event [%s]: (%d, %f, %d, %d)\n", sessionId, t.Id, t.Events[0].Timestamp, t.Events[0].X, t.Events[0].Y)
 	} else {
@@ -131,7 +131,7 @@ func (c *APIController) ClearTrace() {
 		panic(err)
 	}
 
-	ss, _ := GetOrCreateSession(sessionId)
+	ss, _ := GetOrCreateDataset(sessionId)
 	if t2, ok := ss.TraceMap[t.Id]; ok {
 		delete(ss.TraceMap, t.Id)
 		for i, t3 := range ss.Traces {

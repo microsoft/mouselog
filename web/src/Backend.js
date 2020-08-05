@@ -35,8 +35,8 @@ export function getTrace(fileId, traceId) {
   }).then(res => res.json());
 }
 
-export function listSessions() {
-  return fetch(`${Setting.ServerUrl}/api/list-sessions`, {
+export function listDatasets() {
+  return fetch(`${Setting.ServerUrl}/api/list-datasets`, {
     method: 'GET',
     credentials: 'include'
   }).then(res => res.json());

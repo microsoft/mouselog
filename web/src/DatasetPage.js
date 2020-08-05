@@ -16,7 +16,7 @@ class DatasetPage extends React.Component {
     super(props);
     this.state = {
       classes: props,
-      sessions: [],
+      datasets: [],
       sessionId: "",
       traces: [],
       trace: null,
@@ -25,10 +25,10 @@ class DatasetPage extends React.Component {
   }
 
   componentDidMount() {
-    Backend.listSessions()
+    Backend.listDatasets()
       .then(res => {
         this.setState({
-          sessions: res
+          datasets: res
         });
       });
   }
@@ -61,7 +61,7 @@ class DatasetPage extends React.Component {
         <div>
           <Row>
             {
-              <DatasetTable datasets={this.state.sessions} rowRadioSelection={rowRadioSelection}/>
+              <DatasetTable datasets={this.state.datasets} rowRadioSelection={rowRadioSelection}/>
             }
           </Row>
           <Row>
@@ -76,7 +76,7 @@ class DatasetPage extends React.Component {
         <Row>
           <Col span={12}>
             {
-              <DatasetTable datasets={this.state.sessions} rowRadioSelection={rowRadioSelection}/>
+              <DatasetTable datasets={this.state.datasets} rowRadioSelection={rowRadioSelection}/>
             }
             <Row>
               <Col span={12} style={{paddingRight: '2.5px'}}>

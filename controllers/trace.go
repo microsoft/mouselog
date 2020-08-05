@@ -7,46 +7,16 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/microsoft/mouselog/detect"
 	"github.com/microsoft/mouselog/fileutils"
-	"github.com/microsoft/mouselog/trace"
 	"github.com/microsoft/mouselog/util"
 )
-
-func trackNewSession(s *trace.Session) {
-	detect.SyncGuesses(s)
-	s.SyncStatistics()
-}
-
-func traceFiles(path string) []*trace.Session {
-	res := []*trace.Session{}
-
-	if util.FileExist(path) {
-		for _, fileId := range util.ListFileIds(path) {
-			if s, isNew := GetOrCreateSession(fileId); isNew {
-				trackNewSession(s)
-			}
-		}
-	}
-
-	m := map[string]interface{}{}
-	for k, v := range sessions {
-		m[k] = v
-	}
-	kv := util.SortMapsByKey(&m)
-	for _, v := range *kv {
-		res = append(res, v.Key.(*trace.Session))
-	}
-
-	return res
-}
 
 func (c *APIController) ListTraces() {
 	perPage := util.ParseInt(c.Input().Get("perPage"))
 	page := util.ParseInt(c.Input().Get("page"))
-	session, isNew := GetOrCreateSession(c.Input().Get("fileId"))
+	session, isNew := GetOrCreateDataset(c.Input().Get("fileId"))
 	if isNew {
-		trackNewSession(session)
+		syncDataset(session)
 	}
 
 	last := perPage * (page + 1)
@@ -64,9 +34,9 @@ func (c *APIController) ListTraces() {
 }
 
 func (c *APIController) GetTrace() {
-	session, isNew := GetOrCreateSession(c.Input().Get("fileId"))
+	session, isNew := GetOrCreateDataset(c.Input().Get("fileId"))
 	if isNew {
-		trackNewSession(session)
+		syncDataset(session)
 	}
 
 	c.Data["json"] = session.Traces[util.ParseInt(c.Input().Get("traceId"))]
@@ -99,7 +69,7 @@ func (c *APIController) UploadFile() {
 		} else {
 			for _, trace := range traces {
 				// Use Filename as SessionId
-				ss, _ := GetOrCreateSession(header.Filename)
+				ss, _ := GetOrCreateDataset(header.Filename)
 				if len(trace.Events) != 0 {
 					ss.AddTrace(&trace)
 				}
