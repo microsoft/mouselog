@@ -19,9 +19,9 @@ type TraceFragment struct {
 	End   int
 }
 
-func checkHighPointDensity(t *trace.Trace) (int, string, int, int, int) {
+func checkHighPointDensity(events []*trace.Event) (int, string, int, int, int) {
 	m := map[int]*TraceFragment{}
-	for i, e := range t.Events {
+	for i, e := range events {
 		key := int(math.Floor(e.Timestamp))
 		if _, ok := m[key]; ok {
 			m[key].Count += 1

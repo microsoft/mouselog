@@ -5,38 +5,38 @@ package detect
 
 import "github.com/microsoft/mouselog/trace"
 
-func checkBot(t *trace.Trace) (int, string, int, int, int) {
-	//isBot, reason, rule, start, end := checkStraightLine(t)
+func checkBot(events []*trace.Event) (int, string, int, int, int) {
+	//isBot, reason, rule, start, end := checkStraightLine(events)
 	//if isBot != 0 {
 	//	return isBot, reason, rule, start, end
 	//}
 
-	isBot, reason, rule, start, end := checkNearStraightLine(t)
+	isBot, reason, rule, start, end := checkNearStraightLine(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
 
-	isBot, reason, rule, start, end = checkSinglePoint(t)
+	isBot, reason, rule, start, end = checkSinglePoint(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
 
-	isBot, reason, rule, start, end = checkOverspeed(t)
+	isBot, reason, rule, start, end = checkOverspeed(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
 
-	isBot, reason, rule, start, end = checkRootlessClick(t)
+	isBot, reason, rule, start, end = checkRootlessClick(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
 
-	isBot, reason, rule, start, end = checkHighPointDensity(t)
+	isBot, reason, rule, start, end = checkHighPointDensity(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
 
-	isBot, reason, rule, start, end = checkNegativeCursor(t)
+	isBot, reason, rule, start, end = checkNegativeCursor(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
@@ -49,7 +49,7 @@ func CheckBot(t *trace.Trace) (int, string, int, int, int) {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}
 
-	isBot, reason, rule, start, end := checkBot(t)
+	isBot, reason, rule, start, end := checkBot(t.Events)
 	t.Guess = isBot
 	t.Reason = reason
 	t.RuleId = rule

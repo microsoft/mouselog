@@ -11,13 +11,13 @@ import (
 
 var SpeedLimit = 500.0
 
-func checkOverspeed(t *trace.Trace) (int, string, int, int, int) {
+func checkOverspeed(events []*trace.Event) (int, string, int, int, int) {
 	dist := 0.0
-	for i := 0; i < len(t.Events) - 1; i ++ {
-		dist += getDistance(t.Events[i].X, t.Events[i].Y, t.Events[i+1].X, t.Events[i+1].Y)
+	for i := 0; i < len(events) - 1; i ++ {
+		dist += getDistance(events[i].X, events[i].Y, events[i+1].X, events[i+1].Y)
 	}
 
-	time := t.Events[len(t.Events) - 1].Timestamp - t.Events[0].Timestamp
+	time := events[len(events) - 1].Timestamp - events[0].Timestamp
 
 	speed := dist / time
 
