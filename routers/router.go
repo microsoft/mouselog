@@ -28,13 +28,10 @@ func init() {
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "POST:UploadTrace")
 	beego.Router("/api/upload-trace", &controllers.APIController{}, "GET:UploadTrace")
 	beego.Router("/api/clear-trace", &controllers.APIController{}, "POST:ClearTrace")
-	beego.Router("/api/list-traces", &controllers.APIController{}, "GET:ListTraces")
-	beego.Router("/api/get-trace", &controllers.APIController{}, "GET:GetTrace")
 
 	beego.Router("/api/list-datasets", &controllers.APIController{}, "GET:ListDatasets")
 
 	beego.Router("/api/list-rules", &controllers.APIController{}, "GET:ListRules")
-	beego.Router("/api/upload-file", &controllers.APIController{}, "POST:UploadFile")
 
 	beego.Router("/api/get-websites", &controllers.APIController{}, "GET:GetWebsites")
 	beego.Router("/api/get-website", &controllers.APIController{}, "GET:GetWebsite")

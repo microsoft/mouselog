@@ -11,7 +11,6 @@ import {Switch, Route} from 'react-router-dom'
 import TestPage from "./TestPage";
 import DatasetPage from "./DatasetPage";
 import {Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
-import TracePage from "./TracePage";
 import RulePage from "./RulePage";
 import CanvasPage from "./CanvasPage";
 import WebsitePage from "./WebsitePage";
@@ -44,21 +43,15 @@ class App extends React.Component {
 
   componentWillMount() {
     const path = this.getUrlPath();
-    if (path.includes('datasets')) {
+    if (path.includes('websites')) {
       this.setState({selectedMenuKey: 2});
-    } else if (path.includes('trace')) {
-      this.setState({selectedMenuKey: 3});
-    } else if (path.includes('canvas')) {
-      this.setState({selectedMenuKey: 4});
-    } else if (path.includes('rule')) {
-      this.setState({selectedMenuKey: 5});
-    } else if (path.includes('pages')) {
-      this.setState({selectedMenuKey: 9});
-    } else if (path.includes('impressions')) {
-      this.setState({selectedMenuKey: 8});
     } else if (path.includes('sessions')) {
-      this.setState({selectedMenuKey: 7});
-    } else if (path.includes('websites')) {
+      this.setState({selectedMenuKey: 3});
+    } else if (path.includes('impressions')) {
+      this.setState({selectedMenuKey: 4});
+    } if (path.includes('datasets')) {
+      this.setState({selectedMenuKey: 5});
+    } else if (path.includes('rule')) {
       this.setState({selectedMenuKey: 6});
     } else {
       this.setState({selectedMenuKey: 1});
@@ -109,14 +102,14 @@ class App extends React.Component {
                     Get Started
                   </a>
                 </Menu.Item>
-                <Menu.Item key="6">
+                <Menu.Item key="2">
                   <a href="/websites">
                     Websites
                   </a>
                 </Menu.Item>
                 {
                   !this.getUrlPath().includes('sessions') ? null :
-                    <Menu.Item key="7">
+                    <Menu.Item key="3">
                       <a href="#">
                         Sessions
                       </a>
@@ -124,42 +117,18 @@ class App extends React.Component {
                 }
                 {
                   !this.getUrlPath().includes('impressions') ? null :
-                    <Menu.Item key="8">
+                    <Menu.Item key="4">
                       <a href="#">
                         Impressions
                       </a>
                     </Menu.Item>
                 }
-                {
-                  !this.getUrlPath().includes('pages') ? null :
-                    <Menu.Item key="9">
-                      <a href="#">
-                        Pages
-                      </a>
-                    </Menu.Item>
-                }
-                <Menu.Item key="2">
+                <Menu.Item key="5">
                   <a href="/datasets">
                     Dataset
                   </a>
                 </Menu.Item>
-                {
-                  !this.getUrlPath().includes('trace') ? null :
-                    <Menu.Item key="3">
-                      <a href="#">
-                        Trace
-                      </a>
-                    </Menu.Item>
-                }
-                {
-                  !this.getUrlPath().includes('canvas') ? null :
-                    <Menu.Item key="4">
-                      <a href="#">
-                        Canvas
-                      </a>
-                    </Menu.Item>
-                }
-                <Menu.Item key="5">
+                <Menu.Item key="6">
                   <a href="/rule">
                     Rule
                   </a>
@@ -193,8 +162,6 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={TestPage}/>
             <Route path="/datasets/" component={DatasetPage}/>
-            <Route path="/trace/:sessionId" component={TracePage}/>
-            <Route path="/canvas/:sessionId/:traceId" component={CanvasPage}/>
             <Route path="/rule/" component={RulePage}/>
             <Route exact path="/websites/" component={WebsitePage}/>
             <Route exact path="/websites/:websiteId" component={WebsiteEditPage}/>

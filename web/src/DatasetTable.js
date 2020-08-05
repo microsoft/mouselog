@@ -4,13 +4,11 @@
  */
 
 import React from "react";
-import {Table, Popover, Button, Tag, Typography} from 'antd';
-import Canvas from "./Canvas";
+import {Table} from 'antd';
 import {Group, Layer, Rect, Stage, Text} from "react-konva";
 import * as Backend from "./Backend";
 import {Link} from "react-router-dom";
 import * as Setting from "./Setting";
-import UploadFile from "./UploadFile";
 
 class DatasetTable extends React.Component {
   constructor(props) {
@@ -147,7 +145,6 @@ class DatasetTable extends React.Component {
       <div>
         <Table rowSelection={this.props.rowRadioSelection} columns={columns} dataSource={this.props.datasets} size="small"
                bordered title={() => 'Datasets'} pagination={{pageSize: 100}} scroll={{y: 'calc(90vh - 200px)'}}/>
-        <UploadFile/>
       </div>
     );
   }

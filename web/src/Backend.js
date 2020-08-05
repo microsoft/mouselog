@@ -21,20 +21,6 @@ export function getSessionId(websiteId, userId = "") {
   }).then(res => res.json());
 }
 
-export function listTrace(fileId, perPage = null, page = null) {
-  return fetch(`${Setting.ServerUrl}/api/list-traces?fileId=${fileId}&perPage=${perPage ? perPage : 10000000}&page=${page ? page : 0}`, {
-    method: 'GET',
-    credentials: 'include'
-  }).then(res => res.json());
-}
-
-export function getTrace(fileId, traceId) {
-  return fetch(`${Setting.ServerUrl}/api/get-trace?fileId=${fileId}&traceId=${traceId}`, {
-    method: 'GET',
-    credentials: 'include'
-  }).then(res => res.json());
-}
-
 export function listDatasets() {
   return fetch(`${Setting.ServerUrl}/api/list-datasets`, {
     method: 'GET',
