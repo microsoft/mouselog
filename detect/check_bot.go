@@ -44,7 +44,22 @@ func checkBot(events []*trace.Event) (int, string, int, int, int) {
 	return 0, ReasonNone, RuleNone, -1, -1
 }
 
-func CheckBot(t *trace.Trace) (int, string, int, int, int) {
+func CheckBotForImpression(impression *trace.Impression) (int, string, int, int, int) {
+	if impression == nil {
+		return 0, ReasonNone, RuleNone, -1, -1
+	}
+
+	isBot, reason, rule, start, end := checkBot(impression.Events)
+	impression.Guess = isBot
+	impression.Reason = reason
+	impression.RuleId = rule
+	impression.RuleStart = start
+	impression.RuleEnd = end
+
+	return isBot, reason, rule, start, end
+}
+
+func CheckBotForTrace(t *trace.Trace) (int, string, int, int, int) {
 	if t == nil {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}
@@ -62,7 +77,7 @@ func CheckBot(t *trace.Trace) (int, string, int, int, int) {
 func GetDetectResult(ss *trace.Session, traceId int) *trace.Session {
 	t, ok := ss.TraceMap[traceId]
 	if traceId != -1 || ok {
-		CheckBot(t)
+		CheckBotForTrace(t)
 	}
 
 	return ss

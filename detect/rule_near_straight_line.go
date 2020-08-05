@@ -17,7 +17,7 @@ func checkNearStraightLine(events []*trace.Event) (int, string, int, int, int) {
 	for i := 0; i < len(events)-1; i++ {
 		if events[i+1].Timestamp-events[i].Timestamp < 0.1 {
 			targetLen += 1
-			if targetLen >= lineLimit && isLineDistanceSumLargerThan(events, i-targetLen, i, distLimit) {
+			if targetLen >= lineLimit && isLineDistanceSumLargerThan(events, i-targetLen+1, i, distLimit) {
 				return 1, fmt.Sprintf("near straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", lineLimit, distLimit, i-targetLen, i), RuleNearStraightLine, i - targetLen, i
 			}
 		} else {

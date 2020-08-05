@@ -10,9 +10,8 @@ import * as Setting from "./Setting";
 import {Switch, Route} from 'react-router-dom'
 import TestPage from "./TestPage";
 import DashboardPage from "./DashboardPage";
-import {Badge, Button, Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
+import {Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
 import TracePage from "./TracePage";
-import * as Backend from "./Backend";
 import RulePage from "./RulePage";
 import CanvasPage from "./CanvasPage";
 import WebsitePage from "./WebsitePage";
@@ -21,8 +20,8 @@ import SessionPage from "./SessionPage";
 import ImpressionPage from "./ImpressionPage";
 import PagePage from "./PagePage";
 
-const {Title, Paragraph, Text} = Typography;
-const {Header, Footer, Sider, Content} = Layout;
+const {Text} = Typography;
+const {Header, Footer} = Layout;
 
 class App extends React.Component {
   constructor(props) {

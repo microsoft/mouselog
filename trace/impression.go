@@ -23,6 +23,13 @@ type Impression struct {
 	ClientIp  string `xorm:"varchar(100)" json:"clientIp"`
 	UserId    string `xorm:"varchar(100)" json:"userId"`
 
+	Label     int    `json:"label"`
+	Guess     int    `json:"guess"`
+	Reason    string `json:"reason"`
+	RuleId    int    `json:"ruleId"`
+	RuleStart int    `json:"ruleStart"`
+	RuleEnd   int    `json:"ruleEnd"`
+
 	Events []*Event `xorm:"mediumtext" json:"events"`
 }
 

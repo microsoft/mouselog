@@ -4,17 +4,30 @@
 package controllers
 
 import (
+	"github.com/microsoft/mouselog/detect"
 	"github.com/microsoft/mouselog/trace"
 	"github.com/microsoft/mouselog/util"
 )
 
 func (c *APIController) GetImpressions() {
-	c.Data["json"] = trace.GetImpressions(c.Input().Get("websiteId"), c.Input().Get("sessionId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+	impressions := trace.GetImpressions(c.Input().Get("websiteId"), c.Input().Get("sessionId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+
+	for _, impression := range impressions {
+		detect.CheckBotForImpression(impression)
+	}
+
+	c.Data["json"] = impressions
 	c.ServeJSON()
 }
 
 func (c *APIController) GetImpressionsAll() {
-	c.Data["json"] = trace.GetImpressionsAll(c.Input().Get("websiteId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+	impressions := trace.GetImpressionsAll(c.Input().Get("websiteId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+
+	for _, impression := range impressions {
+		detect.CheckBotForImpression(impression)
+	}
+
+	c.Data["json"] = impressions
 	c.ServeJSON()
 }
 
