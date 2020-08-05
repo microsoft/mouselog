@@ -12,7 +12,7 @@ import * as WebsiteBackend from "./backend/WebsiteBackend";
 import BreadcrumbBar from "./BreadcrumbBar";
 
 const { Option } = Select;
-const MAX_PAGE_SIZE = 1000;
+const MAX_PAGE_SIZE = 1000000;
 
 class SessionPage extends React.Component {
   constructor(props) {

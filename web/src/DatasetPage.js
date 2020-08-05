@@ -152,7 +152,11 @@ class DatasetPage extends React.Component {
           key: `${p.ruleId}. ${p.ruleName}`,
           width: '70px',
           render: (text, dataset, index) => {
-            return dataset.ruleCounts[i];
+            if (dataset.ruleCounts[i] === 0) {
+              return dataset.ruleCounts[i];
+            } else {
+              return <Link to={`/websites/${dataset.id}/impressions/rules/${p.ruleId}`} target='_blank'>{dataset.ruleCounts[i]}</Link>
+            }
           }
         }
       );

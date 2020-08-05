@@ -168,6 +168,7 @@ class App extends React.Component {
             <Route exact path="/websites/:websiteId/sessions" component={SessionPage}/>
             <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions" component={ImpressionPage}/>
             <Route exact path="/websites/:websiteId/impressions" component={ImpressionPage}/>
+            <Route exact path="/websites/:websiteId/impressions/rules/:ruleId" component={ImpressionPage}/>
             <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions/:impressionId/events" component={CanvasPage}/>
             <Route exact path="/websites/:websiteId/pages" component={PagePage}/>
           </Switch>

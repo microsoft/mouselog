@@ -16,7 +16,7 @@ import BreadcrumbBar from "./BreadcrumbBar";
 import * as Backend from "./Backend";
 
 const { Option } = Select;
-const MAX_PAGE_SIZE = 1000;
+const MAX_PAGE_SIZE = 1000000;
 
 class ImpressionPage extends React.Component {
   constructor(props) {
@@ -25,6 +25,7 @@ class ImpressionPage extends React.Component {
       classes: props,
       websiteId: props.match.params.websiteId,
       sessionId: props.match.params.sessionId,
+      ruleId: props.match.params.ruleId,
       impressions: [],
       website: null,
       tableLoading: false,
@@ -78,6 +79,15 @@ class ImpressionPage extends React.Component {
     this.getWebsite();
   }
 
+  filterImpressions(impressions) {
+    if (this.state.ruleId === undefined) {
+      return impressions;
+    } else {
+      const ruleId = parseInt(this.state.ruleId);
+      return impressions.filter(impression => impression.ruleId === ruleId);
+    }
+  }
+
   getImpressions(pageSize, current, sortField, sortOrder) {
     this.setState({
       tableLoading: true
@@ -91,12 +101,11 @@ class ImpressionPage extends React.Component {
       sortField,
       sortOrder === "descend" ? 0 : 1 // "ascend": 1, "descend": 0
     ).then((res) => {
-          this.setState({
-            impressions: res,
-            tableLoading: false
-          });
-        }
-      );
+      this.setState({
+        impressions: this.filterImpressions(res),
+        tableLoading: false
+      });
+    });
   }
 
   getImpressionsAll(pageSize, current, sortField, sortOrder) {
@@ -111,12 +120,11 @@ class ImpressionPage extends React.Component {
       sortField,
       sortOrder === "descend" ? 0 : 1 // "ascend": 1, "descend": 0
     ).then((res) => {
-          this.setState({
-            impressions: res,
-            tableLoading: false
-          });
-        }
-      );
+      this.setState({
+        impressions: this.filterImpressions(res),
+        tableLoading: false
+      });
+    });
   }
 
   getImpressionCount() {
@@ -411,7 +419,7 @@ class ImpressionPage extends React.Component {
             this.onTableChange.call(this, pagination, filters, sorter);
           }}
            rowClassName={(record, index) => {
-             return (record.label === 1 || record.guess === 1) ? 'bot-row' : ''
+             return (record.guess === 1) ? 'bot-row' : ''
            }}/>
         />
         <Row type="flex" justify="end" style={{marginRight: 20}}>
