@@ -92,18 +92,21 @@ class DatasetTable extends React.Component {
         title: 'Dataset',
         dataIndex: 'id',
         key: 'id',
+        width: '100px',
         render: (text, record, index) => {
-          return <Link to={`/trace/${text}`} target='_blank'>{text}</Link>
+          return <Link to={`/websites/${text}/impressions`} target='_blank'>{text}</Link>
         }
       },
       {
-        title: 'Trace Count',
-        dataIndex: 'traceSize',
-        key: 'traceSize',
+        title: 'Impression Count',
+        dataIndex: 'impressionCount',
+        key: 'impressionCount',
+        width: '50px',
       },
       {
         title: 'Confusing Matrix',
         key: 'cm',
+        width: '100px',
         render: (text, dataset, index) => {
           return this.renderCM(dataset.tn, dataset.fp, dataset.fn, dataset.tp);
         }
@@ -111,6 +114,7 @@ class DatasetTable extends React.Component {
       {
         title: 'Precision (%)',
         key: 'precision',
+        width: '50px',
         render: (text, dataset, index) => {
           return (dataset.tp * 100.0 / (dataset.tp + dataset.fp)).toFixed(2)
         }
@@ -118,6 +122,7 @@ class DatasetTable extends React.Component {
       {
         title: 'Recall (%)',
         key: 'recall',
+        width: '50px',
         render: (text, dataset, index) => {
           return (dataset.tp * 100.0 / (dataset.tp + dataset.fn)).toFixed(2)
         }
@@ -134,6 +139,7 @@ class DatasetTable extends React.Component {
         {
           title: `${p.ruleId}. ${p.ruleName}`,
           key: `${p.ruleId}. ${p.ruleName}`,
+          width: '70px',
           render: (text, dataset, index) => {
             return dataset.ruleCounts[i];
           }

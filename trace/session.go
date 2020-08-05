@@ -188,14 +188,14 @@ func (ss *Session) ToJson() *SessionJson {
 	}
 
 	sj := SessionJson{
-		Id:         ss.Id,
-		TraceSize:  len(ss.Impressions),
-		TN:         ss.TN,
-		FP:         ss.FP,
-		FN:         ss.FN,
-		TP:         ss.TP,
-		UN:         ss.UN,
-		RuleCounts: ruleCounts,
+		Id:              ss.Id,
+		ImpressionCount: len(ss.Impressions),
+		TN:              ss.TN,
+		FP:              ss.FP,
+		FN:              ss.FN,
+		TP:              ss.TP,
+		UN:              ss.UN,
+		RuleCounts:      ruleCounts,
 	}
 	return &sj
 }

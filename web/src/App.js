@@ -43,13 +43,13 @@ class App extends React.Component {
 
   componentWillMount() {
     const path = this.getUrlPath();
-    if (path.includes('websites')) {
+    if (path.includes('impressions')) {
+      this.setState({selectedMenuKey: 4});
+    } else if (path.includes('websites')) {
       this.setState({selectedMenuKey: 2});
     } else if (path.includes('sessions')) {
       this.setState({selectedMenuKey: 3});
-    } else if (path.includes('impressions')) {
-      this.setState({selectedMenuKey: 4});
-    } if (path.includes('datasets')) {
+    } else if (path.includes('datasets')) {
       this.setState({selectedMenuKey: 5});
     } else if (path.includes('rule')) {
       this.setState({selectedMenuKey: 6});

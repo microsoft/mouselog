@@ -6,7 +6,7 @@ package trace
 type SessionJson struct {
 	Id string `json:"id"`
 
-	TraceSize int `json:"traceSize"`
+	ImpressionCount int `json:"impressionCount"`
 
 	TN int `json:"tn"`
 	FP int `json:"fp"`
