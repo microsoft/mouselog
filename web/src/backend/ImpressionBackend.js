@@ -35,8 +35,8 @@ export function getImpressionsAll(websiteId, resultCount, offset, sortField, sor
   }).then(res => res.json());
 }
 
-export function getImpression(id) {
-  return fetch(`${Setting.ServerUrl}/api/get-impression?id=${id}`, {
+export function getImpression(id, websiteId) {
+  return fetch(`${Setting.ServerUrl}/api/get-impression?id=${id}&websiteId=${websiteId}`, {
     method: "GET",
     credentials: "include"
   }).then(res => res.json());

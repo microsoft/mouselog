@@ -35,7 +35,7 @@ class CanvasPage extends React.Component {
   }
 
   getImpression() {
-    ImpressionBackend.getImpression(this.state.impressionId)
+    ImpressionBackend.getImpression(this.state.impressionId, this.state.websiteId)
       .then(res => {
         this.setState({
           trace: res,

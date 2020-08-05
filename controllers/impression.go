@@ -32,7 +32,7 @@ func (c *APIController) GetImpressionsAll() {
 }
 
 func (c *APIController) GetImpression() {
-	c.Data["json"] = trace.GetImpression(c.Input().Get("id"))
+	c.Data["json"] = trace.GetImpression(c.Input().Get("id"), c.Input().Get("websiteId"))
 	c.ServeJSON()
 }
 

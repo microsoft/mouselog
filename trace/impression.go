@@ -11,7 +11,7 @@ import (
 type Impression struct {
 	Id          string `xorm:"varchar(100) notnull pk" json:"id"`
 	SessionId   string `xorm:"varchar(100)" json:"sessionId"`
-	WebsiteId   string `xorm:"varchar(100)" json:"websiteId"`
+	WebsiteId   string `xorm:"varchar(100) notnull pk" json:"websiteId"`
 	CreatedTime string `xorm:"varchar(100)" json:"createdTime"`
 	UrlPath     string `xorm:"varchar(500)" json:"urlPath"`
 
@@ -73,8 +73,8 @@ func GetImpressionsAll(websiteId string, resultCount int, offset int, sortField 
 	return impressions
 }
 
-func GetImpression(id string) *Impression {
-	im := Impression{Id: id}
+func GetImpression(id string, websiteId string) *Impression {
+	im := Impression{Id: id, WebsiteId: websiteId}
 	existed, err := ormManager.engine.Get(&im)
 	if err != nil {
 		panic(err)
@@ -87,8 +87,8 @@ func GetImpression(id string) *Impression {
 	}
 }
 
-func updateImpression(id string, impression *Impression) bool {
-	if GetImpression(id) == nil {
+func updateImpression(id string, websiteId string, impression *Impression) bool {
+	if GetImpression(id, websiteId) == nil {
 		return false
 	}
 
@@ -163,13 +163,13 @@ func DeleteImpressions(websiteId string) bool {
 	return affected != 0
 }
 
-func AppendTraceToImpression(id string, trace *Trace) {
+func AppendTraceToImpression(id string, websiteId string, trace *Trace) {
 	if len(trace.Events) == 0 {
 		return
 	}
 	impressionMapMutex.TryLock(id)
 
-	impression := GetImpression(id)
+	impression := GetImpression(id, websiteId)
 
 	// Merge Sort
 	impEvtCount := len(impression.Events)
@@ -190,7 +190,7 @@ func AppendTraceToImpression(id string, trace *Trace) {
 		impression.Events = append(tmp, impression.Events[i:]...)
 	}
 
-	updateImpression(id, impression)
+	updateImpression(id, websiteId, impression)
 
 	impressionMapMutex.Unlock(id)
 }
