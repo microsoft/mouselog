@@ -14,7 +14,7 @@ func addSession(sessions *[]*trace.Session, sessionMap *map[string]*trace.Sessio
 }
 
 func addImpression(impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, id string, sessionId string, websiteId string, createdTime string, urlPath string, userAgent string, clientIp string) {
-	im := &trace.Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: createdTime, UrlPath: urlPath, UserAgent: userAgent, ClientIp: clientIp, Events: []trace.Event{}}
+	im := &trace.Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: createdTime, UrlPath: urlPath, UserAgent: userAgent, ClientIp: clientIp, Events: []*trace.Event{}}
 	if _, ok := (*impressionMap)[id]; !ok {
 		*impressions = append(*impressions, im)
 		(*impressionMap)[id] = im
@@ -27,6 +27,7 @@ func appendTraceToImpression(impressionMap *map[string]*trace.Impression, id str
 	impression.Width = trace.Width
 	impression.Height = trace.Height
 	impression.PageLoadTime = trace.PageLoadTime
+	impression.Label = trace.Label
 
 	impression.Events = trace.Events
 }
