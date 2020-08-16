@@ -226,79 +226,79 @@ class ImpressionPage extends React.Component {
       //   dataIndex: 'id',
       //   key: 'id',
       // },
-      {
-        title: 'Created Time',
-        dataIndex: 'createdTime',
-        key: 'createdTime',
-        sorter: (a, b) => a.createdTime.localeCompare(b.createdTime),
-        render: (text, record, index) => {
-          return Setting.getFormattedDate(text);
-        }
-      },
-      {
-        title: 'URL Path',
-        dataIndex: 'urlPath',
-        key: 'urlPath',
-        width: '300px',
-        sorter: (a, b) => a.urlPath.localeCompare(b.urlPath),
-        render: (text, record, index) => {
-          text = decodeURI(text);
-
-          if (this.state.website === null) {
-            return text;
-          }
-
-          let url = `${this.state.website.url}${text}`;
-          if (text.startsWith("http://") || text.startsWith("https://")) {
-            url = text;
-          }
-
-          return (
-            <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
-              <a target="_blank" href={url}>
-                {text}
-              </a>
-            </span>
-          )
-        }
-      },
-      {
-        title: 'User Id',
-        dataIndex: 'userId',
-        key: 'userId',
-        sorter: (a, b) => a.userId.localeCompare(b.userId),
-      },
+      // {
+      //   title: 'Created Time',
+      //   dataIndex: 'createdTime',
+      //   key: 'createdTime',
+      //   sorter: (a, b) => a.createdTime.localeCompare(b.createdTime),
+      //   render: (text, record, index) => {
+      //     return Setting.getFormattedDate(text);
+      //   }
+      // },
+      // {
+      //   title: 'URL Path',
+      //   dataIndex: 'urlPath',
+      //   key: 'urlPath',
+      //   width: '300px',
+      //   sorter: (a, b) => a.urlPath.localeCompare(b.urlPath),
+      //   render: (text, record, index) => {
+      //     text = decodeURI(text);
+      //
+      //     if (this.state.website === null) {
+      //       return text;
+      //     }
+      //
+      //     let url = `${this.state.website.url}${text}`;
+      //     if (text.startsWith("http://") || text.startsWith("https://")) {
+      //       url = text;
+      //     }
+      //
+      //     return (
+      //       <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
+      //         <a target="_blank" href={url}>
+      //           {text}
+      //         </a>
+      //       </span>
+      //     )
+      //   }
+      // },
+      // {
+      //   title: 'User Id',
+      //   dataIndex: 'userId',
+      //   key: 'userId',
+      //   sorter: (a, b) => a.userId.localeCompare(b.userId),
+      // },
     ];
 
-    if (this.state.sessionId === undefined) {
-      columns.push(
-        {
-          title: 'User Agent',
-          dataIndex: 'userAgent',
-          key: 'userAgent',
-          sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
-          render: (text, record, index) => {
-            return Setting.wrapUserAgent(text);
-          }
-        },
-        {
-          title: 'Client IP',
-          dataIndex: 'clientIp',
-          key: 'clientIp',
-          width: '130px',
-          sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
-          render: (text, record, index) => {
-            return (
-              <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
-                {
-                  Setting.wrapClientIp(text)
-                }
-            </span>
-            )
-          }
-        },
-      );
-    }
+    // if (this.state.sessionId === undefined) {
+    //   columns.push(
+    //     {
+    //       title: 'User Agent',
+    //       dataIndex: 'userAgent',
+    //       key: 'userAgent',
+    //       sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
+    //       render: (text, record, index) => {
+    //         return Setting.wrapUserAgent(text);
+    //       }
+    //     },
+    //     {
+    //       title: 'Client IP',
+    //       dataIndex: 'clientIp',
+    //       key: 'clientIp',
+    //       width: '130px',
+    //       sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
+    //       render: (text, record, index) => {
+    //         return (
+    //           <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
+    //             {
+    //               Setting.wrapClientIp(text)
+    //             }
+    //         </span>
+    //         )
+    //       }
+    //     },
+    //   );
+    // }
 
     columns.push(
       {
