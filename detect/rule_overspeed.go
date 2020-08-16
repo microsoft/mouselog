@@ -9,7 +9,7 @@ import (
 	"github.com/microsoft/mouselog/trace"
 )
 
-var SpeedLimit = 500.0
+var SpeedLimit = 1000.0
 
 func checkOverspeed(events []*trace.Event) (int, string, int, int, int) {
 	dist := 0.0

@@ -11,17 +11,17 @@ func checkBot(events []*trace.Event) (int, string, int, int, int) {
 	//	return isBot, reason, rule, start, end
 	//}
 
-	isBot, reason, rule, start, end := checkNearStraightLine(events)
+	isBot, reason, rule, start, end := checkOverspeed(events)
+	if isBot != 0 {
+		return isBot, reason, rule, start, end
+	}
+
+	isBot, reason, rule, start, end = checkNearStraightLine(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
 
 	isBot, reason, rule, start, end = checkSinglePoint(events)
-	if isBot != 0 {
-		return isBot, reason, rule, start, end
-	}
-
-	isBot, reason, rule, start, end = checkOverspeed(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
 	}
