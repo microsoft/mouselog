@@ -3,5 +3,5 @@
 
 package util
 
-const BaseDir = "I:/Microsoft/LogNet - General/"
+const BaseDir = "D:/Microsoft/LogNet - General/"
 const CacheDir = BaseDir + "RawLogsCache/"
