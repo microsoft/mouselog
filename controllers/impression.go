@@ -32,7 +32,11 @@ func (c *APIController) GetImpressionsAll() {
 }
 
 func (c *APIController) GetImpression() {
-	c.Data["json"] = trace.GetImpression(c.Input().Get("id"), c.Input().Get("websiteId"))
+	impression := trace.GetImpression(c.Input().Get("id"), c.Input().Get("websiteId"))
+
+	detect.CheckBotForImpression(impression)
+
+	c.Data["json"] = impression
 	c.ServeJSON()
 }
 

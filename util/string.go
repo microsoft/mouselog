@@ -26,6 +26,10 @@ func ParseFloat(s string) float64 {
 	return f
 }
 
+func FormatFloat(f float64) string {
+	return strconv.FormatFloat(f, 'f', -1, 64)
+}
+
 func UnescapeUserAgent(userAgent string) string {
 	return strings.Replace(userAgent, "#TAB#", ",", -1)
 }

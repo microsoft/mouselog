@@ -180,7 +180,7 @@ func (ss *Session) AddTrace(t *Trace) {
 
 func (ss *Session) ToJson() *SessionJson {
 	ruleCounts := []int{}
-	for i := 0; i < 9; i++ {
+	for i := 0; i < 10; i++ {
 		ruleCounts = append(ruleCounts, 0)
 	}
 	for _, impression := range ss.Impressions {

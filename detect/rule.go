@@ -13,6 +13,7 @@ const (
 	RuleRootlessClick
 	RuleHighPointDensity
 	RuleNegativeCursor
+	RuleTimeConflict
 	RuleUpperLimit
 )
 
@@ -38,6 +39,8 @@ func GetRuleName(rule int) string {
 		return "Point density too high"
 	case RuleNegativeCursor:
 		return "Negative cursor found"
+	case RuleTimeConflict:
+		return "Time conflict found"
 	default:
 		return ""
 	}
