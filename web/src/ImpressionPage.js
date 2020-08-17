@@ -420,7 +420,7 @@ class ImpressionPage extends React.Component {
           }}
            rowClassName={(record, index) => {
              return (record.guess === 1) ? 'bot-row' : ''
-           }}/>
+           }}
         />
         <Row type="flex" justify="end" style={{marginRight: 20}}>
           <Col>
