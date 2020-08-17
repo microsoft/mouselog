@@ -53,7 +53,7 @@ func (c *APIController) ListDatasets() {
 	path := filepath.Join(util.CacheDir, "mouselog")
 	datasets := listDatasets(path)
 	for _, ss := range datasets {
-		res = append(res, ss.ToJson())
+		res = append(res, ss.ToJson(detect.RuleUpperLimit))
 	}
 
 	c.Data["json"] = res

@@ -178,9 +178,9 @@ func (ss *Session) AddTrace(t *Trace) {
 	}
 }
 
-func (ss *Session) ToJson() *SessionJson {
+func (ss *Session) ToJson(ruleCount int) *SessionJson {
 	ruleCounts := []int{}
-	for i := 0; i < 10; i++ {
+	for i := 0; i < ruleCount; i++ {
 		ruleCounts = append(ruleCounts, 0)
 	}
 	for _, impression := range ss.Impressions {
