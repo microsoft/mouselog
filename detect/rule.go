@@ -5,11 +5,12 @@ package detect
 
 const (
 	RuleNone = iota
+	RuleOverspeed
+	RuleAccelerationBeforeClick
 	RuleStraightLine
 	//RuleNearStraightLine
 	RuleEquallySpacedPoints
 	RuleSinglePoint
-	RuleOverspeed
 	RuleRootlessClick
 	RuleHighPointDensity
 	//RuleNegativeCursor
@@ -23,6 +24,10 @@ func GetRuleName(rule int) string {
 	switch rule {
 	case RuleNone:
 		return "Human"
+	case RuleOverspeed:
+		return "Pointer speed too fast"
+	case RuleAccelerationBeforeClick:
+		return "Acceleration before click abnormal"
 	case RuleStraightLine:
 		return "Straight line found"
 	//case RuleNearStraightLine:
@@ -31,8 +36,6 @@ func GetRuleName(rule int) string {
 		return "Multiple equally spaced points found"
 	case RuleSinglePoint:
 		return "Only one point found"
-	case RuleOverspeed:
-		return "Pointer speed too fast"
 	case RuleRootlessClick:
 		return "Rootless click found"
 	case RuleHighPointDensity:

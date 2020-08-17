@@ -9,8 +9,8 @@ import (
 	"github.com/microsoft/mouselog/trace"
 )
 
-func getSpeed(e1 *trace.Event, e2 *trace.Event) float64 {
-	return getDistanceRaw(e1.X, e1.Y, e2.X, e2.Y) / (e2.Timestamp - e1.Timestamp)
+func getSpeed(e1 *trace.Event, e2 *trace.Event) int {
+	return int(getDistanceRaw(e1.X, e1.Y, e2.X, e2.Y) / (e2.Timestamp - e1.Timestamp))
 }
 
 func getDistance(e1 *trace.Event, e2 *trace.Event) float64 {

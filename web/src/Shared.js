@@ -72,11 +72,11 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
       key: 'type',
       width: 110,
     },
-    {
-      title: 'Btn',
-      dataIndex: 'button',
-      key: 'button',
-    },
+    // {
+    //   title: 'Btn',
+    //   dataIndex: 'button',
+    //   key: 'button',
+    // },
     {
       title: 'X',
       dataIndex: 'x',
@@ -86,7 +86,17 @@ export function renderEventTable(title, events, isLong=false, rowClickHandler=nu
       title: 'Y',
       dataIndex: 'y',
       key: 'y',
-    }
+    },
+    {
+      title: 'Speed',
+      dataIndex: 'speed',
+      key: 'speed',
+    },
+    {
+      title: 'Acc',
+      dataIndex: 'acceleration',
+      key: 'acceleration',
+    },
   ];
 
   let handleRow = record => {

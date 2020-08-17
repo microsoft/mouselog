@@ -14,6 +14,9 @@ type Event struct {
 	DeltaY    int     `json:"deltaY"`
 	Width     int     `json:"width"`
 	Height    int     `json:"height"`
+
+	Speed        int `json:"speed"`
+	Acceleration int `json:"acceleration"`
 }
 
 var targetEventList = []string{

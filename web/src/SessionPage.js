@@ -212,7 +212,7 @@ class SessionPage extends React.Component {
               <Option value="100">100</Option>
               <Option value="All">All</Option>
             </Select>
-            sessions per page.
+            sessions / page
           </Col>
         </Row>
       </div>
