@@ -5,7 +5,7 @@
 
 import React from "react";
 import * as Setting from "./Setting";
-import {Alert, Button, Card, Col, Input, Progress, Row, Select, Switch, Tag, Typography} from "antd";
+import {Alert, Button, Card, Col, Input, Progress, Row, Select, Statistic, Switch, Tag, Typography} from "antd";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
 import EventSelectionCheckBox from "./EventSelectionCheckBox"
@@ -371,6 +371,19 @@ class TestPage extends React.Component {
     }
   }
 
+  getAverageSpeed() {
+    if (this.trace.events.length <= 1) {
+      return 0;
+    } else {
+      let distSum = 0;
+      for (let i = 0; i < this.trace.events.length - 1; i ++) {
+        distSum += this.getDistance(this.trace.events[i], this.trace.events[i + 1]);
+      }
+
+      return Math.round(distSum / (this.trace.events[this.trace.events.length - 1].timestamp - this.trace.events[0].timestamp));
+    }
+  }
+
   renderLeft() {
     return (
       <div>
@@ -382,13 +395,15 @@ class TestPage extends React.Component {
         </Row>
         <Row style={{marginTop: "10px"}}>
           <Col span={12}>
-            {/*<div><Text>Events for: </Text><Tag color="#108ee9">{this.state.speed}</Tag></div>*/}
             <Text>Events/s: </Text>
             <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80}/>
           </Col>
           <Col span={12}>
-            <div><Text>Payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>
+            <Statistic title="Speed (pixels/s)" value={this.getAverageSpeed()} />
           </Col>
+          {/*<Col span={12}>*/}
+          {/*  <div><Text>Payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>*/}
+          {/*</Col>*/}
           <Text>&nbsp;</Text>
         </Row>
         <Row>
