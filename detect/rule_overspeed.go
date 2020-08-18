@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/mouselog/trace"
 )
 
+var EventLimit = 50
 var SpeedLimit = 1000.0
 
 func checkOverspeed(events []*trace.Event) (int, string, int, int, int) {
@@ -21,8 +22,8 @@ func checkOverspeed(events []*trace.Event) (int, string, int, int, int) {
 
 	speed := dist / time
 
-	if time > 20 && speed > SpeedLimit {
-		return 1, fmt.Sprintf("pointer speed too fast (%d > %d pixels/s) in more than 20 seconds", int(speed), int(SpeedLimit)), RuleOverspeed, -1, -1
+	if len(events) > EventLimit && speed > SpeedLimit {
+		return 1, fmt.Sprintf("pointer speed too fast (%d > %d pixels/s) for more than %d events", int(speed), int(SpeedLimit), EventLimit), RuleOverspeed, -1, -1
 	} else {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}
