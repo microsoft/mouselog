@@ -9,23 +9,52 @@ import (
 	"github.com/microsoft/mouselog/util"
 )
 
+func getFilteredImpressions(impressions []*trace.Impression, ruleId int, limit int, offset int) []*trace.Impression {
+	if ruleId != -1 {
+		impressionsForRule := []*trace.Impression{}
+		for _, impression := range impressions {
+			if impression.RuleId == ruleId {
+				impressionsForRule = append(impressionsForRule, impression)
+			}
+		}
+		impressions = impressionsForRule
+	}
+
+	last := limit * (offset + 1)
+	if last > len(impressions) {
+		last = len(impressions)
+	}
+	res := impressions[(limit * offset):last]
+	return res
+}
+
 func (c *APIController) GetImpressions() {
-	impressions := trace.GetImpressions(c.Input().Get("websiteId"), c.Input().Get("sessionId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+	ruleId := util.ParseInt(c.Input().Get("ruleId"))
+	limit := util.ParseInt(c.Input().Get("resultCount"))
+	offset := util.ParseInt(c.Input().Get("offset"))
+	impressions := trace.GetImpressions(c.Input().Get("websiteId"), c.Input().Get("sessionId"), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
 
 	for _, impression := range impressions {
 		detect.CheckBotForImpression(impression)
 	}
+
+	impressions = getFilteredImpressions(impressions, ruleId, limit, offset)
 
 	c.Data["json"] = impressions
 	c.ServeJSON()
 }
 
 func (c *APIController) GetImpressionsAll() {
-	impressions := trace.GetImpressionsAll(c.Input().Get("websiteId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+	ruleId := util.ParseInt(c.Input().Get("ruleId"))
+	limit := util.ParseInt(c.Input().Get("resultCount"))
+	offset := util.ParseInt(c.Input().Get("offset"))
+	impressions := trace.GetImpressionsAll(c.Input().Get("websiteId"), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
 
 	for _, impression := range impressions {
 		detect.CheckBotForImpression(impression)
 	}
+
+	impressions = getFilteredImpressions(impressions, ruleId, limit, offset)
 
 	c.Data["json"] = impressions
 	c.ServeJSON()

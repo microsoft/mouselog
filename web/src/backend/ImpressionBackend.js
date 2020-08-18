@@ -6,10 +6,11 @@
 import * as Setting from "../Setting";
 import {humpToLine} from "../utils";
 
-export function getImpressions(websiteId, sessionId, resultCount, offset, sortField, sortOrder) {
+export function getImpressions(websiteId, sessionId, ruleId, resultCount, offset, sortField, sortOrder) {
   let requestParams = [
     `websiteId=${websiteId}`,
     `sessionId=${sessionId}`,
+    `ruleId=${ruleId}`,
     `resultCount=${resultCount}`,
     `offset=${offset}`,
     `sortField=${humpToLine(sortField)}`,
@@ -21,9 +22,10 @@ export function getImpressions(websiteId, sessionId, resultCount, offset, sortFi
   }).then(res => res.json());
 }
 
-export function getImpressionsAll(websiteId, resultCount, offset, sortField, sortOrder) {
+export function getImpressionsAll(websiteId, ruleId, resultCount, offset, sortField, sortOrder) {
   let requestParams = [
     `websiteId=${websiteId}`,
+    `ruleId=${ruleId}`,
     `resultCount=${resultCount}`,
     `offset=${offset}`,
     `sortField=${humpToLine(sortField)}`,

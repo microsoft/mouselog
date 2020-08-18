@@ -33,18 +33,18 @@ type Impression struct {
 	Events []*Event `xorm:"mediumtext" json:"events"`
 }
 
-func GetImpressions(websiteId string, sessionId string, resultCount int, offset int, sortField string, sortOrder string) []*Impression {
+func GetImpressions(websiteId string, sessionId string, sortField string, sortOrder string) []*Impression {
 	impressions := []*Impression{}
 	var err error
 
 	if sortField != "" {
 		if sortOrder == "1" {
-			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc(sortField).Limit(resultCount, offset).Find(&impressions)
+			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc(sortField).Find(&impressions)
 		} else {
-			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Desc(sortField).Limit(resultCount, offset).Find(&impressions)
+			err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Desc(sortField).Find(&impressions)
 		}
 	} else {
-		err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc("created_time").Limit(resultCount, offset).Find(&impressions)
+		err = ormManager.engine.Where("session_id = ?", sessionId).And("website_id = ?", websiteId).Asc("created_time").Find(&impressions)
 	}
 	if err != nil {
 		panic(err)
@@ -53,18 +53,18 @@ func GetImpressions(websiteId string, sessionId string, resultCount int, offset 
 	return impressions
 }
 
-func GetImpressionsAll(websiteId string, resultCount int, offset int, sortField string, sortOrder string) []*Impression {
+func GetImpressionsAll(websiteId string, sortField string, sortOrder string) []*Impression {
 	impressions := []*Impression{}
 	var err error
 
 	if sortField != "" {
 		if sortOrder == "1" {
-			err = ormManager.engine.Where("website_id = ?", websiteId).Asc(sortField).Limit(resultCount, offset).Find(&impressions)
+			err = ormManager.engine.Where("website_id = ?", websiteId).Asc(sortField).Find(&impressions)
 		} else {
-			err = ormManager.engine.Where("website_id = ?", websiteId).Desc(sortField).Limit(resultCount, offset).Find(&impressions)
+			err = ormManager.engine.Where("website_id = ?", websiteId).Desc(sortField).Find(&impressions)
 		}
 	} else {
-		err = ormManager.engine.Where("website_id = ?", websiteId).Asc("created_time").Limit(resultCount, offset).Find(&impressions)
+		err = ormManager.engine.Where("website_id = ?", websiteId).Asc("created_time").Find(&impressions)
 	}
 	if err != nil {
 		panic(err)

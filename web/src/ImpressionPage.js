@@ -79,15 +79,6 @@ class ImpressionPage extends React.Component {
     this.getWebsite();
   }
 
-  filterImpressions(impressions) {
-    if (this.state.ruleId === undefined) {
-      return impressions;
-    } else {
-      const ruleId = parseInt(this.state.ruleId);
-      return impressions.filter(impression => impression.ruleId === ruleId);
-    }
-  }
-
   getImpressions(pageSize, current, sortField, sortOrder) {
     this.setState({
       tableLoading: true
@@ -96,13 +87,14 @@ class ImpressionPage extends React.Component {
     ImpressionBackend.getImpressions(
       this.state.websiteId,
       this.state.sessionId,
+      this.state.ruleId !== undefined ? this.state.ruleId : -1,
       pageSize,
       pageSize * (current-1),
       sortField,
       sortOrder === "descend" ? 0 : 1 // "ascend": 1, "descend": 0
     ).then((res) => {
       this.setState({
-        impressions: this.filterImpressions(res),
+        impressions: res,
         tableLoading: false
       });
     });
@@ -115,13 +107,14 @@ class ImpressionPage extends React.Component {
 
     ImpressionBackend.getImpressionsAll(
       this.state.websiteId,
+      this.state.ruleId !== undefined ? this.state.ruleId : -1,
       pageSize,
       pageSize * (current-1),
       sortField,
       sortOrder === "descend" ? 0 : 1 // "ascend": 1, "descend": 0
     ).then((res) => {
       this.setState({
-        impressions: this.filterImpressions(res),
+        impressions: res,
         tableLoading: false
       });
     });
