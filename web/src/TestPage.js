@@ -371,6 +371,53 @@ class TestPage extends React.Component {
     }
   }
 
+  renderLeft() {
+    return (
+      <div>
+        <Row>
+          {
+            !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.traces} self={null}/> :
+              <TraceTable title={''} traces={[]} self={null}/>
+          }
+        </Row>
+        <Row style={{marginTop: "10px"}}>
+          <Col span={12}>
+            {/*<div><Text>Events for: </Text><Tag color="#108ee9">{this.state.speed}</Tag></div>*/}
+            <Text>Events/s: </Text>
+            <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80}/>
+          </Col>
+          <Col span={12}>
+            <div><Text>Payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>
+          </Col>
+          <Text>&nbsp;</Text>
+        </Row>
+        <Row>
+          <Col span={12}>
+            Background recording: <Switch onChange={this.onChange.bind(this)}/>
+          </Col>
+          <Col span={12}>
+            <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>
+            <Button type="primary" block onClick={this.simulateMouse.bind(this)}>Perform Fake Click</Button>
+          </Col>
+          <Col span={12}>
+
+          </Col>
+        </Row>
+        <Row>
+          <EventSelectionCheckBox
+            allCheckedList={allTargetEvents}
+            defaultCheckedList={defaultTargetEvents}
+            onCheckedListChange={this.onTargetEventsChange.bind(this)}
+          />
+        </Row>
+      </div>
+    )
+  }
+
   render() {
     if (this.state.onLoading) {
       return (<div>Loading Data...</div>)
@@ -381,56 +428,17 @@ class TestPage extends React.Component {
         {this.renderResult()}
         <Row>
           <Col span={6}>
-            <Row>
-              {
-                !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.traces} self={null}/> :
-                  <TraceTable title={''} traces={[]} self={null}/>
-              }
-            </Row>
-            <Row style={{marginTop: "10px"}}>
-              <Col span={12}>
-                {/*<div><Text>Events for: </Text><Tag color="#108ee9">{this.state.speed}</Tag></div>*/}
-                <Text>Events/s: </Text>
-                <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80}/>
-              </Col>
-              <Col span={12}>
-                <div><Text>Payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>
-              </Col>
-              <Text>&nbsp;</Text>
-            </Row>
-            <Row>
-              <Col span={12}>
-                Background recording: <Switch onChange={this.onChange.bind(this)}/>
-              </Col>
-              <Col span={12}>
-                <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={12}>
-                <Button type="primary" block onClick={this.simulateMouse.bind(this)}>Perform Fake Click</Button>
-              </Col>
-              <Col span={12}>
-
-              </Col>
-            </Row>
-            <Row>
-              <EventSelectionCheckBox
-                allCheckedList={allTargetEvents}
-                defaultCheckedList={defaultTargetEvents}
-                onCheckedListChange={this.onTargetEventsChange.bind(this)}
-              />
-            </Row>
+            {
+              this.renderLeft()
+            }
           </Col>
           <Col span={12}>
             <Canvas trace={this.trace.events.length > 0 ? this.trace : null} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground}/>
           </Col>
           <Col span={6}>
-            <Row>
-              {
-                !this.state.isBackground ? Shared.renderEventTable(this.getPathname(), this.events.slice(-10)) : Shared.renderEventTable('', [])
-              }
-            </Row>
+            {
+              !this.state.isBackground ? Shared.renderEventTable(this.getPathname(), this.events.slice(-10)) : Shared.renderEventTable('', [])
+            }
           </Col>
         </Row>
       </div>
