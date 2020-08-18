@@ -256,6 +256,18 @@ class TestPage extends React.Component {
     return Math.trunc(diff) / 1000;
   }
 
+  getDistance(e1, e2) {
+    return Math.sqrt((e1.x - e2.x) * (e1.x - e2.x) + (e1.y - e2.y) * (e1.y - e2.y));
+  }
+
+  getSpeed(e1, e2) {
+    return Math.round(this.getDistance(e1, e2) / (e2.timestamp - e1.timestamp));
+  }
+
+  getAcceleration(e1, e2) {
+    return Math.round((e2.speed - e1.speed) / (e2.timestamp - e1.timestamp));
+  }
+
   mouseHandler(type, e) {
     // Listen to mouse events after loading the data
     if (this.state.onLoading) {
@@ -284,23 +296,31 @@ class TestPage extends React.Component {
       y = parseInt(e.changedTouches[0].pageY);
     }
 
-    let p = {
+    let event = {
       id: this.events.length,
       timestamp: this.getRelativeTimestampInSeconds(),
       type: type,
       x: x,
       y: y,
-      button: this.getButton(e.button)
+      button: this.getButton(e.button),
+      speed: 0,
+      acceleration: 0,
     };
 
+    if (this.events.length > 0) {
+      const prevEvent = this.events[this.events.length - 1];
+      event.speed = this.getSpeed(prevEvent, event);
+      event.acceleration = this.getAcceleration(prevEvent, event);
+    }
+
     // Push the new event info to the buffer
-    this.events.push(p);
+    this.events.push(event);
     if (this.events.length > 50) {
       this.events = this.events.slice(50)
       this.events[0].id = 0;
     }
 
-    this.trace.events.push(p);
+    this.trace.events.push(event);
     this.traces = [this.trace];
     if (this.trace.events.length % 50 == 0) {
       this.saveTraceToLocal();
