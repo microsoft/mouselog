@@ -51,16 +51,23 @@ func isLineDistanceSumSmallerThan(events []*trace.Event, start int, end int, dis
 }
 
 func getStandardDeviationForSpeed(events []*trace.Event) int {
-	mean := 0
+	moveEvents := []*trace.Event{}
 	for _, event := range events {
+		if event.Type == "mousemove" || event.Type == "touchmove" {
+			moveEvents = append(moveEvents, event)
+		}
+	}
+
+	mean := 0
+	for _, event := range moveEvents {
 		mean += event.Speed
 	}
-	mean /= len(events)
+	mean /= len(moveEvents)
 
 	sd := 0
-	for _, event := range events {
+	for _, event := range moveEvents {
 		sd += (event.Speed - mean) * (event.Speed - mean)
 	}
-	sd = int(math.Sqrt(float64(sd / len(events))))
+	sd = int(math.Sqrt(float64(sd / len(moveEvents))))
 	return sd
 }
