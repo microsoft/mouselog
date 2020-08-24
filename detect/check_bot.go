@@ -6,6 +6,8 @@ package detect
 import "github.com/microsoft/mouselog/trace"
 
 func checkBot(events []*trace.Event) (int, string, int, int, int) {
+	initEvents(events)
+
 	isBot, reason, rule, start, end := checkOverspeed(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
