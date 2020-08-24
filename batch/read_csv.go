@@ -16,17 +16,17 @@ import (
 const (
 	RowSessionId = iota
 	RowImpressionId
-	RowUnifiedId
-	RowVertical
-	RowTimestamp
-	RowPageName
+	//RowUnifiedId
+	//RowVertical
+	//RowTimestamp
+	//RowPageName
 	RowClientIp
 	RowUserAgent
 	RowIsBot
-	RowPageClickCount
-	RowDwellTime
-	RowHasPerfPing
-	RowUrl
+	//RowPageClickCount
+	//RowDwellTime
+	//RowHasPerfPing
+	//RowUrl
 	RowTimestampList
 	RowEventTypeList
 	RowButtonList
@@ -194,11 +194,15 @@ func addEventsToTrace(t *trace.Trace, timestampList []string, eventTypeList []st
 	normalizeWidthAndHeight(t, maxX, minX, maxY, minY)
 }
 
+func unescapeUa(ua string) string {
+	return strings.ReplaceAll(ua, "|", ",")
+}
+
 func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, websiteId string, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
 
 	t := trace.NewTrace(i)
-	t.Url = row[RowUrl]
+	//t.Url = row[RowUrl]
 
 	isBot := row[RowIsBot]
 	if isBot == "True" {
@@ -224,9 +228,9 @@ func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Sessi
 
 	sessionId := row[RowSessionId]
 	impressionId := row[RowImpressionId]
-	timestamp := row[RowTimestamp]
-	url := row[RowUrl]
-	userAgent := util.UnescapeUserAgent(row[RowUserAgent])
+	timestamp := ""
+	url := ""
+	userAgent := unescapeUa(row[RowUserAgent])
 	clientIp := row[RowClientIp]
 	addSession(sessions, sessionMap, sessionId, websiteId, timestamp, userAgent, clientIp)
 	addImpression(impressions, impressionMap, impressionId, sessionId, websiteId, timestamp, url, userAgent, clientIp)

@@ -83,6 +83,9 @@ func ReadTraces(fileId string) {
 	i := 0
 	for scanner.Scan() {
 		line := scanner.Text()
+		if line == "" {
+			continue
+		}
 
 		readCsvLine(&sessions, &sessionMap, &impressions, &impressionMap, websiteId, line, i)
 		//readTsvLine(&sessions, &sessionMap, &impressions, &impressionMap, websiteId, line, i)
