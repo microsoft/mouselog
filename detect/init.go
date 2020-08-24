@@ -12,11 +12,11 @@ func initEvents(events []*trace.Event) {
 		}
 	}
 
-	for i := 0; i < len(events)-1; i++ {
-		events[i].Speed = getSpeed(events[i], events[i+1])
+	for i := 1; i < len(events); i++ {
+		events[i].Speed = getSpeed(events[i-1], events[i])
 	}
 
-	for i := 1; i < len(events)-1; i++ {
+	for i := 1; i < len(events); i++ {
 		events[i].Acceleration = int(float64(events[i].Speed-events[i-1].Speed) / (events[i].Timestamp - events[i-1].Timestamp))
 	}
 }
