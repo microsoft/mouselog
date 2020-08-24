@@ -58,6 +58,10 @@ func getStandardDeviationForSpeed(events []*trace.Event) int {
 		}
 	}
 
+	if len(moveEvents) > 2 {
+		moveEvents = moveEvents[1:len(moveEvents)-1]
+	}
+
 	mean := 0
 	for _, event := range moveEvents {
 		mean += event.Speed

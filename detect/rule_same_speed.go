@@ -10,7 +10,7 @@ import (
 )
 
 var SameSpeedEventLimit = 50
-var SameSpeedSdLimit = 1000
+var SameSpeedSdLimit = 300
 
 func checkSameSpeed(events []*trace.Event) (int, string, int, int, int) {
 	if len(events) <= SameSpeedEventLimit {
