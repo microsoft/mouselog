@@ -6,8 +6,9 @@ package detect
 const (
 	RuleNone = iota
 	RuleOverspeed
-	RuleAccelerationBeforeClick
+	RuleSameSpeed
 	RuleStraightLine
+	RuleAccelerationBeforeClick
 	//RuleNearStraightLine
 	RuleEquallySpacedPoints
 	RuleSinglePoint
@@ -26,10 +27,12 @@ func GetRuleName(rule int) string {
 		return "Human"
 	case RuleOverspeed:
 		return "Pointer speed too fast"
-	case RuleAccelerationBeforeClick:
-		return "Acceleration before click abnormal"
+	case RuleSameSpeed:
+		return "Pointer speed standard deviation too small"
 	case RuleStraightLine:
 		return "Straight line found"
+	case RuleAccelerationBeforeClick:
+		return "Acceleration before click abnormal"
 	//case RuleNearStraightLine:
 	//	return "Near straight line found"
 	case RuleEquallySpacedPoints:

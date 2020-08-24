@@ -28,11 +28,11 @@ func checkStraightLine(events []*trace.Event) (int, string, int, int, int) {
 
 	targetLen := 0
 	for i := 0; i < len(degrees)-1; i++ {
-		if math.Abs(degrees[i]-degrees[i+1]) < math.Pi/72 {
-			targetLen += 1
+		if math.Abs(degrees[i]-degrees[i+1]) < math.Pi/144 {
 			if targetLen >= lineLimit && isDistanceLargerThan(events[i-targetLen].X, events[i-targetLen].Y, events[i].X, events[i].Y, distLimit) {
 				return 1, fmt.Sprintf("straight line found in %d+ continuous points and %d+ pixel distances, range = (%d, %d)", lineLimit, distLimit, i-targetLen, i), RuleStraightLine, i - targetLen, i
 			}
+			targetLen += 1
 		} else {
 			targetLen = 0
 		}

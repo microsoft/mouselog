@@ -49,3 +49,18 @@ func isLineDistanceSumSmallerThan(events []*trace.Event, start int, end int, dis
 
 	return sum < dist, sum
 }
+
+func getStandardDeviationForSpeed(events []*trace.Event) int {
+	mean := 0
+	for _, event := range events {
+		mean += event.Speed
+	}
+	mean /= len(events)
+
+	sd := 0
+	for _, event := range events {
+		sd += (event.Speed - mean) * (event.Speed - mean)
+	}
+	sd = int(math.Sqrt(float64(sd / len(events))))
+	return sd
+}

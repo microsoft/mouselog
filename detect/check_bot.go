@@ -13,6 +13,16 @@ func checkBot(events []*trace.Event) (int, string, int, int, int) {
 		return isBot, reason, rule, start, end
 	}
 
+	isBot, reason, rule, start, end = checkSameSpeed(events)
+	if isBot != 0 {
+		return isBot, reason, rule, start, end
+	}
+
+	isBot, reason, rule, start, end = checkStraightLine(events)
+	if isBot != 0 {
+		return isBot, reason, rule, start, end
+	}
+
 	isBot, reason, rule, start, end = checkAcceleration(events)
 	if isBot != 0 {
 		return isBot, reason, rule, start, end
