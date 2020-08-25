@@ -205,7 +205,7 @@ func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Sessi
 	//t.Url = row[RowUrl]
 
 	isBot := row[RowIsBot]
-	if isBot == "True" {
+	if isBot == "True" || isBot == "TRUE" {
 		t.Label = 1
 	} else {
 		t.Label = 0
