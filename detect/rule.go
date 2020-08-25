@@ -7,6 +7,7 @@ const (
 	RuleNone = iota
 	RuleOverspeed
 	RuleSinglePoint
+	RuleOverDistance
 	//RuleRepeatedPoint
 	RuleSameSpeed
 	RuleStraightLine
@@ -30,6 +31,8 @@ func GetRuleName(rule int) string {
 		return "Pointer speed too fast"
 	case RuleSinglePoint:
 		return "Single point found"
+	case RuleOverDistance:
+		return "Pointer distance too long"
 	//case RuleRepeatedPoint:
 	//	return "Repeated point found"
 	case RuleSameSpeed:
