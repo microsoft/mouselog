@@ -8,6 +8,7 @@ const (
 	RuleOverspeed
 	RuleSinglePoint
 	RuleOverDistance
+	RuleAcuteAngle
 	//RuleRepeatedPoint
 	RuleSameSpeed
 	RuleStraightLine
@@ -33,6 +34,8 @@ func GetRuleName(rule int) string {
 		return "Single point found"
 	case RuleOverDistance:
 		return "Pointer distance too long"
+	case RuleAcuteAngle:
+		return "acute angles too many"
 	//case RuleRepeatedPoint:
 	//	return "Repeated point found"
 	case RuleSameSpeed:
