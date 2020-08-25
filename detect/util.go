@@ -21,10 +21,14 @@ func getDistanceRaw(x1 int, y1 int, x2 int, y2 int) float64 {
 	return math.Sqrt(float64((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)))
 }
 
-func getDegree(x1 int, y1 int, x2 int, y2 int) float64 {
-	cos := float64(x1*x2+y1*y2) / math.Sqrt(float64(x1*x1+y1*y1)) / math.Sqrt(float64(x2*x2+y2*y2))
-	degree := math.Acos(cos)
-	return degree
+func getDistanceFromOrigin(x int, y int) float64 {
+	return math.Sqrt(float64(x*x + y*y))
+}
+
+func getRadian(x1 int, y1 int, x2 int, y2 int) float64 {
+	cos := float64(x1*x2+y1*y2) / getDistanceFromOrigin(x1, y1) / getDistanceFromOrigin(x2, y2)
+	radian := math.Acos(cos)
+	return radian
 }
 
 func isDistanceLargerThan(x1 int, y1 int, x2 int, y2 int, dist int) bool {
@@ -59,7 +63,7 @@ func getStandardDeviationForSpeed(events []*trace.Event) int {
 	}
 
 	if len(moveEvents) > 2 {
-		moveEvents = moveEvents[1:len(moveEvents)-1]
+		moveEvents = moveEvents[1 : len(moveEvents)-1]
 	}
 
 	mean := 0

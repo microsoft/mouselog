@@ -8,10 +8,10 @@ import (
 	"testing"
 )
 
-func TestGetDegree(t *testing.T) {
-	fmt.Println(getDegree(1, 1, 1, 1)) // 0
-	fmt.Println(getDegree(1, 0, 1, 1)) // 45
-	fmt.Println(getDegree(1, 1, 1, 0)) // 45
-	fmt.Println(getDegree(0, 1, 1, 0)) // 90
-	fmt.Println(getDegree(0, 1, 0, -1)) // 180: 3.1415926..
+func TestGetRadian(t *testing.T) {
+	fmt.Println(getRadian(1, 1, 1, 1))  // 0
+	fmt.Println(getRadian(1, 0, 1, 1))  // 45
+	fmt.Println(getRadian(1, 1, 1, 0))  // 45
+	fmt.Println(getRadian(0, 1, 1, 0))  // 90
+	fmt.Println(getRadian(0, 1, 0, -1)) // 180: 3.1415926..
 }

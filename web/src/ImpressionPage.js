@@ -208,12 +208,12 @@ class ImpressionPage extends React.Component {
 
   renderTable(impressions) {
     let columns = [
-      {
-        title: 'Session ID',
-        dataIndex: 'sessionId',
-        key: 'sessionId',
-        sorter: (a, b) => a.sessionId.localeCompare(b.sessionId),
-      },
+      // {
+      //   title: 'Session ID',
+      //   dataIndex: 'sessionId',
+      //   key: 'sessionId',
+      //   sorter: (a, b) => a.sessionId.localeCompare(b.sessionId),
+      // },
       // {
       //   title: 'Impression ID',
       //   dataIndex: 'id',
@@ -263,35 +263,35 @@ class ImpressionPage extends React.Component {
       // },
     ];
 
-    // if (this.state.sessionId === undefined) {
-    //   columns.push(
-    //     {
-    //       title: 'User Agent',
-    //       dataIndex: 'userAgent',
-    //       key: 'userAgent',
-    //       sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
-    //       render: (text, record, index) => {
-    //         return Setting.wrapUserAgent(text);
-    //       }
-    //     },
-    //     {
-    //       title: 'Client IP',
-    //       dataIndex: 'clientIp',
-    //       key: 'clientIp',
-    //       width: '130px',
-    //       sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
-    //       render: (text, record, index) => {
-    //         return (
-    //           <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
-    //             {
-    //               Setting.wrapClientIp(text)
-    //             }
-    //         </span>
-    //         )
-    //       }
-    //     },
-    //   );
-    // }
+    if (this.state.sessionId === undefined) {
+      columns.push(
+        {
+          title: 'User Agent',
+          dataIndex: 'userAgent',
+          key: 'userAgent',
+          sorter: (a, b) => a.userAgent.localeCompare(b.userAgent),
+          render: (text, record, index) => {
+            return Setting.wrapUserAgent(text);
+          }
+        },
+        {
+          title: 'Client IP',
+          dataIndex: 'clientIp',
+          key: 'clientIp',
+          width: '130px',
+          sorter: (a, b) => a.clientIp.localeCompare(b.clientIp),
+          render: (text, record, index) => {
+            return (
+              <span style={{wordWrap: 'break-word', wordBreak: 'break-word'}}>
+                {
+                  Setting.wrapClientIp(text)
+                }
+            </span>
+            )
+          }
+        },
+      );
+    }
 
     columns.push(
       {
@@ -329,12 +329,12 @@ class ImpressionPage extends React.Component {
         key: 'label',
         sorter: (a, b) => a.label - b.label,
       },
-      {
-        title: 'Guess',
-        dataIndex: 'guess',
-        key: 'guess',
-        sorter: (a, b) => a.guess - b.guess,
-      },
+      // {
+      //   title: 'Guess',
+      //   dataIndex: 'guess',
+      //   key: 'guess',
+      //   sorter: (a, b) => a.guess - b.guess,
+      // },
       {
         title: 'Reason',
         dataIndex: 'reason',
