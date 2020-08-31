@@ -3,9 +3,9 @@
 
 package detect
 
-import "github.com/microsoft/mouselog/trace"
+import "github.com/microsoft/mouselog/object"
 
-func checkBot(events []*trace.Event) (int, string, int, int, int) {
+func checkBot(events []*object.Event) (int, string, int, int, int) {
 	initEvents(events)
 
 	isBot, reason, rule, start, end := checkOverspeed(events)
@@ -61,7 +61,7 @@ func checkBot(events []*trace.Event) (int, string, int, int, int) {
 	return 0, ReasonNone, RuleNone, -1, -1
 }
 
-func CheckBotForImpression(impression *trace.Impression) (int, string, int, int, int) {
+func CheckBotForImpression(impression *object.Impression) (int, string, int, int, int) {
 	if impression == nil {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}
@@ -76,7 +76,7 @@ func CheckBotForImpression(impression *trace.Impression) (int, string, int, int,
 	return isBot, reason, rule, start, end
 }
 
-func CheckBotForTrace(t *trace.Trace) (int, string, int, int, int) {
+func CheckBotForTrace(t *object.Trace) (int, string, int, int, int) {
 	if t == nil {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}
@@ -91,7 +91,7 @@ func CheckBotForTrace(t *trace.Trace) (int, string, int, int, int) {
 	return isBot, reason, rule, start, end
 }
 
-func GetDetectResult(ss *trace.Session, traceId int) *trace.Session {
+func GetDetectResult(ss *object.Session, traceId int) *object.Session {
 	t, ok := ss.TraceMap[traceId]
 	if traceId != -1 || ok {
 		CheckBotForTrace(t)

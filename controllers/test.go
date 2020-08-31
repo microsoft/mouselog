@@ -11,7 +11,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/microsoft/mouselog/detect"
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 type ApiController struct {
@@ -45,7 +45,7 @@ func (c *ApiController) UploadTrace() {
 		sessionId = beegoSessionId
 	}
 
-	website := trace.GetWebsite(websiteId)
+	website := object.GetWebsite(websiteId)
 	if website == nil {
 		resp = response{Status: "ok", Msg: "this website is not monitored", Data: ""}
 
@@ -54,7 +54,7 @@ func (c *ApiController) UploadTrace() {
 		return
 	}
 
-	trackConfig := trace.ParseTrackConfig(website.TrackConfig)
+	trackConfig := object.ParseTrackConfig(website.TrackConfig)
 	if queryConfig == "1" {
 		resp = response{Status: "ok", Msg: "config", Data: trackConfig}
 
@@ -78,7 +78,7 @@ func (c *ApiController) UploadTrace() {
 		}
 	}
 
-	var t trace.Trace
+	var t object.Trace
 	t.LoadFromJson(data)
 
 	referrer := t.Referrer
@@ -92,9 +92,9 @@ func (c *ApiController) UploadTrace() {
 		return
 	}
 
-	trace.AddSession(sessionId, websiteId, userAgent, clientIp, userId)
-	trace.AddImpression(impressionId, sessionId, websiteId, userId, &t)
-	trace.AppendTraceToImpression(impressionId, websiteId, &t)
+	object.AddSession(sessionId, websiteId, userAgent, clientIp, userId)
+	object.AddImpression(impressionId, sessionId, websiteId, userId, &t)
+	object.AppendTraceToImpression(impressionId, websiteId, &t)
 
 	// Only return traces for test page for visualization (websiteId == "mouselog")
 	if websiteId != "mouselog" {
@@ -125,7 +125,7 @@ func (c *ApiController) ClearTrace() {
 	sessionId := c.StartSession().SessionID()
 	data := c.Ctx.Input.RequestBody
 
-	var t trace.Trace
+	var t object.Trace
 	err := json.Unmarshal(data, &t)
 	if err != nil {
 		panic(err)

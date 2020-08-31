@@ -3,10 +3,10 @@
 
 package detect
 
-import "github.com/microsoft/mouselog/trace"
+import "github.com/microsoft/mouselog/object"
 
-func SyncGuesses(ss *trace.Session) {
-	ss.Impressions = trace.GetImpressionsAll(ss.Id, "", "")
+func SyncGuesses(ss *object.Session) {
+	ss.Impressions = object.GetImpressionsAll(ss.Id, "", "")
 	for _, impression := range ss.Impressions {
 		CheckBotForImpression(impression)
 	}

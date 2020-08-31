@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 	"github.com/microsoft/mouselog/util"
 )
 
@@ -28,7 +28,7 @@ const (
 	TRowMouselogData
 )
 
-func addJsonToTrace(t *trace.Trace, data string) {
+func addJsonToTrace(t *object.Trace, data string) {
 	if data != "" {
 		data = strings.Trim(data, "\"")
 		data = strings.ReplaceAll(data, "\"\"", "\"")
@@ -36,10 +36,10 @@ func addJsonToTrace(t *trace.Trace, data string) {
 	}
 }
 
-func readTsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, websiteId string, line string, i int) {
+func readTsvLine(sessions *[]*object.Session, sessionMap *map[string]*object.Session, impressions *[]*object.Impression, impressionMap *map[string]*object.Impression, websiteId string, line string, i int) {
 	row := strings.SplitN(line, "\t", TRowMouselogData+1)
 
-	t := trace.NewTrace(i)
+	t := object.NewTrace(i)
 	t.Url = row[TRowUrl]
 
 	isBot := row[TRowIsBot]

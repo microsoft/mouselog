@@ -5,13 +5,13 @@ package controllers
 
 import (
 	"github.com/microsoft/mouselog/detect"
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 	"github.com/microsoft/mouselog/util"
 )
 
-func getFilteredImpressions(impressions []*trace.Impression, ruleId int, limit int, offset int) []*trace.Impression {
+func getFilteredImpressions(impressions []*object.Impression, ruleId int, limit int, offset int) []*object.Impression {
 	if ruleId != -1 {
-		impressionsForRule := []*trace.Impression{}
+		impressionsForRule := []*object.Impression{}
 		for _, impression := range impressions {
 			if impression.RuleId == ruleId {
 				impressionsForRule = append(impressionsForRule, impression)
@@ -32,7 +32,7 @@ func (c *ApiController) GetImpressions() {
 	ruleId := util.ParseInt(c.Input().Get("ruleId"))
 	limit := util.ParseInt(c.Input().Get("resultCount"))
 	offset := util.ParseInt(c.Input().Get("offset"))
-	impressions := trace.GetImpressions(c.Input().Get("websiteId"), c.Input().Get("sessionId"), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+	impressions := object.GetImpressions(c.Input().Get("websiteId"), c.Input().Get("sessionId"), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
 
 	for _, impression := range impressions {
 		detect.CheckBotForImpression(impression)
@@ -48,7 +48,7 @@ func (c *ApiController) GetImpressionsAll() {
 	ruleId := util.ParseInt(c.Input().Get("ruleId"))
 	limit := util.ParseInt(c.Input().Get("resultCount"))
 	offset := util.ParseInt(c.Input().Get("offset"))
-	impressions := trace.GetImpressionsAll(c.Input().Get("websiteId"), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+	impressions := object.GetImpressionsAll(c.Input().Get("websiteId"), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
 
 	for _, impression := range impressions {
 		detect.CheckBotForImpression(impression)
@@ -61,7 +61,7 @@ func (c *ApiController) GetImpressionsAll() {
 }
 
 func (c *ApiController) GetImpression() {
-	impression := trace.GetImpression(c.Input().Get("id"), c.Input().Get("websiteId"))
+	impression := object.GetImpression(c.Input().Get("id"), c.Input().Get("websiteId"))
 
 	detect.CheckBotForImpression(impression)
 
@@ -70,6 +70,6 @@ func (c *ApiController) GetImpression() {
 }
 
 func (c *ApiController) DeleteImpression() {
-	c.Data["json"] = trace.DeleteImpression(c.Input().Get("id"))
+	c.Data["json"] = object.DeleteImpression(c.Input().Get("id"))
 	c.ServeJSON()
 }

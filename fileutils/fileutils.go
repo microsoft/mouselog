@@ -8,14 +8,14 @@ import (
 	"io/ioutil"
 	"mime/multipart"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 type JsonFile struct {
-	Data []trace.Trace `json:"data"`
+	Data []object.Trace `json:"data"`
 }
 
-func JsonParser(file multipart.File) (traces []trace.Trace, errMsg string) {
+func JsonParser(file multipart.File) (traces []object.Trace, errMsg string) {
 	content, err := ioutil.ReadAll(file)
 	if err != nil {
 		panic(err)

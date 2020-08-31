@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-package trace
+package object
 
 func (ss *Session) SyncStatistics() {
 	for _, impression := range ss.Impressions {

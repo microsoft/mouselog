@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
-func checkStraightLine(events []*trace.Event) (int, string, int, int, int) {
+func checkStraightLine(events []*object.Event) (int, string, int, int, int) {
 	boxLen := 10
 	lineLimit := 30
 	distLimit := 400

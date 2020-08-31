@@ -6,13 +6,13 @@ package detect
 import (
 	"fmt"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 //var EventLimit = 50
 var DistLimit = 200.0
 
-func checkOverDistance(events []*trace.Event) (int, string, int, int, int) {
+func checkOverDistance(events []*object.Event) (int, string, int, int, int) {
 	//if len(events) <= EventLimit {
 	//	return 0, ReasonNone, RuleNone, -1, -1
 	//}

@@ -6,12 +6,12 @@ package batch
 import (
 	"testing"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 func TestReadTraces(t *testing.T) {
-	trace.InitOrmManager()
-	trace.InitMapMutexes()
+	object.InitOrmManager()
+	object.InitMapMutexes()
 
 	//ReadTraces("dsjtzs_txfz_training")
 	//ReadTraces("logs_20200127_slapi_coupon_bot")

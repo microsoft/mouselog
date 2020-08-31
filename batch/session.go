@@ -3,10 +3,10 @@
 
 package batch
 
-import "github.com/microsoft/mouselog/trace"
+import "github.com/microsoft/mouselog/object"
 
 func addWebsite(websiteId string) {
-	w := &trace.Website{
+	w := &object.Website{
 		Id:           websiteId,
 		Name:         websiteId,
 		Url:          "",
@@ -14,28 +14,28 @@ func addWebsite(websiteId string) {
 		State:        "active",
 	}
 
-	if trace.GetWebsite(websiteId) == nil {
-		trace.AddWebsite(w)
+	if object.GetWebsite(websiteId) == nil {
+		object.AddWebsite(w)
 	}
 }
 
-func addSession(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, id string, websiteId string, createdTime string, userAgent string, clientIp string) {
-	s := &trace.Session{Id: id, WebsiteId: websiteId, CreatedTime: createdTime, UserAgent: userAgent, ClientIp: clientIp}
+func addSession(sessions *[]*object.Session, sessionMap *map[string]*object.Session, id string, websiteId string, createdTime string, userAgent string, clientIp string) {
+	s := &object.Session{Id: id, WebsiteId: websiteId, CreatedTime: createdTime, UserAgent: userAgent, ClientIp: clientIp}
 	if _, ok := (*sessionMap)[id]; !ok {
 		*sessions = append(*sessions, s)
 		(*sessionMap)[id] = s
 	}
 }
 
-func addImpression(impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, id string, sessionId string, websiteId string, createdTime string, urlPath string, userAgent string, clientIp string) {
-	im := &trace.Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: createdTime, UrlPath: urlPath, UserAgent: userAgent, ClientIp: clientIp, Events: []*trace.Event{}}
+func addImpression(impressions *[]*object.Impression, impressionMap *map[string]*object.Impression, id string, sessionId string, websiteId string, createdTime string, urlPath string, userAgent string, clientIp string) {
+	im := &object.Impression{Id: id, SessionId: sessionId, WebsiteId: websiteId, CreatedTime: createdTime, UrlPath: urlPath, UserAgent: userAgent, ClientIp: clientIp, Events: []*object.Event{}}
 	if _, ok := (*impressionMap)[id]; !ok {
 		*impressions = append(*impressions, im)
 		(*impressionMap)[id] = im
 	}
 }
 
-func appendTraceToImpression(impressionMap *map[string]*trace.Impression, id string, trace *trace.Trace) {
+func appendTraceToImpression(impressionMap *map[string]*object.Impression, id string, trace *object.Trace) {
 	impression := (*impressionMap)[id]
 
 	impression.Width = trace.Width

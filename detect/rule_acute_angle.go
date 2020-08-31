@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 var AcuteAngleLimit = 3
 
-func checkAcuteAngle(events []*trace.Event) (int, string, int, int, int) {
+func checkAcuteAngle(events []*object.Event) (int, string, int, int, int) {
 	if len(events) < 3 {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}

@@ -6,14 +6,14 @@ package detect
 import (
 	"math"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
-func getSpeed(e1 *trace.Event, e2 *trace.Event) int {
+func getSpeed(e1 *object.Event, e2 *object.Event) int {
 	return int(getDistanceRaw(e1.X, e1.Y, e2.X, e2.Y) / (e2.Timestamp - e1.Timestamp))
 }
 
-func getDistance(e1 *trace.Event, e2 *trace.Event) float64 {
+func getDistance(e1 *object.Event, e2 *object.Event) float64 {
 	return getDistanceRaw(e1.X, e1.Y, e2.X, e2.Y)
 }
 
@@ -35,7 +35,7 @@ func isDistanceLargerThan(x1 int, y1 int, x2 int, y2 int, dist int) bool {
 	return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2) > dist*dist
 }
 
-func isLineDistanceSumSmallerThan(events []*trace.Event, start int, end int, dist int) (bool, int) {
+func isLineDistanceSumSmallerThan(events []*object.Event, start int, end int, dist int) (bool, int) {
 	sum := 0
 
 	x1, y1 := events[start].X, events[start].Y
@@ -54,8 +54,8 @@ func isLineDistanceSumSmallerThan(events []*trace.Event, start int, end int, dis
 	return sum < dist, sum
 }
 
-func getStandardDeviationForSpeed(events []*trace.Event) int {
-	moveEvents := []*trace.Event{}
+func getStandardDeviationForSpeed(events []*object.Event) int {
+	moveEvents := []*object.Event{}
 	for _, event := range events {
 		if event.Type == "mousemove" || event.Type == "touchmove" {
 			moveEvents = append(moveEvents, event)

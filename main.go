@@ -10,13 +10,13 @@ import (
 	"github.com/astaxie/beego/plugins/cors"
 	"github.com/microsoft/mouselog/routers"
 
+	"github.com/microsoft/mouselog/object"
 	_ "github.com/microsoft/mouselog/routers"
-	"github.com/microsoft/mouselog/trace"
 )
 
 func main() {
-	trace.InitOrmManager()
-	trace.InitMapMutexes()
+	object.InitOrmManager()
+	object.InitMapMutexes()
 
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
 		AllowOrigins:     []string{"*"},

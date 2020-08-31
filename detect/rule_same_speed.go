@@ -6,13 +6,13 @@ package detect
 import (
 	"fmt"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 var SameSpeedEventLimit = 50
 var SameSpeedSdLimit = 300
 
-func checkSameSpeed(events []*trace.Event) (int, string, int, int, int) {
+func checkSameSpeed(events []*object.Event) (int, string, int, int, int) {
 	if len(events) <= SameSpeedEventLimit {
 		return 0, ReasonNone, RuleNone, -1, -1
 	}

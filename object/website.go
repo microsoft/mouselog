@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-package trace
+package object
 
 type Website struct {
 	Id   string `xorm:"varchar(100) notnull pk" json:"id"`

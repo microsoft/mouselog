@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 	"github.com/microsoft/mouselog/util"
 )
 
@@ -41,7 +41,7 @@ func getCeil(i int) int {
 	return i - i%100 + 200
 }
 
-func normalizeWidthAndHeight(t *trace.Trace, maxX int, minX int, maxY int, minY int) {
+func normalizeWidthAndHeight(t *object.Trace, maxX int, minX int, maxY int, minY int) {
 	t.Width = getCeil(maxX)
 	t.Height = getCeil(maxY)
 
@@ -65,10 +65,10 @@ func ReadTraces(fileId string) {
 
 	addWebsite(websiteId)
 
-	sessions := []*trace.Session{}
-	sessionMap := map[string]*trace.Session{}
-	impressions := []*trace.Impression{}
-	impressionMap := map[string]*trace.Impression{}
+	sessions := []*object.Session{}
+	sessionMap := map[string]*object.Session{}
+	impressions := []*object.Impression{}
+	impressionMap := map[string]*object.Impression{}
 
 	file, err := os.Open(path)
 	if err != nil {
@@ -98,11 +98,11 @@ func ReadTraces(fileId string) {
 	}
 
 	fmt.Printf("Delete sessions for file: [%s].\n", fileId)
-	trace.DeleteSessions(websiteId)
+	object.DeleteSessions(websiteId)
 	fmt.Printf("Add sessions for file: [%s].\n", fileId)
-	trace.AddSessionsSafe(sessions)
+	object.AddSessionsSafe(sessions)
 	fmt.Printf("Delete impressions for file: [%s].\n", fileId)
-	trace.DeleteImpressions(websiteId)
+	object.DeleteImpressions(websiteId)
 	fmt.Printf("Add impressions for file: [%s].\n", fileId)
-	trace.AddImpressionsSafe(impressions)
+	object.AddImpressionsSafe(impressions)
 }

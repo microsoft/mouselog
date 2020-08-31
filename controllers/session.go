@@ -4,17 +4,17 @@
 package controllers
 
 import (
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 	"github.com/microsoft/mouselog/util"
 )
 
 func (c *ApiController) GetSessions() {
-	c.Data["json"] = trace.GetSessions(c.Input().Get("websiteId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
+	c.Data["json"] = object.GetSessions(c.Input().Get("websiteId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
 	c.ServeJSON()
 }
 
 func (c *ApiController) GetSession() {
-	c.Data["json"] = trace.GetSession(c.Input().Get("id"), c.Input().Get("websiteId"))
+	c.Data["json"] = object.GetSession(c.Input().Get("id"), c.Input().Get("websiteId"))
 	c.ServeJSON()
 }
 
@@ -28,6 +28,6 @@ func (c *ApiController) GetSessionId() {
 }
 
 func (c *ApiController) DeleteSession() {
-	c.Data["json"] = trace.DeleteSession(c.Input().Get("id"), c.Input().Get("websiteId"))
+	c.Data["json"] = object.DeleteSession(c.Input().Get("id"), c.Input().Get("websiteId"))
 	c.ServeJSON()
 }

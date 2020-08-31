@@ -7,19 +7,19 @@ import (
 	"path/filepath"
 
 	"github.com/microsoft/mouselog/detect"
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 	"github.com/microsoft/mouselog/util"
 )
 
-var datasets map[string]*trace.Session
+var datasets map[string]*object.Session
 
 func init() {
-	datasets = map[string]*trace.Session{}
+	datasets = map[string]*object.Session{}
 }
 
-func listDatasets(path string) []*trace.Session {
+func listDatasets(path string) []*object.Session {
 	if !util.FileExist(path) {
-		return []*trace.Session{}
+		return []*object.Session{}
 	}
 
 	fileIds := util.ListFileIds(path)
@@ -35,20 +35,20 @@ func listDatasets(path string) []*trace.Session {
 	}
 	kv := util.SortMapsByKey(&m)
 
-	res := []*trace.Session{}
+	res := []*object.Session{}
 	for _, v := range *kv {
-		res = append(res, v.Key.(*trace.Session))
+		res = append(res, v.Key.(*object.Session))
 	}
 	return res
 }
 
-func syncDataset(s *trace.Session) {
+func syncDataset(s *object.Session) {
 	detect.SyncGuesses(s)
 	s.SyncStatistics()
 }
 
 func (c *ApiController) ListDatasets() {
-	res := []*trace.SessionJson{}
+	res := []*object.SessionJson{}
 
 	path := filepath.Join(util.CacheDir, "mouselog")
 	datasets := listDatasets(path)
@@ -62,11 +62,11 @@ func (c *ApiController) ListDatasets() {
 
 // GetOrCreateDataset either returns an already existing session or creates and returns a new one.
 // If a new session has been created, the returned boolean will be true.
-func GetOrCreateDataset(sessionId string) (*trace.Session, bool) {
+func GetOrCreateDataset(sessionId string) (*object.Session, bool) {
 	if val, ok := datasets[sessionId]; ok {
 		return val, false
 	}
 
-	datasets[sessionId] = trace.NewSession(sessionId)
+	datasets[sessionId] = object.NewSession(sessionId)
 	return datasets[sessionId], true
 }

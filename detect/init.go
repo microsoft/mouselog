@@ -3,9 +3,9 @@
 
 package detect
 
-import "github.com/microsoft/mouselog/trace"
+import "github.com/microsoft/mouselog/object"
 
-func initEvents(events []*trace.Event) {
+func initEvents(events []*object.Event) {
 	for i := 1; i < len(events); i++ {
 		if events[i].Timestamp <= events[i-1].Timestamp {
 			events[i].Timestamp = events[i-1].Timestamp + 0.0001

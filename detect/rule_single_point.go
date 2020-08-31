@@ -3,9 +3,9 @@
 
 package detect
 
-import "github.com/microsoft/mouselog/trace"
+import "github.com/microsoft/mouselog/object"
 
-func checkSinglePoint(events []*trace.Event) (int, string, int, int, int) {
+func checkSinglePoint(events []*object.Event) (int, string, int, int, int) {
 	if len(events) == 1 {
 		return 1, "single point found", RuleSinglePoint, 0, -1
 	}

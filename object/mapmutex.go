@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 // Refer to https://github.com/EagleChen/mapmutex
-package trace
+package object
 
 import (
 	"math/rand"

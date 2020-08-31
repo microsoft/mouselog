@@ -8,7 +8,7 @@ import (
 	"math"
 	"sort"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 var DensityLimit = 30
@@ -19,7 +19,7 @@ type TraceFragment struct {
 	End   int
 }
 
-func checkHighPointDensity(events []*trace.Event) (int, string, int, int, int) {
+func checkHighPointDensity(events []*object.Event) (int, string, int, int, int) {
 	m := map[int]*TraceFragment{}
 	for i, e := range events {
 		key := int(math.Floor(e.Timestamp))

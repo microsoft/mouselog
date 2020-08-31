@@ -9,7 +9,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 	"github.com/microsoft/mouselog/util"
 )
 
@@ -70,7 +70,7 @@ func getUnifiedPointerType(pointerTypeList []string) string {
 	return strings.Join(resList, ", ")
 }
 
-func addEventsToTrace(t *trace.Trace, timestampList []string, eventTypeList []string, buttonList []string, pointerTypeList []string, xList []string, yList []string) {
+func addEventsToTrace(t *object.Trace, timestampList []string, eventTypeList []string, buttonList []string, pointerTypeList []string, xList []string, yList []string) {
 	minX := math.MaxInt32
 	minY := math.MaxInt32
 	maxX := 0
@@ -198,10 +198,10 @@ func unescapeUa(ua string) string {
 	return strings.ReplaceAll(ua, "|", ",")
 }
 
-func readCsvLine(sessions *[]*trace.Session, sessionMap *map[string]*trace.Session, impressions *[]*trace.Impression, impressionMap *map[string]*trace.Impression, websiteId string, line string, i int) {
+func readCsvLine(sessions *[]*object.Session, sessionMap *map[string]*object.Session, impressions *[]*object.Impression, impressionMap *map[string]*object.Impression, websiteId string, line string, i int) {
 	row := strings.SplitN(line, ",", RowYList+1)
 
-	t := trace.NewTrace(i)
+	t := object.NewTrace(i)
 	//t.Url = row[RowUrl]
 
 	isBot := row[RowIsBot]

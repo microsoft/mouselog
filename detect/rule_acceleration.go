@@ -6,7 +6,7 @@ package detect
 import (
 	"fmt"
 
-	"github.com/microsoft/mouselog/trace"
+	"github.com/microsoft/mouselog/object"
 )
 
 var AccelerationLimit = 2
@@ -19,7 +19,7 @@ func getNegativeValue(i int) int {
 	}
 }
 
-func checkAcceleration(events []*trace.Event) (int, string, int, int, int) {
+func checkAcceleration(events []*object.Event) (int, string, int, int, int) {
 	for i := 5; i < len(events); i++ {
 		if events[i].Type != "mousedown" {
 			continue
