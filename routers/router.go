@@ -55,4 +55,10 @@ func init() {
 	beego.Router("/api/update-faker", &controllers.ApiController{}, "POST:UpdateFaker")
 	beego.Router("/api/add-faker", &controllers.ApiController{}, "POST:AddFaker")
 	beego.Router("/api/delete-faker", &controllers.ApiController{}, "POST:DeleteFaker")
+
+	beego.Router("/api/get-captors", &controllers.ApiController{}, "GET:GetCaptors")
+	beego.Router("/api/get-captor", &controllers.ApiController{}, "GET:GetCaptor")
+	beego.Router("/api/update-captor", &controllers.ApiController{}, "POST:UpdateCaptor")
+	beego.Router("/api/add-captor", &controllers.ApiController{}, "POST:AddCaptor")
+	beego.Router("/api/delete-captor", &controllers.ApiController{}, "POST:DeleteCaptor")
 }

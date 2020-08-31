@@ -20,6 +20,8 @@ import ImpressionPage from "./ImpressionPage";
 import PagePage from "./PagePage";
 import FakerListPage from "./FakerListPage";
 import FakerEditPage from "./FakerEditPage";
+import CaptorListPage from "./CaptorListPage";
+import CaptorEditPage from "./CaptorEditPage";
 
 const {Text} = Typography;
 const {Header, Footer} = Layout;
@@ -57,6 +59,8 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 6});
     } else if (path.includes('fakers')) {
       this.setState({selectedMenuKey: 7});
+    } else if (path.includes('captors')) {
+      this.setState({selectedMenuKey: 8});
     } else {
       this.setState({selectedMenuKey: 1});
     }
@@ -142,6 +146,11 @@ class App extends React.Component {
                     Fakers
                   </a>
                 </Menu.Item>
+                <Menu.Item key="8">
+                  <a href="/captors">
+                    Captors
+                  </a>
+                </Menu.Item>
                 <Menu.Item key="100" style={{float: 'right'}}>
                   <a target="_blank" href="https://github.com/microsoft/mouselog">
                     <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />
@@ -174,6 +183,8 @@ class App extends React.Component {
             <Route path="/rules/" component={RuleListPage}/>
             <Route exact path="/fakers/" component={FakerListPage}/>
             <Route exact path="/fakers/:fakerName" component={FakerEditPage}/>
+            <Route exact path="/captors/" component={CaptorListPage}/>
+            <Route exact path="/captors/:captorName" component={CaptorEditPage}/>
             <Route exact path="/websites/" component={WebsiteListPage}/>
             <Route exact path="/websites/:websiteId" component={WebsiteEditPage}/>
             <Route exact path="/websites/:websiteId/sessions" component={SessionPage}/>
