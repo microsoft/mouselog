@@ -18,6 +18,8 @@ import WebsiteEditPage from "./WebsiteEditPage";
 import SessionPage from "./SessionPage";
 import ImpressionPage from "./ImpressionPage";
 import PagePage from "./PagePage";
+import FakerListPage from "./FakerListPage";
+import FakerEditPage from "./FakerEditPage";
 
 const {Text} = Typography;
 const {Header, Footer} = Layout;
@@ -53,6 +55,8 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 5});
     } else if (path.includes('rules')) {
       this.setState({selectedMenuKey: 6});
+    } else if (path.includes('fakers')) {
+      this.setState({selectedMenuKey: 7});
     } else {
       this.setState({selectedMenuKey: 1});
     }
@@ -133,6 +137,11 @@ class App extends React.Component {
                     Rules
                   </a>
                 </Menu.Item>
+                <Menu.Item key="7">
+                  <a href="/fakers">
+                    Fakers
+                  </a>
+                </Menu.Item>
                 <Menu.Item key="100" style={{float: 'right'}}>
                   <a target="_blank" href="https://github.com/microsoft/mouselog">
                     <img alt="GitHub stars" src="https://img.shields.io/github/stars/microsoft/mouselog?style=social" />
@@ -163,6 +172,8 @@ class App extends React.Component {
             <Route exact path="/" component={TestPage}/>
             <Route path="/datasets/" component={DatasetListPage}/>
             <Route path="/rules/" component={RuleListPage}/>
+            <Route exact path="/fakers/" component={FakerListPage}/>
+            <Route exact path="/fakers/:fakerName" component={FakerEditPage}/>
             <Route exact path="/websites/" component={WebsiteListPage}/>
             <Route exact path="/websites/:websiteId" component={WebsiteEditPage}/>
             <Route exact path="/websites/:websiteId/sessions" component={SessionPage}/>

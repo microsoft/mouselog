@@ -50,6 +50,10 @@ export function openLink(link) {
   w.location.href = link;
 }
 
+export function goToLink(link) {
+  window.location.href = link;
+}
+
 export function showMessage(type, text) {
   if (type === "") {
     return;
@@ -123,6 +127,10 @@ export function mixColor(rgbA, rgbB, amountToMix) {
 
 export function addRow(array, row) {
   return [...array, row];
+}
+
+export function prependRow(array, row) {
+  return [row, ...array];
 }
 
 export function deleteRow(array, i) {
