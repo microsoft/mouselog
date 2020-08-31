@@ -8,17 +8,17 @@ import (
 	"github.com/microsoft/mouselog/util"
 )
 
-func (c *APIController) GetSessions() {
+func (c *ApiController) GetSessions() {
 	c.Data["json"] = trace.GetSessions(c.Input().Get("websiteId"), util.ParseInt(c.Input().Get("resultCount")), util.ParseInt(c.Input().Get("offset")), c.Input().Get("sortField"), c.Input().Get("sortOrder"))
 	c.ServeJSON()
 }
 
-func (c *APIController) GetSession() {
+func (c *ApiController) GetSession() {
 	c.Data["json"] = trace.GetSession(c.Input().Get("id"), c.Input().Get("websiteId"))
 	c.ServeJSON()
 }
 
-func (c *APIController) GetSessionId() {
+func (c *ApiController) GetSessionId() {
 	sessionId := c.StartSession().SessionID()
 
 	//trace.AddSession(sessionId, c.Input().Get("websiteId"), c.getUserAgent(), c.getClientIp(), c.Input().Get("userId"))
@@ -27,7 +27,7 @@ func (c *APIController) GetSessionId() {
 	c.ServeJSON()
 }
 
-func (c *APIController) DeleteSession() {
+func (c *ApiController) DeleteSession() {
 	c.Data["json"] = trace.DeleteSession(c.Input().Get("id"), c.Input().Get("websiteId"))
 	c.ServeJSON()
 }

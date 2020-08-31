@@ -28,7 +28,7 @@ func getFilteredImpressions(impressions []*trace.Impression, ruleId int, limit i
 	return res
 }
 
-func (c *APIController) GetImpressions() {
+func (c *ApiController) GetImpressions() {
 	ruleId := util.ParseInt(c.Input().Get("ruleId"))
 	limit := util.ParseInt(c.Input().Get("resultCount"))
 	offset := util.ParseInt(c.Input().Get("offset"))
@@ -44,7 +44,7 @@ func (c *APIController) GetImpressions() {
 	c.ServeJSON()
 }
 
-func (c *APIController) GetImpressionsAll() {
+func (c *ApiController) GetImpressionsAll() {
 	ruleId := util.ParseInt(c.Input().Get("ruleId"))
 	limit := util.ParseInt(c.Input().Get("resultCount"))
 	offset := util.ParseInt(c.Input().Get("offset"))
@@ -60,7 +60,7 @@ func (c *APIController) GetImpressionsAll() {
 	c.ServeJSON()
 }
 
-func (c *APIController) GetImpression() {
+func (c *ApiController) GetImpression() {
 	impression := trace.GetImpression(c.Input().Get("id"), c.Input().Get("websiteId"))
 
 	detect.CheckBotForImpression(impression)
@@ -69,7 +69,7 @@ func (c *APIController) GetImpression() {
 	c.ServeJSON()
 }
 
-func (c *APIController) DeleteImpression() {
+func (c *ApiController) DeleteImpression() {
 	c.Data["json"] = trace.DeleteImpression(c.Input().Get("id"))
 	c.ServeJSON()
 }

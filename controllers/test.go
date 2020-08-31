@@ -14,7 +14,7 @@ import (
 	"github.com/microsoft/mouselog/trace"
 )
 
-type APIController struct {
+type ApiController struct {
 	beego.Controller
 }
 
@@ -28,7 +28,7 @@ func base64Decode(src []byte) ([]byte, error) {
 	return base64.StdEncoding.DecodeString(string(src))
 }
 
-func (c *APIController) UploadTrace() {
+func (c *ApiController) UploadTrace() {
 	var resp response
 
 	websiteId := c.Input().Get("websiteId")
@@ -121,7 +121,7 @@ func (c *APIController) UploadTrace() {
 	c.ServeJSON()
 }
 
-func (c *APIController) ClearTrace() {
+func (c *ApiController) ClearTrace() {
 	sessionId := c.StartSession().SessionID()
 	data := c.Ctx.Input.RequestBody
 

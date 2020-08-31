@@ -3,10 +3,10 @@
 
 package controllers
 
-func (c *APIController) getUserAgent() string {
+func (c *ApiController) getUserAgent() string {
 	return c.Ctx.Input.UserAgent()
 }
 
-func (c *APIController) getClientIp() string {
+func (c *ApiController) getClientIp() string {
 	return c.Ctx.Input.IP()
 }

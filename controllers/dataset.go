@@ -47,7 +47,7 @@ func syncDataset(s *trace.Session) {
 	s.SyncStatistics()
 }
 
-func (c *APIController) ListDatasets() {
+func (c *ApiController) ListDatasets() {
 	res := []*trace.SessionJson{}
 
 	path := filepath.Join(util.CacheDir, "mouselog")
