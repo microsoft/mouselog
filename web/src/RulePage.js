@@ -54,17 +54,20 @@ class RulePage extends React.Component {
   render() {
     return (
       <div>
-        <Row>
-          <Col span={12}>
+        <Row style={{width: "100%"}}>
+          <Col span={1}>
+          </Col>
+          <Col span={22}>
             {
               this.renderRuleTable()
             }
+          </Col>
+          <Col span={1}>
           </Col>
         </Row>
       </div>
     );
   }
-
 }
 
 export default RulePage;

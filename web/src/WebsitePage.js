@@ -304,11 +304,15 @@ class WebsitePage extends React.Component {
   render() {
     return (
       <div>
-        <Row>
-          <Col span={24}>
+        <Row style={{width: "100%"}}>
+          <Col span={1}>
+          </Col>
+          <Col span={22}>
             {
               this.renderTable(this.state.websites)
             }
+          </Col>
+          <Col span={1}>
           </Col>
         </Row>
       </div>

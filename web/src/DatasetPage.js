@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import {Row, Table} from 'antd';
+import {Col, Row, Table} from 'antd';
 import * as Backend from "./Backend";
 import * as Setting from "./Setting";
 import {Group, Layer, Rect, Stage, Text} from "react-konva";
@@ -173,13 +173,19 @@ class DatasetPage extends React.Component {
   render() {
     return (
       <div>
-        <Row>
-          {
-            this.renderTable()
-          }
+        <Row style={{width: "100%"}}>
+          <Col span={1}>
+          </Col>
+          <Col span={22}>
+            {
+              this.renderTable()
+            }
+          </Col>
+          <Col span={1}>
+          </Col>
         </Row>
       </div>
-    )
+    );
   }
 }
 
