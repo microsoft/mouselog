@@ -10,7 +10,7 @@ import * as Setting from "./Setting";
 import {Group, Layer, Rect, Stage, Text} from "react-konva";
 import {Link} from "react-router-dom";
 
-class DatasetPage extends React.Component {
+class DatasetListPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -189,4 +189,4 @@ class DatasetPage extends React.Component {
   }
 }
 
-export default DatasetPage;
+export default DatasetListPage;

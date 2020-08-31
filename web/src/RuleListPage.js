@@ -7,7 +7,7 @@ import React from "react";
 import {Table, Row, Col} from 'antd';
 import * as Backend from "./Backend";
 
-class RulePage extends React.Component {
+class RuleListPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,4 +70,4 @@ class RulePage extends React.Component {
   }
 }
 
-export default RulePage;
+export default RuleListPage;

@@ -9,7 +9,7 @@ import * as Setting from "./Setting";
 import * as WebsiteBackend from "./backend/WebsiteBackend";
 import ConfigEdit from "./ConfigEdit";
 
-class WebsitePage extends React.Component {
+class WebsiteListPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -320,4 +320,4 @@ class WebsitePage extends React.Component {
   }
 }
 
-export default WebsitePage;
+export default WebsiteListPage;

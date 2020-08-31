@@ -9,11 +9,11 @@ import * as Setting from "./Setting";
 
 import {Switch, Route} from 'react-router-dom'
 import TestPage from "./TestPage";
-import DatasetPage from "./DatasetPage";
+import DatasetListPage from "./DatasetListPage";
 import {Layout, Menu, Tag, Typography, Switch as AntdSwitch} from "antd";
-import RulePage from "./RulePage";
+import RuleListPage from "./RuleListPage";
 import CanvasPage from "./CanvasPage";
-import WebsitePage from "./WebsitePage";
+import WebsiteListPage from "./WebsiteListPage";
 import WebsiteEditPage from "./WebsiteEditPage";
 import SessionPage from "./SessionPage";
 import ImpressionPage from "./ImpressionPage";
@@ -51,7 +51,7 @@ class App extends React.Component {
       this.setState({selectedMenuKey: 3});
     } else if (path.includes('datasets')) {
       this.setState({selectedMenuKey: 5});
-    } else if (path.includes('rule')) {
+    } else if (path.includes('rules')) {
       this.setState({selectedMenuKey: 6});
     } else {
       this.setState({selectedMenuKey: 1});
@@ -125,12 +125,12 @@ class App extends React.Component {
                 }
                 <Menu.Item key="5">
                   <a href="/datasets">
-                    Dataset
+                    Datasets
                   </a>
                 </Menu.Item>
                 <Menu.Item key="6">
-                  <a href="/rule">
-                    Rule
+                  <a href="/rules">
+                    Rules
                   </a>
                 </Menu.Item>
                 <Menu.Item key="100" style={{float: 'right'}}>
@@ -161,9 +161,9 @@ class App extends React.Component {
           </Layout>
           <Switch>
             <Route exact path="/" component={TestPage}/>
-            <Route path="/datasets/" component={DatasetPage}/>
-            <Route path="/rule/" component={RulePage}/>
-            <Route exact path="/websites/" component={WebsitePage}/>
+            <Route path="/datasets/" component={DatasetListPage}/>
+            <Route path="/rules/" component={RuleListPage}/>
+            <Route exact path="/websites/" component={WebsiteListPage}/>
             <Route exact path="/websites/:websiteId" component={WebsiteEditPage}/>
             <Route exact path="/websites/:websiteId/sessions" component={SessionPage}/>
             <Route exact path="/websites/:websiteId/sessions/:sessionId/impressions" component={ImpressionPage}/>
