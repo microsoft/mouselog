@@ -8,64 +8,18 @@ import (
 	"go/parser"
 	"go/token"
 	"log"
-	"strings"
 )
 
-func parseCallStatement(stmt *ast.ExprStmt) *Statement {
-	expr := stmt.X.(*ast.CallExpr)
-
-	fun := expr.Fun.(*ast.SelectorExpr)
-	x := fun.X.(*ast.Ident).Name
-	sel := fun.Sel.Name
-	name := x + "." + sel
-
-	params := []*Parameter{}
-	for _, arg := range expr.Args {
-		a := arg.(*ast.BasicLit)
-		param := &Parameter{
-			Type: strings.ToLower(a.Kind.String()),
-			Name: a.Value,
-		}
-		params = append(params, param)
+func parseField(field *ast.Field) *Parameter {
+	param := &Parameter{
+		Type: field.Type.(*ast.Ident).Name,
 	}
 
-	s := &Statement{
-		Name: name,
-		Args: params,
-	}
-	return s
-}
-
-func parseReturnStatement(stmt *ast.ReturnStmt) *Statement {
-	params := []*Parameter{}
-	for _, result := range stmt.Results {
-		r := result.(*ast.BasicLit)
-		param := &Parameter{
-			Type: strings.ToLower(r.Kind.String()),
-			Name: r.Value,
-		}
-		params = append(params, param)
+	if len(field.Names) > 0 {
+		param.Name = field.Names[0].Name
 	}
 
-	s := &Statement{
-		Name: "return",
-		Args: params,
-	}
-	return s
-}
-
-func parseStatement(expr *ast.Stmt) *Statement {
-	e, ok := (*expr).(*ast.ExprStmt)
-	if ok {
-		return parseCallStatement(e)
-	}
-
-	e2, ok := (*expr).(*ast.ReturnStmt)
-	if ok {
-		return parseReturnStatement(e2)
-	}
-
-	return nil
+	return param
 }
 
 func parseFunction(fd *ast.FuncDecl) *Function {
@@ -73,17 +27,14 @@ func parseFunction(fd *ast.FuncDecl) *Function {
 
 	params := []*Parameter{}
 	for _, field := range fd.Type.Params.List {
-		param := &Parameter{
-			Type: field.Type.(*ast.Ident).Name,
-			Name: field.Names[0].Name,
-		}
+		param := parseField(field)
 		params = append(params, param)
 	}
 
 	results := []string{}
 	for _, field := range fd.Type.Results.List {
-		result := field.Type.(*ast.Ident).Name
-		results = append(results, result)
+		f := parseField(field)
+		results = append(results, f.Type)
 	}
 
 	stmts := []*Statement{}
@@ -93,9 +44,9 @@ func parseFunction(fd *ast.FuncDecl) *Function {
 	}
 
 	f := &Function{
-		Name:    name,
-		Params:  params,
-		Results: results,
+		Name:       name,
+		Params:     params,
+		Results:    results,
 		Statements: stmts,
 	}
 	return f
