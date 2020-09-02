@@ -11,49 +11,58 @@ import (
 	"strings"
 )
 
+func parseCallStatement(stmt *ast.ExprStmt) *Statement {
+	expr := stmt.X.(*ast.CallExpr)
+
+	fun := expr.Fun.(*ast.SelectorExpr)
+	x := fun.X.(*ast.Ident).Name
+	sel := fun.Sel.Name
+	name := x + "." + sel
+
+	params := []*Parameter{}
+	for _, arg := range expr.Args {
+		a := arg.(*ast.BasicLit)
+		param := &Parameter{
+			Type: strings.ToLower(a.Kind.String()),
+			Name: a.Value,
+		}
+		params = append(params, param)
+	}
+
+	s := &Statement{
+		Name: name,
+		Args: params,
+	}
+	return s
+}
+
+func parseReturnStatement(stmt *ast.ReturnStmt) *Statement {
+	params := []*Parameter{}
+	for _, result := range stmt.Results {
+		r := result.(*ast.BasicLit)
+		param := &Parameter{
+			Type: strings.ToLower(r.Kind.String()),
+			Name: r.Value,
+		}
+		params = append(params, param)
+	}
+
+	s := &Statement{
+		Name: "return",
+		Args: params,
+	}
+	return s
+}
+
 func parseStatement(expr *ast.Stmt) *Statement {
 	e, ok := (*expr).(*ast.ExprStmt)
 	if ok {
-		callExpr := e.X.(*ast.CallExpr)
-		fun := callExpr.Fun.(*ast.SelectorExpr)
-		x := fun.X.(*ast.Ident).Name
-		sel := fun.Sel.Name
-		name := x + "." + sel
-
-		params := []*Parameter{}
-		for _, arg := range callExpr.Args {
-			a := arg.(*ast.BasicLit)
-			param := &Parameter{
-				Type: strings.ToLower(a.Kind.String()),
-				Name: a.Value,
-			}
-			params = append(params, param)
-		}
-
-		s := &Statement{
-			Name: name,
-			Args: params,
-		}
-		return s
+		return parseCallStatement(e)
 	}
 
 	e2, ok := (*expr).(*ast.ReturnStmt)
 	if ok {
-		params := []*Parameter{}
-		for _, result := range e2.Results {
-			r := result.(*ast.BasicLit)
-			param := &Parameter{
-				Type: strings.ToLower(r.Kind.String()),
-				Name: r.Value,
-			}
-			params = append(params, param)
-		}
-
-		s := &Statement{
-			Name: "return",
-			Args: params,
-		}
-		return s
+		return parseReturnStatement(e2)
 	}
 
 	return nil
