@@ -12,6 +12,7 @@ import (
 func parseExpression(expr *ast.Expr) *Parameter {
 	e, ok := (*expr).(*ast.BasicLit)
 	if ok {
+		// Literal value of int: 0, 1, 2, ...
 		param := &Parameter{
 			Type: strings.ToLower(e.Kind.String()),
 			Name: e.Value,
@@ -21,15 +22,26 @@ func parseExpression(expr *ast.Expr) *Parameter {
 
 	e2, ok := (*expr).(*ast.Ident)
 	if ok {
-		param := &Parameter{
-			Type: strings.ToLower(e2.Obj.Kind.String()),
-			Name: e2.Obj.Name,
+		if e2.Obj == nil {
+			// Literal value of boolean: true, false
+			param := &Parameter{
+				Type: "bool",
+				Name: e2.Name,
+			}
+			return param
+		} else {
+			// Variable
+			param := &Parameter{
+				Type: strings.ToLower(e2.Obj.Kind.String()),
+				Name: e2.Obj.Name,
+			}
+			return param
 		}
-		return param
 	}
 
 	e3, ok := (*expr).(*ast.BinaryExpr)
 	if ok {
+		// Binary expression like: i < 10
 		op := e3.Op.String()
 		left := parseExpression(&e3.X)
 		right := parseExpression(&e3.Y)
@@ -42,10 +54,17 @@ func parseExpression(expr *ast.Expr) *Parameter {
 		return param
 	}
 
-	err := "parseExpression: unknown expr type"
-	param := &Parameter{
-		Type: err,
-		Name: err,
+	e4, ok := (*expr).(*ast.ParenExpr)
+	if ok {
+		// Parentheses expression like: (1 + 2)
+		inside := parseExpression(&e4.X)
+
+		param := &Parameter{
+			Type: "parentheses",
+			Inside: inside,
+		}
+		return param
 	}
-	return param
+
+	panic("parseExpression(): unknown expression type")
 }

@@ -11,11 +11,18 @@ import (
 type Parameter struct {
 	Type string
 	Name string
+
+	Inside *Parameter
 }
 
 func (param *Parameter) String() string {
 	//return fmt.Sprintf("%s:%s", param.Type, param.Name)
-	return fmt.Sprintf("%s", param.Name)
+
+	if param.Type == "parentheses" {
+		return fmt.Sprintf("(%s)", param.Inside)
+	} else {
+		return param.Name
+	}
 }
 
 type Parameters []*Parameter

@@ -140,5 +140,5 @@ func parseStatement(stmt *ast.Stmt, level int) *Statement {
 		return parseIfStatement(e6, level)
 	}
 
-	panic("parseStatement(): statement type not recognized")
+	panic("parseStatement(): unknown statement type")
 }
