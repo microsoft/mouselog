@@ -109,6 +109,15 @@ func parseIfStatement(stmt *ast.IfStmt, level int) *Statement {
 	return s
 }
 
+func parseBranchStatement(stmt *ast.BranchStmt, level int) *Statement {
+	s := &Statement{
+		Level: level,
+		Name: strings.ToLower(stmt.Tok.String()), // Can be "break",
+	}
+
+	return s
+}
+
 func parseStatement(stmt *ast.Stmt, level int) *Statement {
 	e, ok := (*stmt).(*ast.ExprStmt)
 	if ok {
@@ -138,6 +147,11 @@ func parseStatement(stmt *ast.Stmt, level int) *Statement {
 	e6, ok := (*stmt).(*ast.IfStmt)
 	if ok {
 		return parseIfStatement(e6, level)
+	}
+
+	e7, ok := (*stmt).(*ast.BranchStmt)
+	if ok {
+		return parseBranchStatement(e7, level)
 	}
 
 	panic("parseStatement(): unknown statement type")

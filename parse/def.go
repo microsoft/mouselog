@@ -127,6 +127,10 @@ func (stmt *Statement) String() string {
 		}
 
 		res = strings.Join(list, "\n")
+	} else if stmt.Name == "break" || stmt.Name == "continue" {
+		// Input: break
+		// Output: break
+		res = stmt.Name
 	} else if stmt.Name == "+=" || stmt.Name == "-=" {
 		// Input: res += 10
 		// Output: res += 10
