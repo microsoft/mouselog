@@ -8,29 +8,29 @@ import (
 	"strings"
 )
 
-type Parameter struct {
+type Expression struct {
 	Type string
 	Name string
 
-	Inside *Parameter
+	Inside *Expression
 }
 
-func (param *Parameter) String() string {
-	//return fmt.Sprintf("%s:%s", param.Type, param.Name)
+func (expr *Expression) String() string {
+	//return fmt.Sprintf("%s:%s", expr.Type, expr.Name)
 
-	if param.Type == "parentheses" {
-		return fmt.Sprintf("(%s)", param.Inside)
+	if expr.Type == "parentheses" {
+		return fmt.Sprintf("(%s)", expr.Inside)
 	} else {
-		return param.Name
+		return expr.Name
 	}
 }
 
-type Parameters []*Parameter
+type Expressions []*Expression
 
-func (params Parameters) String() string {
+func (exprs Expressions) String() string {
 	res := []string{}
-	for _, param := range params {
-		res = append(res, param.String())
+	for _, expr := range exprs {
+		res = append(res, expr.String())
 	}
 	return strings.Join(res, ", ")
 }
@@ -38,7 +38,7 @@ func (params Parameters) String() string {
 type Function struct {
 	Level      int
 	Name       string
-	Params     Parameters
+	Params     Expressions
 	Results    []string
 	Statements []*Statement
 }
@@ -67,10 +67,10 @@ func (f *Function) String() string {
 type Statement struct {
 	Level int
 	Name  string
-	Args  Parameters
+	Args  Expressions
 
 	Init *Statement
-	Cond *Parameter
+	Cond *Expression
 	Post *Statement
 	Body []*Statement
 }

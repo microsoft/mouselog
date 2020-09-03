@@ -16,30 +16,30 @@ func parseCallStatement(stmt *ast.ExprStmt, level int) *Statement {
 	sel := fun.Sel.Name
 	name := x + "." + sel
 
-	params := []*Parameter{}
+	exprs := []*Expression{}
 	for _, arg := range expr.Args {
-		param := parseExpression(&arg)
-		params = append(params, param)
+		expr := parseExpression(&arg)
+		exprs = append(exprs, expr)
 	}
 
 	s := &Statement{
 		Level: level,
 		Name:  name,
-		Args:  params,
+		Args:  exprs,
 	}
 	return s
 }
 
 func parseAssignStatement(stmt *ast.AssignStmt, level int) *Statement {
-	leftExpr := stmt.Lhs[0]
-	rightExpr := stmt.Rhs[0]
-	leftParam := parseExpression(&leftExpr)
-	rightParam := parseExpression(&rightExpr)
+	left := stmt.Lhs[0]
+	right := stmt.Rhs[0]
+	leftExpr := parseExpression(&left)
+	rightExpr := parseExpression(&right)
 
 	s := &Statement{
 		Level: level,
 		Name:  strings.ToLower(stmt.Tok.String()),
-		Args:  []*Parameter{leftParam, rightParam},
+		Args:  []*Expression{leftExpr, rightExpr},
 	}
 	return s
 }
@@ -63,32 +63,32 @@ func parseForStatement(stmt *ast.ForStmt, level int) *Statement {
 }
 
 func parseReturnStatement(stmt *ast.ReturnStmt, level int) *Statement {
-	params := []*Parameter{}
+	exprs := []*Expression{}
 	for _, result := range stmt.Results {
-		param := parseExpression(&result)
-		params = append(params, param)
+		expr := parseExpression(&result)
+		exprs = append(exprs, expr)
 	}
 
 	s := &Statement{
 		Level: level,
 		Name:  "return",
-		Args:  params,
+		Args:  exprs,
 	}
 	return s
 }
 
 func parseIncDecStatement(stmt *ast.IncDecStmt, level int) *Statement {
-	params := []*Parameter{}
-	param := &Parameter{
+	exprs := []*Expression{}
+	expr := &Expression{
 		Type: "",
 		Name: stmt.X.(*ast.Ident).Name,
 	}
-	params = append(params, param)
+	exprs = append(exprs, expr)
 
 	s := &Statement{
 		Level: level,
 		Name:  strings.ToLower(stmt.Tok.String()),
-		Args:  params,
+		Args:  exprs,
 	}
 	return s
 }

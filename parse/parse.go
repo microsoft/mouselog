@@ -10,8 +10,8 @@ import (
 	"log"
 )
 
-func parseField(field *ast.Field) *Parameter {
-	param := &Parameter{
+func parseField(field *ast.Field) *Expression {
+	param := &Expression{
 		Type: field.Type.(*ast.Ident).Name,
 	}
 
@@ -25,7 +25,7 @@ func parseField(field *ast.Field) *Parameter {
 func parseFunction(fd *ast.FuncDecl, level int) *Function {
 	name := fd.Name.Name
 
-	params := []*Parameter{}
+	params := []*Expression{}
 	for _, field := range fd.Type.Params.List {
 		param := parseField(field)
 		params = append(params, param)

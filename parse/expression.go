@@ -9,33 +9,33 @@ import (
 	"strings"
 )
 
-func parseExpression(expr *ast.Expr) *Parameter {
+func parseExpression(expr *ast.Expr) *Expression {
 	e, ok := (*expr).(*ast.BasicLit)
 	if ok {
 		// Literal value of int: 0, 1, 2, ...
-		param := &Parameter{
+		res := &Expression{
 			Type: strings.ToLower(e.Kind.String()),
 			Name: e.Value,
 		}
-		return param
+		return res
 	}
 
 	e2, ok := (*expr).(*ast.Ident)
 	if ok {
 		if e2.Obj == nil {
 			// Literal value of boolean: true, false
-			param := &Parameter{
+			res := &Expression{
 				Type: "bool",
 				Name: e2.Name,
 			}
-			return param
+			return res
 		} else {
 			// Variable
-			param := &Parameter{
+			res := &Expression{
 				Type: strings.ToLower(e2.Obj.Kind.String()),
 				Name: e2.Obj.Name,
 			}
-			return param
+			return res
 		}
 	}
 
@@ -47,11 +47,11 @@ func parseExpression(expr *ast.Expr) *Parameter {
 		right := parseExpression(&e3.Y)
 		value := fmt.Sprintf("%s %s %s", left, op, right)
 
-		param := &Parameter{
+		res := &Expression{
 			Type: op,
 			Name: value,
 		}
-		return param
+		return res
 	}
 
 	e4, ok := (*expr).(*ast.ParenExpr)
@@ -59,11 +59,11 @@ func parseExpression(expr *ast.Expr) *Parameter {
 		// Parentheses expression like: (1 + 2)
 		inside := parseExpression(&e4.X)
 
-		param := &Parameter{
+		res := &Expression{
 			Type: "parentheses",
 			Inside: inside,
 		}
-		return param
+		return res
 	}
 
 	panic("parseExpression(): unknown expression type")
