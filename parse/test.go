@@ -8,5 +8,8 @@ func test(a string, b int) int {
 	for i := 0; i < 10; i++ {
 		res += 10 / 2
 	}
+	if res != 10 {
+		res = 5
+	}
 	return res
 }

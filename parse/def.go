@@ -88,6 +88,10 @@ func (stmt *Statement) String() string {
 		// Input: res := 0
 		// Output: int res = 0
 		res = fmt.Sprintf("%s %s = %s", stmt.Args[1].Type, stmt.Args[0].Name, stmt.Args[1])
+	} else if stmt.Name == "=" {
+		// Input: res = 5
+		// Output: res = 5
+		res = fmt.Sprintf("%s = %s", stmt.Args[0], stmt.Args[1])
 	} else if stmt.Name == "for" {
 		// Input: for i := 0; i < 10; i++
 		// Output: for (int i = 0; i < 10; xxx)
@@ -95,6 +99,19 @@ func (stmt *Statement) String() string {
 		cond := stmt.Cond.String()
 		post := stmt.Post.String()
 		declaration := fmt.Sprintf("for (%s; %s; %s)", init, cond, post)
+
+		list := []string{}
+		list = append(list, declaration)
+		for _, stmt := range stmt.Body {
+			list = append(list, stmt.String())
+		}
+
+		res = strings.Join(list, "\n")
+	} else if stmt.Name == "if" {
+		// Input: if res != 10
+		// Output: if (res != 10)
+		cond := stmt.Cond.String()
+		declaration := fmt.Sprintf("if (%s)", cond)
 
 		list := []string{}
 		list = append(list, declaration)

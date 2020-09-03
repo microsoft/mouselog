@@ -93,6 +93,22 @@ func parseIncDecStatement(stmt *ast.IncDecStmt, level int) *Statement {
 	return s
 }
 
+func parseIfStatement(stmt *ast.IfStmt, level int) *Statement {
+	s := &Statement{
+		Level: level,
+		Name: "if",
+	}
+
+	s.Cond = parseExpression(&stmt.Cond)
+
+	s.Body = []*Statement{}
+	for _, stmt2 := range stmt.Body.List {
+		s.Body = append(s.Body, parseStatement(&stmt2, level+1))
+	}
+
+	return s
+}
+
 func parseStatement(stmt *ast.Stmt, level int) *Statement {
 	e, ok := (*stmt).(*ast.ExprStmt)
 	if ok {
@@ -119,5 +135,10 @@ func parseStatement(stmt *ast.Stmt, level int) *Statement {
 		return parseIncDecStatement(e5, level)
 	}
 
-	return nil
+	e6, ok := (*stmt).(*ast.IfStmt)
+	if ok {
+		return parseIfStatement(e6, level)
+	}
+
+	panic("parseStatement(): statement type not recognized")
 }
