@@ -4,155 +4,85 @@
 package parse
 
 import (
-	"go/ast"
+	"fmt"
 	"strings"
 )
 
-func parseCallStatement(stmt *ast.ExprStmt, level int) *Statement {
-	expr := stmt.X.(*ast.CallExpr)
+type Statement struct {
+	Level int
+	Name  string
+	Args  Expressions
 
-	fun := expr.Fun.(*ast.SelectorExpr)
-	x := fun.X.(*ast.Ident).Name
-	sel := fun.Sel.Name
-	name := x + "." + sel
-
-	exprs := []*Expression{}
-	for _, arg := range expr.Args {
-		expr := parseExpression(&arg)
-		exprs = append(exprs, expr)
-	}
-
-	s := &Statement{
-		Level: level,
-		Name:  name,
-		Args:  exprs,
-	}
-	return s
+	Init *Statement
+	Cond *Expression
+	Post *Statement
+	Body []*Statement
 }
 
-func parseAssignStatement(stmt *ast.AssignStmt, level int) *Statement {
-	left := stmt.Lhs[0]
-	right := stmt.Rhs[0]
-	leftExpr := parseExpression(&left)
-	rightExpr := parseExpression(&right)
+func (stmt *Statement) String() string {
+	res := ""
+	if stmt.Name == ":=" {
+		// Input: res := 0
+		// Output: int res = 0
+		res = fmt.Sprintf("%s %s = %s", stmt.Args[1].Type, stmt.Args[0].Name, stmt.Args[1])
+	} else if stmt.Name == "=" {
+		// Input: res = 5
+		// Output: res = 5
+		res = fmt.Sprintf("%s = %s", stmt.Args[0], stmt.Args[1])
+	} else if stmt.Name == "for" {
+		// Input: for i := 0; i < 10; i++
+		// Output: for (int i = 0; i < 10; xxx)
+		init := stmt.Init.String()
+		cond := stmt.Cond.String()
+		post := stmt.Post.String()
+		declaration := fmt.Sprintf("for (%s; %s; %s)", init, cond, post)
 
-	s := &Statement{
-		Level: level,
-		Name:  strings.ToLower(stmt.Tok.String()),
-		Args:  []*Expression{leftExpr, rightExpr},
-	}
-	return s
-}
+		list := []string{}
+		list = append(list, declaration)
+		for _, stmt := range stmt.Body {
+			list = append(list, stmt.String())
+		}
 
-func parseForStatement(stmt *ast.ForStmt, level int) *Statement {
-	s := &Statement{
-		Level: level,
-		Name: "for",
-	}
+		res = strings.Join(list, "\n")
+	} else if stmt.Name == "if" {
+		// Input: if res != 10
+		// Output: if (res != 10)
+		cond := stmt.Cond.String()
+		declaration := fmt.Sprintf("if (%s)", cond)
 
-	s.Init = parseStatement(&stmt.Init, 0)
-	s.Cond = parseExpression(&stmt.Cond)
-	s.Post = parseStatement(&stmt.Post, 0)
+		list := []string{}
+		list = append(list, declaration)
+		for _, stmt := range stmt.Body {
+			list = append(list, stmt.String())
+		}
 
-	s.Body = []*Statement{}
-	for _, stmt2 := range stmt.Body.List {
-		s.Body = append(s.Body, parseStatement(&stmt2, level+1))
-	}
-
-	return s
-}
-
-func parseReturnStatement(stmt *ast.ReturnStmt, level int) *Statement {
-	exprs := []*Expression{}
-	for _, result := range stmt.Results {
-		expr := parseExpression(&result)
-		exprs = append(exprs, expr)
-	}
-
-	s := &Statement{
-		Level: level,
-		Name:  "return",
-		Args:  exprs,
-	}
-	return s
-}
-
-func parseIncDecStatement(stmt *ast.IncDecStmt, level int) *Statement {
-	exprs := []*Expression{}
-	expr := &Expression{
-		Type: "",
-		Name: stmt.X.(*ast.Ident).Name,
-	}
-	exprs = append(exprs, expr)
-
-	s := &Statement{
-		Level: level,
-		Name:  strings.ToLower(stmt.Tok.String()),
-		Args:  exprs,
-	}
-	return s
-}
-
-func parseIfStatement(stmt *ast.IfStmt, level int) *Statement {
-	s := &Statement{
-		Level: level,
-		Name: "if",
+		res = strings.Join(list, "\n")
+	} else if stmt.Name == "break" || stmt.Name == "continue" {
+		// Input: break
+		// Output: break
+		res = stmt.Name
+	} else if stmt.Name == "+=" || stmt.Name == "-=" {
+		// Input: res += 10
+		// Output: res += 10
+		res = fmt.Sprintf("%s %s %s", stmt.Args[0], stmt.Name, stmt.Args[1])
+	} else if stmt.Name == "++" || stmt.Name == "--" {
+		// Input: i++
+		// Output: i ++
+		res = fmt.Sprintf("%s %s", stmt.Args[0], stmt.Name)
+	} else {
+		// Input: fmt.Printf("Hello, World!\n")
+		// Output: fmt.Printf("Hello, World!\n")
+		args := []string{}
+		for _, arg := range stmt.Args {
+			args = append(args, arg.String())
+		}
+		res = fmt.Sprintf("%s(%s)", stmt.Name, stmt.Args.String())
 	}
 
-	s.Cond = parseExpression(&stmt.Cond)
-
-	s.Body = []*Statement{}
-	for _, stmt2 := range stmt.Body.List {
-		s.Body = append(s.Body, parseStatement(&stmt2, level+1))
+	indent := getIndent(stmt.Level)
+	if IsVerbose {
+		return fmt.Sprintf("%s<stmt>%s</stmt>", indent, res)
+	} else {
+		return fmt.Sprintf("%s%s", indent, res)
 	}
-
-	return s
-}
-
-func parseBranchStatement(stmt *ast.BranchStmt, level int) *Statement {
-	s := &Statement{
-		Level: level,
-		Name: strings.ToLower(stmt.Tok.String()), // Can be "break",
-	}
-
-	return s
-}
-
-func parseStatement(stmt *ast.Stmt, level int) *Statement {
-	e, ok := (*stmt).(*ast.ExprStmt)
-	if ok {
-		return parseCallStatement(e, level)
-	}
-
-	e2, ok := (*stmt).(*ast.AssignStmt)
-	if ok {
-		return parseAssignStatement(e2, level)
-	}
-
-	e3, ok := (*stmt).(*ast.ForStmt)
-	if ok {
-		return parseForStatement(e3, level)
-	}
-
-	e4, ok := (*stmt).(*ast.ReturnStmt)
-	if ok {
-		return parseReturnStatement(e4, level)
-	}
-
-	e5, ok := (*stmt).(*ast.IncDecStmt)
-	if ok {
-		return parseIncDecStatement(e5, level)
-	}
-
-	e6, ok := (*stmt).(*ast.IfStmt)
-	if ok {
-		return parseIfStatement(e6, level)
-	}
-
-	e7, ok := (*stmt).(*ast.BranchStmt)
-	if ok {
-		return parseBranchStatement(e7, level)
-	}
-
-	panic("parseStatement(): unknown statement type")
 }
