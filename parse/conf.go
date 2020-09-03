@@ -3,10 +3,4 @@
 
 package parse
 
-import "testing"
-
-func TestParseFile(t *testing.T) {
-	println()
-	parseFile()
-	println()
-}
+var IsVerbose = true

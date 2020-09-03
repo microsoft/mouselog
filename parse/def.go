@@ -14,7 +14,8 @@ type Parameter struct {
 }
 
 func (param *Parameter) String() string {
-	return fmt.Sprintf("%s:%s", param.Type, param.Name)
+	//return fmt.Sprintf("%s:%s", param.Type, param.Name)
+	return fmt.Sprintf("%s", param.Name)
 }
 
 type Parameters []*Parameter
@@ -28,6 +29,7 @@ func (params Parameters) String() string {
 }
 
 type Function struct {
+	Level      int
 	Name       string
 	Params     Parameters
 	Results    []string
@@ -35,20 +37,30 @@ type Function struct {
 }
 
 func (f *Function) String() string {
+	res := ""
+
 	declaration := fmt.Sprintf("%s %s(%s)", strings.Join(f.Results, ", "), f.Name, f.Params.String())
 
-	res := []string{}
-	res = append(res, declaration)
+	list := []string{}
+	list = append(list, declaration)
 	for _, stmt := range f.Statements {
-		res = append(res, stmt.String())
+		list = append(list, stmt.String())
 	}
 
-	return strings.Join(res, "\n")
+	res = strings.Join(list, "\n")
+
+	indent := getIndent(f.Level)
+	if IsVerbose {
+		return fmt.Sprintf("%s<func>%s</func>", indent, res)
+	} else {
+		return fmt.Sprintf("%s%s", indent, res)
+	}
 }
 
 type Statement struct {
-	Name string
-	Args Parameters
+	Level int
+	Name  string
+	Args  Parameters
 
 	Init *Statement
 	Cond *Parameter
@@ -56,24 +68,63 @@ type Statement struct {
 	Body []*Statement
 }
 
-func (stmt *Statement) String() string {
-	if stmt.Name == "assign" {
-		return fmt.Sprintf("%s = %s", stmt.Args[0], stmt.Args[1])
-	} else if stmt.Name == "for" {
-		declaration := fmt.Sprintf("for (%s | %s | %s)", stmt.Init, stmt.Cond, stmt.Post)
+func getIndent(level int) string {
+	if level == 0 {
+		return ""
+	} else if level == 1 {
+		return "    "
+	} else if level == 2 {
+		return "        "
+	} else if level == 3 {
+		return "            "
+	} else {
+		panic("getIndent(): not supported level")
+	}
+}
 
-		res := []string{}
-		res = append(res, declaration)
+func (stmt *Statement) String() string {
+	res := ""
+	if stmt.Name == ":=" {
+		// Input: res := 0
+		// Output: int res = 0
+		res = fmt.Sprintf("%s %s = %s", stmt.Args[1].Type, stmt.Args[0].Name, stmt.Args[1])
+	} else if stmt.Name == "for" {
+		// Input: for i := 0; i < 10; i++
+		// Output: for (int i = 0; i < 10; xxx)
+		init := stmt.Init.String()
+		cond := stmt.Cond.String()
+		post := stmt.Post.String()
+		declaration := fmt.Sprintf("for (%s; %s; %s)", init, cond, post)
+
+		list := []string{}
+		list = append(list, declaration)
 		for _, stmt := range stmt.Body {
-			res = append(res, stmt.String())
+			list = append(list, stmt.String())
 		}
 
-		return strings.Join(res, "\n")
+		res = strings.Join(list, "\n")
+	} else if stmt.Name == "+=" || stmt.Name == "-=" {
+		// Input: res += 10
+		// Output: res += 10
+		res = fmt.Sprintf("%s %s %s", stmt.Args[0], stmt.Name, stmt.Args[1])
+	} else if stmt.Name == "++" || stmt.Name == "--" {
+		// Input: i++
+		// Output: i ++
+		res = fmt.Sprintf("%s %s", stmt.Args[0], stmt.Name)
 	} else {
+		// Input: fmt.Printf("Hello, World!\n")
+		// Output: fmt.Printf("Hello, World!\n")
 		args := []string{}
 		for _, arg := range stmt.Args {
 			args = append(args, arg.String())
 		}
-		return fmt.Sprintf("%s(%s)", stmt.Name, stmt.Args.String())
+		res = fmt.Sprintf("%s(%s)", stmt.Name, stmt.Args.String())
+	}
+
+	indent := getIndent(stmt.Level)
+	if IsVerbose {
+		return fmt.Sprintf("%s<stmt>%s</stmt>", indent, res)
+	} else {
+		return fmt.Sprintf("%s%s", indent, res)
 	}
 }

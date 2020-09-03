@@ -22,7 +22,7 @@ func parseField(field *ast.Field) *Parameter {
 	return param
 }
 
-func parseFunction(fd *ast.FuncDecl) *Function {
+func parseFunction(fd *ast.FuncDecl, level int) *Function {
 	name := fd.Name.Name
 
 	params := []*Parameter{}
@@ -39,11 +39,12 @@ func parseFunction(fd *ast.FuncDecl) *Function {
 
 	stmts := []*Statement{}
 	for _, stmt := range fd.Body.List {
-		s := parseStatement(&stmt)
+		s := parseStatement(&stmt, level+1)
 		stmts = append(stmts, s)
 	}
 
 	f := &Function{
+		Level:      level,
 		Name:       name,
 		Params:     params,
 		Results:    results,
@@ -65,7 +66,8 @@ func parseFile() {
 			continue
 		}
 
-		f := parseFunction(fd)
+		level := 0
+		f := parseFunction(fd, level)
 		println(f.String())
 	}
 }

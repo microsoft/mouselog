@@ -36,7 +36,7 @@ func parseExpression(expr *ast.Expr) *Parameter {
 		value := fmt.Sprintf("%s %s %s", left, op, right)
 
 		param := &Parameter{
-			Type: "binary",
+			Type: op,
 			Name: value,
 		}
 		return param
