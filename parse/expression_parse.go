@@ -124,6 +124,20 @@ func parseStarExpression(expr *ast.StarExpr) *Expression {
 	return res
 }
 
+func parseSelectorExpression(expr *ast.SelectorExpr) *Expression {
+	// Selector expression like:
+	// fmt.Printf
+	before := parseExpression(&expr.X) // fmt
+	after := expr.Sel.Name             // Printf
+
+	res := &Expression{
+		Type:     ExpressionTypeSelector,
+		Name:     after,               // Printf
+		Children: Expressions{before}, // fmt
+	}
+	return res
+}
+
 func parseExpression(expr *ast.Expr) *Expression {
 	e, ok := (*expr).(*ast.BasicLit)
 	if ok {
@@ -163,6 +177,11 @@ func parseExpression(expr *ast.Expr) *Expression {
 	e8, ok := (*expr).(*ast.StarExpr)
 	if ok {
 		return parseStarExpression(e8)
+	}
+
+	e9, ok := (*expr).(*ast.SelectorExpr)
+	if ok {
+		return parseSelectorExpression(e9)
 	}
 
 	panic("parseExpression(): unknown expression type")

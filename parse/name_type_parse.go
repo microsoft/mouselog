@@ -23,6 +23,12 @@ func parseStarNameType(nameType *ast.StarExpr) string {
 	return parseNameType(&nameType.X) + "*"
 }
 
+func parseSelectorNameType(expr *ast.SelectorExpr) string {
+	// Selector type like:
+	// object.Event
+	return parseSelectorExpression(expr).String()
+}
+
 func parseNameType(nameType *ast.Expr) string {
 	e, ok := (*nameType).(*ast.Ident)
 	if ok {
@@ -37,6 +43,11 @@ func parseNameType(nameType *ast.Expr) string {
 	e3, ok := (*nameType).(*ast.StarExpr)
 	if ok {
 		return parseStarNameType(e3)
+	}
+
+	e4, ok := (*nameType).(*ast.SelectorExpr)
+	if ok {
+		return parseSelectorNameType(e4)
 	}
 
 	panic("parseNameType(): unknown name type")

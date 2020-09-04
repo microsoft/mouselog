@@ -23,6 +23,7 @@ const (
 	ExpressionTypeCall
 	ExpressionTypeIndex
 	ExpressionTypeStar
+	ExpressionTypeSelector
 	ExpressionTypeParameter
 	ExpressionTypeResult
 )
@@ -49,6 +50,9 @@ func (expr *Expression) String() string {
 	case ExpressionTypeStar:
 		// *flag
 		res = fmt.Sprintf("*%s", expr.Children[0])
+	case ExpressionTypeSelector:
+		// fmt.Printf, object.Event, ..
+		res = fmt.Sprintf("%s.%s", expr.Children[0], expr.Name)
 	default:
 		res = expr.Name
 	}

@@ -11,21 +11,18 @@ import (
 func parseCallStatement(stmt *ast.ExprStmt, level int) *Statement {
 	expr := stmt.X.(*ast.CallExpr)
 
-	fun := expr.Fun.(*ast.SelectorExpr)
-	x := fun.X.(*ast.Ident).Name
-	sel := fun.Sel.Name
-	name := x + "." + sel
+	name := parseSelectorExpression(expr.Fun.(*ast.SelectorExpr)).String()
 
-	exprs := []*Expression{}
+	args := []*Expression{}
 	for _, arg := range expr.Args {
 		expr := parseExpression(&arg)
-		exprs = append(exprs, expr)
+		args = append(args, expr)
 	}
 
 	s := &Statement{
 		Level: level,
 		Name:  name,
-		Args:  exprs,
+		Args:  args,
 	}
 	return s
 }
