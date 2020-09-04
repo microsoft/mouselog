@@ -7,6 +7,6 @@ import "testing"
 
 func TestParseFile(t *testing.T) {
 	println()
-	parseFile()
+	parseFile("../detect/rule_single_point.go")
 	println()
 }

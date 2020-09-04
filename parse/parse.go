@@ -10,9 +10,9 @@ import (
 	"log"
 )
 
-func parseFile() {
+func parseFile(filename string) {
 	fset := token.NewFileSet()
-	node, err := parser.ParseFile(fset, "test.go", nil, parser.ParseComments)
+	node, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 	if err != nil {
 		log.Fatal(err)
 	}

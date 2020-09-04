@@ -56,6 +56,21 @@ func parseBinaryExpression(expr *ast.BinaryExpr) *Expression {
 	return res
 }
 
+func parseUnaryExpression(expr *ast.UnaryExpr) *Expression {
+	// Unary expression like:
+	// -1
+	op := expr.Op.String()
+	inside := parseExpression(&expr.X)
+	value := fmt.Sprintf("%s%s", op, inside)
+
+	res := &Expression{
+		Type:     ExpressionTypeDefault,
+		Name:     value,
+		NameType: op,
+	}
+	return res
+}
+
 func parseParenthesesExpression(expr *ast.ParenExpr) *Expression {
 	// Parentheses expression like:
 	// (1 + 2)
@@ -89,7 +104,7 @@ func parseCallExpression(expr *ast.CallExpr) *Expression {
 	// append(array, 1)
 	res := &Expression{
 		Type: ExpressionTypeCall,
-		Name: expr.Fun.(*ast.Ident).Name,
+		Name: parseExpression(&expr.Fun).String(),
 	}
 
 	res.Children = Expressions{}
@@ -154,34 +169,39 @@ func parseExpression(expr *ast.Expr) *Expression {
 		return parseBinaryExpression(e3)
 	}
 
-	e4, ok := (*expr).(*ast.ParenExpr)
+	e4, ok := (*expr).(*ast.UnaryExpr)
 	if ok {
-		return parseParenthesesExpression(e4)
+		return parseUnaryExpression(e4)
 	}
 
-	e5, ok := (*expr).(*ast.CompositeLit)
+	e5, ok := (*expr).(*ast.ParenExpr)
 	if ok {
-		return parseArrayExpression(e5)
+		return parseParenthesesExpression(e5)
 	}
 
-	e6, ok := (*expr).(*ast.CallExpr)
+	e6, ok := (*expr).(*ast.CompositeLit)
 	if ok {
-		return parseCallExpression(e6)
+		return parseArrayExpression(e6)
 	}
 
-	e7, ok := (*expr).(*ast.IndexExpr)
+	e7, ok := (*expr).(*ast.CallExpr)
 	if ok {
-		return parseIndexExpression(e7)
+		return parseCallExpression(e7)
 	}
 
-	e8, ok := (*expr).(*ast.StarExpr)
+	e8, ok := (*expr).(*ast.IndexExpr)
 	if ok {
-		return parseStarExpression(e8)
+		return parseIndexExpression(e8)
 	}
 
-	e9, ok := (*expr).(*ast.SelectorExpr)
+	e9, ok := (*expr).(*ast.StarExpr)
 	if ok {
-		return parseSelectorExpression(e9)
+		return parseStarExpression(e9)
+	}
+
+	e10, ok := (*expr).(*ast.SelectorExpr)
+	if ok {
+		return parseSelectorExpression(e10)
 	}
 
 	panic("parseExpression(): unknown expression type")

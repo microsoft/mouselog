@@ -35,7 +35,7 @@ func parseAssignStatement(stmt *ast.AssignStmt, level int) *Statement {
 
 	s := &Statement{
 		Level: level,
-		Name:  strings.ToLower(stmt.Tok.String()),
+		Name:  strings.ToLower(stmt.Tok.String()), // :=, =, ..
 		Args:  []*Expression{leftExpr, rightExpr},
 	}
 	return s

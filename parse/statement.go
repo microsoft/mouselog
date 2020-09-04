@@ -24,7 +24,11 @@ func (stmt *Statement) String() string {
 	if stmt.Name == ":=" {
 		// Input: res := 0
 		// Output: int res = 0
-		res = fmt.Sprintf("%s %s = %s", stmt.Args[1].NameType, stmt.Args[0].Name, stmt.Args[1])
+		nameType := stmt.Args[1].NameType
+		if nameType == "" {
+			nameType = "var"
+		}
+		res = fmt.Sprintf("%s %s = %s", nameType, stmt.Args[0].Name, stmt.Args[1])
 	} else if stmt.Name == "=" {
 		// Input: res = 5
 		// Output: res = 5
