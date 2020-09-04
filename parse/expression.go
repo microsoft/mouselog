@@ -9,19 +9,50 @@ import (
 )
 
 type Expression struct {
-	Type string
-	Name string
+	Type     int
+	Name     string
+	NameType string
 
-	Inside *Expression
+	Children Expressions
 }
+
+const (
+	ExpressionTypeDefault = iota
+	ExpressionTypeParentheses
+	ExpressionTypeArray
+	ExpressionTypeCall
+	ExpressionTypeIndex
+	ExpressionTypeParameter
+	ExpressionTypeResult
+)
 
 func (expr *Expression) String() string {
 	//return fmt.Sprintf("%s:%s", expr.Type, expr.Name)
+	res := ""
+	switch expr.Type {
+	case ExpressionTypeParameter:
+		// int a
+		res = fmt.Sprintf("%s %s", expr.NameType, expr.Name)
+	case ExpressionTypeParentheses:
+		// (1 + 2)
+		res = fmt.Sprintf("(%s)", expr.Children[0])
+	case ExpressionTypeArray:
+		// []int{1, 2}
+		res = fmt.Sprintf("%s{%s}", expr.NameType, expr.Children)
+	case ExpressionTypeCall:
+		// append(array, 1)
+		res = fmt.Sprintf("%s(%s)", expr.Name, expr.Children)
+	case ExpressionTypeIndex:
+		// array[123]
+		res = fmt.Sprintf("%s[%s]", expr.Name, expr.Children)
+	default:
+		res = expr.Name
+	}
 
-	if expr.Type == "parentheses" {
-		return fmt.Sprintf("(%s)", expr.Inside)
+	if IsVerbose {
+		return fmt.Sprintf("<expr type=\"%d\" name=\"%s\" nametype=\"%s\">%s</expr>", expr.Type, expr.Name, expr.NameType, res)
 	} else {
-		return expr.Name
+		return res
 	}
 }
 

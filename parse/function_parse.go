@@ -5,16 +5,21 @@ package parse
 
 import "go/ast"
 
-func parseField(field *ast.Field) *Expression {
-	param := &Expression{
-		Type: field.Type.(*ast.Ident).Name,
+func parseParameter(field *ast.Field) *Expression {
+	expr := &Expression{
+		Type:     ExpressionTypeParameter,
+		Name:     field.Names[0].Name,
+		NameType: field.Type.(*ast.Ident).Name,
 	}
+	return expr
+}
 
-	if len(field.Names) > 0 {
-		param.Name = field.Names[0].Name
+func parseResult(field *ast.Field) *Expression {
+	expr := &Expression{
+		Type:     ExpressionTypeResult,
+		NameType: field.Type.(*ast.Ident).Name,
 	}
-
-	return param
+	return expr
 }
 
 func parseFunction(fd *ast.FuncDecl, level int) *Function {
@@ -22,14 +27,14 @@ func parseFunction(fd *ast.FuncDecl, level int) *Function {
 
 	params := []*Expression{}
 	for _, field := range fd.Type.Params.List {
-		param := parseField(field)
+		param := parseParameter(field)
 		params = append(params, param)
 	}
 
 	results := []string{}
 	for _, field := range fd.Type.Results.List {
-		f := parseField(field)
-		results = append(results, f.Type)
+		f := parseResult(field)
+		results = append(results, f.NameType)
 	}
 
 	stmts := []*Statement{}

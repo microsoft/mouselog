@@ -78,17 +78,13 @@ func parseReturnStatement(stmt *ast.ReturnStmt, level int) *Statement {
 }
 
 func parseIncDecStatement(stmt *ast.IncDecStmt, level int) *Statement {
-	exprs := []*Expression{}
-	expr := &Expression{
-		Type: "",
-		Name: stmt.X.(*ast.Ident).Name,
-	}
-	exprs = append(exprs, expr)
+	args := []*Expression{}
+	args = append(args, parseExpression(&stmt.X))
 
 	s := &Statement{
 		Level: level,
 		Name:  strings.ToLower(stmt.Tok.String()),
-		Args:  exprs,
+		Args:  args,
 	}
 	return s
 }
