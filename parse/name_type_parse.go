@@ -6,11 +6,21 @@ package parse
 import "go/ast"
 
 func parseIdentifierNameType(nameType *ast.Ident) string {
+	// Normal type like:
+	// int, string, ..
 	return nameType.Name
 }
 
 func parseArrayNameType(nameType *ast.ArrayType) string {
-	return nameType.Elt.(*ast.Ident).Name + "*"
+	// Array type like:
+	// []int
+	return parseNameType(&nameType.Elt) + "*"
+}
+
+func parseStarNameType(nameType *ast.StarExpr) string {
+	// Star type like:
+	// *int
+	return parseNameType(&nameType.X) + "*"
 }
 
 func parseNameType(nameType *ast.Expr) string {
@@ -22,6 +32,11 @@ func parseNameType(nameType *ast.Expr) string {
 	e2, ok := (*nameType).(*ast.ArrayType)
 	if ok {
 		return parseArrayNameType(e2)
+	}
+
+	e3, ok := (*nameType).(*ast.StarExpr)
+	if ok {
+		return parseStarNameType(e3)
 	}
 
 	panic("parseNameType(): unknown name type")

@@ -73,7 +73,7 @@ func parseArrayExpression(expr *ast.CompositeLit) *Expression {
 	// []int{1, 2}
 	nameType := parseNameType(&expr.Type)
 	res := &Expression{
-		Type: ExpressionTypeArray,
+		Type:     ExpressionTypeArray,
 		NameType: nameType, // int*
 	}
 
@@ -112,6 +112,18 @@ func parseIndexExpression(expr *ast.IndexExpr) *Expression {
 	return res
 }
 
+func parseStarExpression(expr *ast.StarExpr) *Expression {
+	// Star expression like:
+	// *flag
+	inside := parseExpression(&expr.X)
+
+	res := &Expression{
+		Type:     ExpressionTypeStar,
+		Children: Expressions{inside}, // flag
+	}
+	return res
+}
+
 func parseExpression(expr *ast.Expr) *Expression {
 	e, ok := (*expr).(*ast.BasicLit)
 	if ok {
@@ -146,6 +158,11 @@ func parseExpression(expr *ast.Expr) *Expression {
 	e7, ok := (*expr).(*ast.IndexExpr)
 	if ok {
 		return parseIndexExpression(e7)
+	}
+
+	e8, ok := (*expr).(*ast.StarExpr)
+	if ok {
+		return parseStarExpression(e8)
 	}
 
 	panic("parseExpression(): unknown expression type")

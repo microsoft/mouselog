@@ -22,6 +22,7 @@ const (
 	ExpressionTypeArray
 	ExpressionTypeCall
 	ExpressionTypeIndex
+	ExpressionTypeStar
 	ExpressionTypeParameter
 	ExpressionTypeResult
 )
@@ -45,6 +46,9 @@ func (expr *Expression) String() string {
 	case ExpressionTypeIndex:
 		// array[123]
 		res = fmt.Sprintf("%s[%s]", expr.Name, expr.Children)
+	case ExpressionTypeStar:
+		// *flag
+		res = fmt.Sprintf("*%s", expr.Children[0])
 	default:
 		res = expr.Name
 	}
