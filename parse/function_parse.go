@@ -9,7 +9,7 @@ func parseParameter(field *ast.Field) *Expression {
 	expr := &Expression{
 		Type:     ExpressionTypeParameter,
 		Name:     field.Names[0].Name,
-		NameType: field.Type.(*ast.Ident).Name,
+		NameType: parseNameType(&field.Type),
 	}
 	return expr
 }

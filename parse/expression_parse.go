@@ -71,10 +71,10 @@ func parseParenthesesExpression(expr *ast.ParenExpr) *Expression {
 func parseArrayExpression(expr *ast.CompositeLit) *Expression {
 	// Composite literal like:
 	// []int{1, 2}
-	nameType := expr.Type.(*ast.ArrayType).Elt.(*ast.Ident).Name
+	nameType := parseNameType(&expr.Type)
 	res := &Expression{
 		Type: ExpressionTypeArray,
-		NameType: nameType + "*", // int*
+		NameType: nameType, // int*
 	}
 
 	res.Children = Expressions{}
