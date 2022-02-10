@@ -5,15 +5,28 @@
 
 import React from "react";
 import * as Setting from "./Setting";
-import {Alert, Button, Card, Col, Input, Progress, Row, Select, Statistic, Switch, Tag, Typography} from "antd";
+import {
+  Alert,
+  Button,
+  Card,
+  Col,
+  Input,
+  Progress,
+  Row,
+  Select,
+  Statistic,
+  Switch,
+  Tag,
+  Typography,
+} from "antd";
 import * as Shared from "./Shared";
 import Canvas from "./Canvas";
-import EventSelectionCheckBox from "./EventSelectionCheckBox"
+import EventSelectionCheckBox from "./EventSelectionCheckBox";
 import * as Backend from "./Backend";
 import TraceTable from "./TraceTable";
-import {isLocalStorageAvailable} from "./utils";
+import { isLocalStorageAvailable } from "./utils";
 
-const {Text} = Typography;
+const { Text } = Typography;
 
 const allTargetEvents = [
   "mousemove",
@@ -25,7 +38,7 @@ const allTargetEvents = [
   "wheel",
   "torchstart",
   "touchmove",
-  "touchend"
+  "touchend",
 ];
 
 const defaultTargetEvents = [
@@ -38,7 +51,7 @@ const defaultTargetEvents = [
   "wheel",
   "torchstart",
   "touchmove",
-  "touchend"
+  "touchend",
 ];
 
 class TestPage extends React.Component {
@@ -76,7 +89,7 @@ class TestPage extends React.Component {
       this.setState({
         eventBuckets: eventBuckets,
         speed: eventBuckets[10] - eventBuckets[0],
-      })
+      });
     }, 100);
 
     this.trace.events = this.loadTraceFromLocal();
@@ -84,23 +97,30 @@ class TestPage extends React.Component {
     // Set the sessionId.
     this.setState({
       sessionId: Setting.getSessionId(),
-      status: true
-    })
+      status: true,
+    });
 
     // Load data here
 
     this.setState({
-      onLoading: false
-    })
+      onLoading: false,
+    });
   }
 
   eventsEncoder(events) {
     // Convert event object to array
     // {id:id,timestamp:t,type:type,x:x,y:y,button:btn} => [id,type,t,x,y,btn]
-    let t = []
-    events.forEach(evt => {
-      t.push([evt.id, allTargetEvents.indexOf(evt.type), evt.timestamp, evt.x, evt.y, evt.button]);
-    })
+    let t = [];
+    events.forEach((evt) => {
+      t.push([
+        evt.id,
+        allTargetEvents.indexOf(evt.type),
+        evt.timestamp,
+        evt.x,
+        evt.y,
+        evt.button,
+      ]);
+    });
     return JSON.stringify(t);
   }
 
@@ -109,16 +129,16 @@ class TestPage extends React.Component {
     // [id,type,t,x,y,btn]=>{id:id,timestamp:t,type:type,x:x,y:y,button:btn}
     let t = JSON.parse(str);
     let events = [];
-    t.forEach(item => {
+    t.forEach((item) => {
       events.push({
         id: parseInt(item[0]),
         timestamp: parseFloat(item[2]),
         type: allTargetEvents[item[1]],
         x: parseInt(item[3]),
         y: parseInt(item[4]),
-        button: item[5]
-      })
-    })
+        button: item[5],
+      });
+    });
     return events;
   }
 
@@ -128,7 +148,7 @@ class TestPage extends React.Component {
       return [];
     }
     let str = localStorage.getItem("traceDataCache");
-    return str ? this.eventsDecoder(str) : [];  // Return an empty array if no cache.
+    return str ? this.eventsDecoder(str) : []; // Return an empty array if no cache.
   }
 
   saveTraceToLocal() {
@@ -146,7 +166,9 @@ class TestPage extends React.Component {
   }
 
   getByteCount(s) {
-    let count = 0, stringLength = s.length, i;
+    let count = 0,
+      stringLength = s.length,
+      i;
     s = String(s || "");
     for (i = 0; i < stringLength; i++) {
       const partCount = encodeURI(s[i]).split("%").length;
@@ -165,7 +187,7 @@ class TestPage extends React.Component {
 
   newTrace() {
     return {
-      id: '0',
+      id: "0",
       url: this.getHostname(),
       path: this.getPathname(),
       width: document.body.scrollWidth,
@@ -177,7 +199,7 @@ class TestPage extends React.Component {
     };
   }
 
-  uploadTrace(action = 'upload') {
+  uploadTrace(action = "upload") {
     const width = document.body.scrollWidth;
     const height = document.body.scrollHeight;
     let trace = this.newTrace();
@@ -186,37 +208,43 @@ class TestPage extends React.Component {
 
     if (this.events.length === 50) {
       this.setState({
-        payloadSize: this.getByteCount(traceStr)
+        payloadSize: this.getByteCount(traceStr),
       });
     }
 
-    Backend.uploadTrace(action, Setting.getWebsiteId(), Setting.getImpressionId(), traceStr)
-      .then(res => {
-          this.events = [];
-          if (!this.trace && res.traces.length > 0) {
+    Backend.uploadTrace(
+      action,
+      Setting.getWebsiteId(),
+      Setting.getImpressionId(),
+      traceStr
+    )
+      .then((res) => {
+        this.events = [];
+        if (!this.trace && res.traces.length > 0) {
+          this.traces = res.traces;
+          this.trace = res.traces[0];
+        }
+        if (this.state.onLoading) {
+          if (res.traces.length > 0) {
             this.traces = res.traces;
             this.trace = res.traces[0];
           }
-          if (this.state.onLoading) {
-            if (res.traces.length > 0) {
-              this.traces = res.traces;
-              this.trace = res.traces[0];
-            }
-            this.setState({
-              onLoading: false,
-            });
-          } else {
-            // Only update the `guess` and `reason` of the trace
-            this.trace.guess = (res.traces.length === 0 ? -1 : res.traces[0].guess);
-            this.trace.reason = (res.traces.length === 0 ? null : res.traces[0].reason);
-          }
+          this.setState({
+            onLoading: false,
+          });
+        } else {
+          // Only update the `guess` and `reason` of the trace
+          this.trace.guess = res.traces.length === 0 ? -1 : res.traces[0].guess;
+          this.trace.reason =
+            res.traces.length === 0 ? null : res.traces[0].reason;
         }
-      ).catch(() => {
-      console.log("BACKEND ERROR");
-      this.setState({
-        status: false
       })
-    });
+      .catch(() => {
+        console.log("BACKEND ERROR");
+        this.setState({
+          status: false,
+        });
+      });
   }
 
   clearTrace() {
@@ -244,7 +272,7 @@ class TestPage extends React.Component {
   }
 
   getButton(button) {
-    if (button === '2') {
+    if (button === "2") {
       return "Right";
     } else {
       return "";
@@ -257,7 +285,9 @@ class TestPage extends React.Component {
   }
 
   getDistance(e1, e2) {
-    return Math.sqrt((e1.x - e2.x) * (e1.x - e2.x) + (e1.y - e2.y) * (e1.y - e2.y));
+    return Math.sqrt(
+      (e1.x - e2.x) * (e1.x - e2.x) + (e1.y - e2.y) * (e1.y - e2.y)
+    );
   }
 
   getSpeed(e1, e2) {
@@ -275,12 +305,16 @@ class TestPage extends React.Component {
     }
 
     // PC's Chrome on Mobile mode can still receive "contextmenu" event with zero X, Y, so we ignore these events.
-    if (e.type === 'contextmenu' && e.pageX === 0 && e.pageY === 0) {
+    if (e.type === "contextmenu" && e.pageX === 0 && e.pageY === 0) {
       return;
     }
 
     // Don't track our own buttons.
-    if (type === 'click' && (e.target.textContent === 'Clear Traces' || e.target.textContent === 'Perform Fake Click')) {
+    if (
+      type === "click" &&
+      (e.target.textContent === "Clear Traces" ||
+        e.target.textContent === "Perform Fake Click")
+    ) {
       return;
     }
 
@@ -316,7 +350,7 @@ class TestPage extends React.Component {
     // Push the new event info to the buffer
     this.events.push(event);
     if (this.events.length > 50) {
-      this.events = this.events.slice(50)
+      this.events = this.events.slice(50);
       this.events[0].id = 0;
     }
 
@@ -327,35 +361,59 @@ class TestPage extends React.Component {
     }
 
     this.setState({
-      status: true
+      status: true,
     });
-  };
+  }
 
   renderResult() {
     if (!this.state.status) {
       return (
-        <Alert message="Server Offline" description="Server Offline" type="Informational" showIcon banner/>
-      )
+        <Alert
+          message="Server Offline"
+          description="Server Offline"
+          type="Informational"
+          showIcon
+          banner
+        />
+      );
     } else {
       if (this.trace === null || this.trace.guess === -1) {
         return (
-          <Alert message="No Mouse Trace" description="No Mouse Trace" type="warning" showIcon banner/>
-        )
+          <Alert
+            message="No Mouse Trace"
+            description="No Mouse Trace"
+            type="warning"
+            showIcon
+            banner
+          />
+        );
       } else if (this.trace.guess === 1) {
         return (
-          <Alert message="You Are Bot" description={this.trace.reason} type="error" showIcon banner/>
-        )
+          <Alert
+            message="You Are Bot"
+            description={this.trace.reason}
+            type="error"
+            showIcon
+            banner
+          />
+        );
       } else if (this.trace.guess === 0) {
         return (
-          <Alert message="You Are Human" description="You Are Human" type="success" showIcon banner/>
-        )
+          <Alert
+            message="You Are Human"
+            description="You Are Human"
+            type="success"
+            showIcon
+            banner
+          />
+        );
       }
     }
   }
 
   onChange(checked) {
     this.setState({
-      isBackground: checked
+      isBackground: checked,
     });
   }
 
@@ -365,9 +423,18 @@ class TestPage extends React.Component {
 
   renderProgress() {
     if (!this.state.isBackground) {
-      return <Progress percent={this.events.length * 2} status="active"/>
+      return (
+        <Progress
+          percent={this.events.length * 2}
+          strokeColor={{
+            "0%": "#108ee9",
+            "100%": "#87d068",
+          }}
+          status="active"
+        />
+      );
     } else {
-      return <Progress percent={0} status="exception"/>
+      return <Progress percent={0} status="exception" />;
     }
   }
 
@@ -376,11 +443,18 @@ class TestPage extends React.Component {
       return 0;
     } else {
       let distSum = 0;
-      for (let i = 0; i < this.trace.events.length - 1; i ++) {
-        distSum += this.getDistance(this.trace.events[i], this.trace.events[i + 1]);
+      for (let i = 0; i < this.trace.events.length - 1; i++) {
+        distSum += this.getDistance(
+          this.trace.events[i],
+          this.trace.events[i + 1]
+        );
       }
 
-      return Math.round(distSum / (this.trace.events[this.trace.events.length - 1].timestamp - this.trace.events[0].timestamp));
+      return Math.round(
+        distSum /
+          (this.trace.events[this.trace.events.length - 1].timestamp -
+            this.trace.events[0].timestamp)
+      );
     }
   }
 
@@ -388,18 +462,31 @@ class TestPage extends React.Component {
     return (
       <div>
         <Row>
-          {
-            !this.state.isBackground ? <TraceTable title={this.state.sessionId} traces={this.traces} self={null}/> :
-              <TraceTable title={''} traces={[]} self={null}/>
-          }
+          {!this.state.isBackground ? (
+            <TraceTable
+              title={this.state.sessionId}
+              traces={this.traces}
+              self={null}
+            />
+          ) : (
+            <TraceTable title={""} traces={[]} self={null} />
+          )}
         </Row>
-        <Row style={{marginTop: "10px"}}>
+        <Row style={{ marginTop: "10px" }}>
           <Col span={12}>
             <Text>Events/s: </Text>
-            <Progress type="circle" percent={this.state.speed} format={percent => `${percent}`} width={80}/>
+            <Progress
+              type="circle"
+              percent={this.state.speed}
+              format={(percent) => `${percent}`}
+              width={80}
+            />
           </Col>
           <Col span={12}>
-            <Statistic title="Speed (pixels/s)" value={this.getAverageSpeed()} />
+            <Statistic
+              title="Speed (pixels/s)"
+              value={this.getAverageSpeed()}
+            />
           </Col>
           {/*<Col span={12}>*/}
           {/*  <div><Text>Payload size: </Text><Tag color="#108ee9">{this.state.payloadSize}</Tag>Bytes/req</div>*/}
@@ -408,19 +495,25 @@ class TestPage extends React.Component {
         </Row>
         <Row>
           <Col span={12}>
-            Background recording: <Switch onChange={this.onChange.bind(this)}/>
+            Background recording: <Switch onChange={this.onChange.bind(this)} />
           </Col>
           <Col span={12}>
-            <Button type="danger" block onClick={this.clearTrace.bind(this)}>Clear Traces</Button>
+            <Button type="danger" block onClick={this.clearTrace.bind(this)}>
+              Clear Traces
+            </Button>
           </Col>
         </Row>
         <Row>
           <Col span={12}>
-            <Button type="primary" block onClick={this.simulateMouse.bind(this)}>Perform Fake Click</Button>
+            <Button
+              type="primary"
+              block
+              onClick={this.simulateMouse.bind(this)}
+            >
+              Perform Fake Click
+            </Button>
           </Col>
-          <Col span={12}>
-
-          </Col>
+          <Col span={12}></Col>
         </Row>
         <Row>
           <EventSelectionCheckBox
@@ -430,36 +523,45 @@ class TestPage extends React.Component {
           />
         </Row>
       </div>
-    )
+    );
   }
 
   render() {
     if (this.state.onLoading) {
-      return (<div>Loading Data...</div>)
+      return <div>Loading Data...</div>;
     }
     return (
       <div>
+        <style>
+          {`
+        .ant-progress-bg{
+          height:25px !important;
+        }`}
+        </style>
+
         {this.renderProgress()}
         {this.renderResult()}
         <Row>
-          <Col span={6}>
-            {
-              this.renderLeft()
-            }
-          </Col>
+          <Col span={6}>{this.renderLeft()}</Col>
           <Col span={12}>
-            <Canvas trace={this.trace.events.length > 0 ? this.trace : null} size={Shared.getSizeSmall(this.trace)} isBackground={this.state.isBackground}/>
+            <Canvas
+              trace={this.trace.events.length > 0 ? this.trace : null}
+              size={Shared.getSizeSmall(this.trace)}
+              isBackground={this.state.isBackground}
+            />
           </Col>
           <Col span={6}>
-            {
-              !this.state.isBackground ? Shared.renderEventTable(this.getPathname(), this.events.slice(-10)) : Shared.renderEventTable('', [])
-            }
+            {!this.state.isBackground
+              ? Shared.renderEventTable(
+                  this.getPathname(),
+                  this.events.slice(-10)
+                )
+              : Shared.renderEventTable("", [])}
           </Col>
         </Row>
       </div>
     );
   }
-
 }
 
 export default TestPage;
